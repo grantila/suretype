@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"allowJs": false,
+		"declaration": true,
+		"sourceMap": true,
+		"lib": [  "ES2017" ],
+		"types": [
+			"node",
+			"jest"
+		],
+		"outDir": "dist",
+		"target": "ES2017",
+		"module": "CommonJS",
+		"moduleResolution": "node",
+		"noImplicitAny": true,
+		"noUnusedLocals": true,
+		"pretty": true,
+		"strict": true,
+		"alwaysStrict": true,
+	},
+	"include": [
+		"lib",
+		"examples"
+	]
+}

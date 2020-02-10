@@ -1,0 +1,63 @@
+{
+  "name": "suretype",
+  "version": "0.0.0-development",
+  "description": "Typesafe JSON (Schema) validator with magic powers 🧙‍♂️",
+  "author": "Gustaf Räntilä",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/grantila/suretype/issues"
+  },
+  "homepage": "https://github.com/grantila/suretype#readme",
+  "main": "./dist/nodejs.js",
+  "browser": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "directories": {},
+  "engines": {
+    "node": ">=10"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.prod.json",
+    "test": "jest",
+    "benchmark": "ts-node benchmark",
+    "cz": "git-cz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grantila/suretype"
+  },
+  "keywords": [
+    "typesafe",
+    "validate",
+    "validator",
+    "json",
+    "schema"
+  ],
+  "devDependencies": {
+    "@hapi/joi": "^17.1.0",
+    "@types/benchmark": "^2.1.0",
+    "@types/hapi__joi": "^17.1.6",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.32",
+    "benchmark": "^2.1.4",
+    "cz-conventional-changelog": "^3.1.0",
+    "jest": "^26.6.3",
+    "rimraf": "^3.0.1",
+    "tempy": "^1.0.0",
+    "ts-jest": "^26.5.3",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "ajv": "^6.11.0",
+    "awesome-ajv-errors": "^1.0.0",
+    "meta-types": "^1.1.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

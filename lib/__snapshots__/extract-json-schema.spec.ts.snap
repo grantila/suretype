@@ -1,0 +1,233 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`extract-json-schema should be able to rename top-level names 1`] = `
+Object {
+  "definitions": Object {
+    "Foo": Object {
+      "type": "number",
+    },
+    "Foo_2": Object {
+      "type": "string",
+    },
+  },
+}
+`;
+
+exports[`extract-json-schema should call non-decorated validator schemas 'Unknown' 1`] = `
+Object {
+  "definitions": Object {
+    "Foo": Object {
+      "type": "number",
+    },
+    "Unknown_1": Object {
+      "type": "string",
+    },
+  },
+}
+`;
+
+exports[`extract-json-schema should ignore non-decorated validator schemas 1`] = `
+Object {
+  "definitions": Object {
+    "Foo": Object {
+      "type": "number",
+    },
+  },
+}
+`;
+
+exports[`extract-json-schema should produce proper definitions for referenced schemas (using method no-refs) 1`] = `
+Object {
+  "definitions": Object {
+    "Bar": Object {
+      "description": "Desc",
+      "examples": Array [
+        "Ex",
+      ],
+      "properties": Object {
+        "bak": Object {
+          "type": "number",
+        },
+        "bar": Object {
+          "exclusiveMinimum": 17,
+          "type": "number",
+        },
+        "baz": Object {
+          "type": "number",
+        },
+        "foo": Object {
+          "description": "Description",
+          "examples": Array [
+            "Example",
+          ],
+          "properties": Object {
+            "foo": Object {
+              "const": "bar",
+              "type": "string",
+            },
+          },
+          "title": "Title",
+          "type": "object",
+        },
+      },
+      "required": Array [
+        "bar",
+      ],
+      "title": "T",
+      "type": "object",
+    },
+    "Foo": Object {
+      "description": "Description",
+      "examples": Array [
+        "Example",
+      ],
+      "properties": Object {
+        "foo": Object {
+          "const": "bar",
+          "type": "string",
+        },
+      },
+      "title": "Title",
+      "type": "object",
+    },
+  },
+}
+`;
+
+exports[`extract-json-schema should produce proper definitions for referenced schemas (using method provided) 1`] = `
+Object {
+  "definitions": Object {
+    "Bar": Object {
+      "description": "Desc",
+      "examples": Array [
+        "Ex",
+      ],
+      "properties": Object {
+        "bak": Object {
+          "type": "number",
+        },
+        "bar": Object {
+          "exclusiveMinimum": 17,
+          "type": "number",
+        },
+        "baz": Object {
+          "type": "number",
+        },
+        "foo": Object {
+          "$ref": "#/definitions/Foo",
+        },
+      },
+      "required": Array [
+        "bar",
+      ],
+      "title": "T",
+      "type": "object",
+    },
+    "Foo": Object {
+      "description": "Description",
+      "examples": Array [
+        "Example",
+      ],
+      "properties": Object {
+        "foo": Object {
+          "const": "bar",
+          "type": "string",
+        },
+      },
+      "title": "Title",
+      "type": "object",
+    },
+  },
+}
+`;
+
+exports[`extract-json-schema should produce proper definitions for referenced schemas (using method ref-all) 1`] = `
+Object {
+  "definitions": Object {
+    "Bar": Object {
+      "description": "Desc",
+      "examples": Array [
+        "Ex",
+      ],
+      "properties": Object {
+        "bak": Object {
+          "$ref": "#/definitions/Baz",
+        },
+        "bar": Object {
+          "exclusiveMinimum": 17,
+          "type": "number",
+        },
+        "baz": Object {
+          "$ref": "#/definitions/Baz",
+        },
+        "foo": Object {
+          "$ref": "#/definitions/Foo",
+        },
+      },
+      "required": Array [
+        "bar",
+      ],
+      "title": "T",
+      "type": "object",
+    },
+    "Baz": Object {
+      "type": "number",
+    },
+    "Foo": Object {
+      "description": "Description",
+      "examples": Array [
+        "Example",
+      ],
+      "properties": Object {
+        "foo": Object {
+          "const": "bar",
+          "type": "string",
+        },
+      },
+      "title": "Title",
+      "type": "object",
+    },
+  },
+}
+`;
+
+exports[`extract-json-schema should produce two (referenced) definitions for 2 schemas 1`] = `
+Object {
+  "definitions": Object {
+    "Bar": Object {
+      "description": "Desc",
+      "examples": Array [
+        "Ex",
+      ],
+      "properties": Object {
+        "bar": Object {
+          "exclusiveMinimum": 17,
+          "type": "number",
+        },
+        "foo": Object {
+          "$ref": "#/definitions/Foo",
+        },
+      },
+      "required": Array [
+        "bar",
+      ],
+      "title": "T",
+      "type": "object",
+    },
+    "Foo": Object {
+      "description": "Description",
+      "examples": Array [
+        "Example",
+      ],
+      "properties": Object {
+        "foo": Object {
+          "const": "bar",
+          "type": "string",
+        },
+      },
+      "title": "Title",
+      "type": "object",
+    },
+  },
+}
+`;
