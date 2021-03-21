@@ -31,6 +31,7 @@ From a validator schema defined with suretype, you can trivially:
  * Compile a validator function (using the **very** fast [Ajv](https://www.npmjs.com/package/ajv))
  * Extract the corresponding JSON Schema
  * Deduce a TypeScript type corresponding to the validator schema (at compile-time!)
+
 <!--
  * Using [typeconv](https://github.com/grantila/typeconv):
    * Export (convert) the validator schema into JSON Schema, Open API, TypeScript types or GraphQL, or;
