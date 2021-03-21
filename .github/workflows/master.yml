@@ -43,7 +43,7 @@ jobs:
           node-version: 14
       - run: yarn
       - run: yarn build
-      - run: yarn test
+      - run: yarn test --coverage
         env:
           CI: true
       - name: Coveralls
