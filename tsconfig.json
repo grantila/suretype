@@ -3,13 +3,13 @@
 		"allowJs": false,
 		"declaration": true,
 		"sourceMap": true,
-		"lib": [  "ES2017" ],
+		"lib": [  "ES2019" ],
 		"types": [
 			"node",
 			"jest"
 		],
 		"outDir": "dist",
-		"target": "ES2017",
+		"target": "ES2019",
 		"module": "CommonJS",
 		"moduleResolution": "node",
 		"noImplicitAny": true,

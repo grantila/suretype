@@ -13,7 +13,7 @@
   "types": "./dist/index.d.ts",
   "directories": {},
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "files": [
     "dist"
