@@ -6,7 +6,7 @@
 [![Node.JS version][node-version]][node-url]
 
 
-<img src="https://cdn.rawgit.com/grantila/suretype/HEAD/assets/logo.svg" width="100%" />
+<img src="https://raw.githubusercontent.com/grantila/suretype/master/assets/logo.svg" width="100%" />
 
 Suretype is a JSON validator targeting TypeScript and JSON Schema. It is **ridiculously type safe** when used in TypeScript, which is good for strengthness and accuraccy, but also for aiding IDE auto-complete.
 

@@ -33,7 +33,8 @@
     "validate",
     "validator",
     "json",
-    "schema"
+    "schema",
+    "typescript"
   ],
   "devDependencies": {
     "@hapi/joi": "^17.1.0",
