@@ -8,7 +8,7 @@
 
 <img src="https://raw.githubusercontent.com/grantila/suretype/master/assets/logo.svg" width="100%" />
 
-Suretype is a JSON validator targeting TypeScript and JSON Schema. It is **ridiculously type safe** when used in TypeScript, which is good for strengthness and accuraccy, but also for aiding IDE auto-complete.
+Suretype is a JSON validator targeting TypeScript and JSON Schema. It is **ridiculously type safe** when used in TypeScript, which is good for accuraccy, but also for aiding IDE auto-complete.
 
 <details style="padding-left: 32px;border-left: 4px solid gray;">
 <summary>It's as easy as Joi, but ~50x faster.</summary>
