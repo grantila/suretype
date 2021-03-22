@@ -11,7 +11,11 @@ import { AnyOfValidator } from "../validators/or/validator"
 import { AllOfValidator } from "../validators/all-of/validator"
 import { IfValidator } from "../validators/if/validator"
 import { TypeOf } from "../validators/functional"
-import { cloneValidator, decorateValidator } from "../validation"
+import {
+	cloneValidator,
+	decorateValidator,
+	getDecorations,
+} from "../validation"
 import { ArrayFunction, TupleFunction } from "../validators/array-types"
 import { ExtractObject } from "../validators/object-types"
 import { DecorationsHolder, Decorations } from "../validators/decorations"
@@ -70,6 +74,13 @@ export const v = {
 	any,
 };
 
+/**
+ * Decorate a validator with a name and other annotations
+ *
+ * @param decorations Decorations
+ * @param validator Target validator to decorate
+ * @returns Decorated validator
+ */
 export function suretype< T extends BaseValidator< unknown, any > >(
 	decorations: Decorations,
 	validator: T
@@ -79,5 +90,28 @@ export function suretype< T extends BaseValidator< unknown, any > >(
 	return decorateValidator(
 		cloneValidator( validator, false ),
 		new DecorationsHolder( decorations )
+	);
+}
+
+/**
+ * Ensures a validator is decorated with a name. This will not overwrite the
+ * name of a validator, only ensure it has one.
+ *
+ * @param name The name to decorate with, unless already decorated
+ * @param validator The target validator
+ * @returns Decorated validator
+ */
+export function ensureNamed< T extends BaseValidator< unknown, any > >(
+	name: string,
+	validator: T
+)
+: T
+{
+	if ( getDecorations( validator )?.options.name )
+		return validator;
+
+	return decorateValidator(
+		cloneValidator( validator, false ),
+		new DecorationsHolder( { name } )
 	);
 }

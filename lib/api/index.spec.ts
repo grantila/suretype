@@ -1,5 +1,6 @@
-import { suretype, v } from './index'
+import { suretype, v, ensureNamed } from './index'
 import { compile } from '..'
+import { getDecorations } from '../validation'
 
 
 describe( "suretype", ( ) =>
@@ -43,5 +44,26 @@ describe( "v", ( ) =>
 
 		expect( validator( { foo: "foo" } ).ok ).toBe( true );
 		expect( validator( { foo: 42 } ).ok ).toBe( false );
+	} );
+} );
+
+
+describe( "ensureNamed", ( ) =>
+{
+	it( "should not change name of decorated validator", ( ) =>
+	{
+		const schema = suretype(
+			{ name: 'Goodname' },
+			v.object( { foo: v.string( ) } )
+		);
+		const validator = ensureNamed( 'Badname', schema );
+		expect( getDecorations( validator )?.options.name ).toBe( 'Goodname' );
+	} );
+
+	it( "should change name of non-decorated validator", ( ) =>
+	{
+		const schema = v.object( { foo: v.string( ) } );
+		const validator = ensureNamed( 'Goodname', schema );
+		expect( getDecorations( validator )?.options.name ).toBe( 'Goodname' );
 	} );
 } );

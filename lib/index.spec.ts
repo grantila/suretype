@@ -34,6 +34,7 @@ describe( "index", ( ) =>
 
 			// json-schema
 			compile: expect.any( Function ),
+			ensureNamed: expect.any( Function ),
 			validate: expect.any( Function ),
 		} );
 	} );

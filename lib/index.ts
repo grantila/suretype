@@ -2,6 +2,8 @@ export * from "./api"
 
 export * from "./errors"
 
+export * from './types'
+
 import { ValidateFunction, compile, validate } from "./json-schema"
 export { ValidateFunction, compile, validate }
 
