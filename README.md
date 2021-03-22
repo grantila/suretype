@@ -10,7 +10,7 @@
 
 Suretype is a JSON validator targeting TypeScript and JSON Schema. It is **ridiculously type safe** when used in TypeScript, which is good for accuraccy, but also for aiding IDE auto-complete.
 
-<details style="padding-left: 32px;border-left: 4px solid gray;">
+<details style="padding-left: 32px; border-left: 4px solid gray;">
 <summary>It's as easy as Joi, but ~50x faster.</summary>
 <p>
 
@@ -22,7 +22,7 @@ suretype x 22,161,985 ops/sec ±0.43% (90 runs sampled)
 </p>
 </details>
 
-It supports most (if not all) of JSON schema, and *nothing beyong that*, so that the validator schemas written in TypeScript (or JavaScript) can be ensured to be convertible into JSON schema.
+It supports most (if not all) of JSON schema, and *nothing beyond that*, so that the validator schemas written in TypeScript (or JavaScript) can be ensured to be convertible into JSON schema.
 
 Errors are prettified using [awesome-ajv-errors][awesome-ajv-errors-url].
 
@@ -37,7 +37,7 @@ From a validator schema defined with suretype, you can trivially:
    * Export (convert) the validator schema into JSON Schema, Open API, TypeScript types or GraphQL, or;
    * The opposite (!); convert JSON Schema, Open API, TypeScript types or GraphQL **into** suretype validators! 🎉
 
-The above makes it ideal in TypeScript environments. When used in RESTful applications, the JSON Schema can be used to document the API's using OpenAPI. When used in libraries / clients, the TypeScript interfaces can be extracted to standalone files (including JSDoc comments).
+The above makes it ideal in TypeScript environments. When used in RESTful applications, the JSON Schema can be used to document the APIs using OpenAPI. When used in libraries / clients, the TypeScript interfaces can be extracted to standalone files (including JSDoc comments).
 -->
 
 
@@ -75,7 +75,7 @@ interface User {
 
 Note the `?` for the optional properties, i.e. those that aren't followed by `required()`.
 
-There are 3 ways of compiling a validator function, choose what fits best your application and situation. Given:
+There are three ways of compiling a validator function; choose the one that best fits your application and situation. Given:
 
 ```ts
 import { compile } from "suretype"
@@ -120,7 +120,7 @@ if ( isUser( data ) ) {
 
 ## Type-ensured validator
 
-Specify `ensure` mode to get a validator function which returns the ***exact*** same output as input (referencially equal), but with deduced type. *This is often the most practical mode*.
+Specify `ensure` mode to get a validator function which returns the ***exact*** same output as the input (referentially equal), but with a deduced type. *This is often the most practical mode*.
 
 ```ts
 const ensureUser = compile( userSchema, { ensure: true } );
@@ -136,7 +136,7 @@ user.foo; // TypeScript compile-time error, there is no `foo` in User
 
 On validation failure, the error thrown will be of the class `ValidationError`, which has both the raw Ajv errors as an `errors` property, and the pretty explanation in the property `explanation`.
 
-Note; the returned ensurer function can optionally take a type parameter as long as it is typewise the same or a subset of the deduced type. This means that if the type is exported from suretype to decorated TypeScript declaration files (with annotations), those types can be used as type parameter, and the returned type will be that type. Example:
+Note: The returned ensurer function can optionally take a type parameter as long as it is equal to or compatible with the deduced type. This means that if the type is exported from suretype to decorated TypeScript declaration files (with annotations), those types can be used as a type parameter, and the returned type will be that type. Example:
 
 ```ts
 import type { User } from './generated/user'
@@ -179,7 +179,7 @@ where only the `name` is required.
 
 # Thorough example
 
-The following are two types, one using (or *depending*) on the other. They are *named*, which will be reflected in the JSON schema, shown below.
+The following are two types, one using (or *depending on*) the other. They are *named*, which will be reflected in the JSON schema, shown below.
 
 The `userSchema` is the same as in the above example, although it's wrapped in `suretype()` which decorates it with a name and other attributes.
 
