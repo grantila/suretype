@@ -76,5 +76,5 @@ export interface TupleFunction
 }
 
 export type ArrayFunction =
-	< T extends unknown, U extends BaseValidator< T > >( itemType?: U ) =>
-		ArrayValidator< Array< T > >;
+	< U extends BaseValidator< unknown > >( itemType?: U ) =>
+		ArrayValidator< Array< TypeOf< U > > >;

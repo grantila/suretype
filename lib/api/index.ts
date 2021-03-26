@@ -34,8 +34,8 @@ const tuple: TupleFunction =
 		new TupleValidator< any, any, any, any >( types );
 
 const array: ArrayFunction =
-	< T extends unknown, U extends BaseValidator< T > >( itemType?: U ) =>
-		new ArrayValidator< Array< T > >( itemType ?? any( ) );
+	< U extends BaseValidator< unknown > >( itemType?: U ) =>
+		new ArrayValidator< Array< TypeOf< U > > >( itemType ?? any( ) );
 
 const arrayOrTuple = (
 	< T >( itemType?: T ) =>
