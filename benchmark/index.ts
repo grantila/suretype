@@ -1,6 +1,8 @@
 import * as assert from "assert"
 import * as Benchmark from "benchmark"
 import * as Joi from "@hapi/joi"
+import * as ss from 'superstruct'
+
 import { v, compile } from "../"
 import { TypeOf } from "../dist/validators/functional"
 
@@ -13,6 +15,14 @@ const joiSchema =
 		sub: Joi.object( { x: Joi.any( ) } ),
 	} )
 	.unknown( true );
+
+const superstructSchema =
+	ss.type( {
+		id: ss.number( ),
+		level: ss.enums( [ "debug", "info", "notice" ] ),
+		bool: ss.optional( ss.boolean( ) ),
+		sub: ss.optional( ss.object( { x: ss.any( ) } ) ),
+	} );
 
 const suretypeSchema =
 	v.object( {
@@ -27,6 +37,7 @@ const makeValue = ( ): TypeOf< typeof suretypeSchema> =>
 	( { id: Math.random( ), level: "info", sub: { x: "foo" } } );
 
 const joiValidator = Joi.compile( joiSchema );
+const ssValidator = ( val: any ) => ss.assert( val, superstructSchema );
 const suretypeValidator = compile( suretypeSchema );
 
 const suite = new Benchmark.Suite( );
@@ -46,6 +57,11 @@ function runBenchmark( )
 	suite.add( "Joi", ( ) =>
 	{
 		joiValidator.validate( makeValue( ) );
+	} );
+
+	suite.add( "Superstruct", ( ) =>
+	{
+		ssValidator( makeValue( ) );
 	} );
 
 	suite.add( "suretype", ( ) =>
