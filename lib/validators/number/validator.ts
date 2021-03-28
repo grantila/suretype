@@ -1,5 +1,5 @@
 import { Type } from "../types"
-import { TreeTraverser } from "../base/validator"
+import { TreeTraverser } from "../core/validator"
 import { ValueValidator } from "../value/validator"
 import { objectOf } from "../../utils"
 import { DuplicateError, DuplicateConstraintError } from "../../errors"

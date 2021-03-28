@@ -1,3 +1,4 @@
+import { CoreValidator } from "../validators/core/validator"
 import { BaseValidator } from "../validators/base/validator"
 import { BooleanValidator } from "../validators/boolean/validator"
 import { NumberValidator } from "../validators/number/validator"
@@ -92,8 +93,8 @@ export const recursiveCast = < T >( value: RecursiveValue ): T => value as any;
  */
 export const recursiveUnCast = < T >( value: T ) => value as RecursiveValue;
 
-export const raw = < T = unknown >( jsonSchema: any ) =>
-	new RawValidator( jsonSchema ) as BaseValidator< T >;
+export const raw = < T = unknown >( jsonSchema: any, fragment?: string ) =>
+	new RawValidator( jsonSchema, fragment ) as CoreValidator< T >;
 
 /**
  * Annotate a validator with a name and other decorations
@@ -102,7 +103,7 @@ export const raw = < T = unknown >( jsonSchema: any ) =>
  * @param validator Target validator to annotate
  * @returns Annotated validator
  */
-export function suretype< T extends BaseValidator< unknown, any > >(
+export function suretype< T extends CoreValidator< unknown > >(
 	annotations: TopLevelAnnotations,
 	validator: T
 )
@@ -114,7 +115,7 @@ export function suretype< T extends BaseValidator< unknown, any > >(
 	);
 }
 
-export function annotate< T extends BaseValidator< unknown, any > >(
+export function annotate< T extends CoreValidator< unknown > >(
 	annotations: Partial< Annotations >,
 	validator: T
 )
@@ -134,7 +135,7 @@ export function annotate< T extends BaseValidator< unknown, any > >(
  * @param validator The target validator
  * @returns Annotated validator
  */
-export function ensureNamed< T extends BaseValidator< unknown, any > >(
+export function ensureNamed< T extends CoreValidator< unknown > >(
 	name: string,
 	validator: T
 )

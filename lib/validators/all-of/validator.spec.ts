@@ -24,10 +24,10 @@ describe( "AllOfValidator", ( ) =>
 	it( "Valid schema with 1 item", ( ) =>
 	{
 		const validator = new AllOfValidator( [ a ] );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
-			allOf: [ extractSingleJsonSchema( a ) ]
+			allOf: [ extractSingleJsonSchema( a ).schema ]
 		} );
 
 		expect( validateJsonSchema( schema ).ok ).toEqual( true );
@@ -39,12 +39,12 @@ describe( "AllOfValidator", ( ) =>
 	it( "Valid schema with 2 items", ( ) =>
 	{
 		const validator = new AllOfValidator( [ a, b ] );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			allOf: [
-				extractSingleJsonSchema( a ),
-				extractSingleJsonSchema( b )
+				extractSingleJsonSchema( a ).schema,
+				extractSingleJsonSchema( b ).schema
 			]
 		} );
 

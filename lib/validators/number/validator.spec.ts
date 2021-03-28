@@ -21,7 +21,7 @@ describe( "NumberValidator", ( ) =>
 	it( "Valid basic schema", ( ) =>
 	{
 		const validator = new NumberValidator( );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 		expect( schema ).toEqual( { type: "number" } );
 
 		expect( validateJsonSchema( schema ).ok ).toEqual( true );
@@ -37,7 +37,7 @@ describe( "NumberValidator", ( ) =>
 	it( "Valid schema with enum values (empty)", ( ) =>
 	{
 		const validator = new NumberValidator( ).enum( );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "number" } );
 
@@ -54,7 +54,7 @@ describe( "NumberValidator", ( ) =>
 	it( "Valid schema with enum values (42)", ( ) =>
 	{
 		const validator = new NumberValidator( ).enum( 42 );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "number", enum: [ 42 ] } );
 
@@ -69,7 +69,7 @@ describe( "NumberValidator", ( ) =>
 	it( "Valid schema with enum values (17, 42)", ( ) =>
 	{
 		const validator = new NumberValidator( ).enum( 17, 42 );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "number", enum: [ 17, 42 ] } );
 
@@ -86,7 +86,7 @@ describe( "NumberValidator", ( ) =>
 	it( "Valid schema with enum values (17, 42) as integers", ( ) =>
 	{
 		const validator = new NumberValidator( ).integer( ).enum( 17, 42 );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "integer", enum: [ 17, 42 ] } );
 
@@ -103,7 +103,7 @@ describe( "NumberValidator", ( ) =>
 	it( "Valid schema with gt", ( ) =>
 	{
 		const validator = new NumberValidator( ).gt( 3.14 );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "number", exclusiveMinimum: 3.14 } );
 
@@ -117,7 +117,7 @@ describe( "NumberValidator", ( ) =>
 	it( "Valid schema with gte", ( ) =>
 	{
 		const validator = new NumberValidator( ).gte( 3.14 );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "number", minimum: 3.14 } );
 
@@ -132,7 +132,7 @@ describe( "NumberValidator", ( ) =>
 	it( "Valid schema with lt", ( ) =>
 	{
 		const validator = new NumberValidator( ).lt( 3.14 );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "number", exclusiveMaximum: 3.14 } );
 
@@ -146,7 +146,7 @@ describe( "NumberValidator", ( ) =>
 	it( "Valid schema with lte", ( ) =>
 	{
 		const validator = new NumberValidator( ).lte( 3.14 );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "number", maximum: 3.14 } );
 
@@ -161,7 +161,7 @@ describe( "NumberValidator", ( ) =>
 	it( "Valid schema with gt+lt", ( ) =>
 	{
 		const validator = new NumberValidator( ).gt( 3.14 ).lt( 3.16 );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "number",
@@ -228,7 +228,7 @@ describe( "NumberValidator", ( ) =>
 	it( "Valid schema with multipleOf", ( ) =>
 	{
 		const validator = new NumberValidator( ).multipleOf( 3 );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "number",

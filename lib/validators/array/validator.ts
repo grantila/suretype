@@ -1,6 +1,7 @@
 import { Type } from "../types"
 import { ValueValidator } from "../value/validator"
-import { BaseValidator, TreeTraverser } from "../base/validator"
+import { TreeTraverser } from "../core/validator"
+import { BaseValidator } from "../base/validator"
 import { DuplicateConstraintError } from "../../errors"
 import { Writeable } from "../functional"
 

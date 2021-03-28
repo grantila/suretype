@@ -21,7 +21,7 @@ describe( "AnyOfValidator", ( ) =>
 	it( "Valid schema with one item", ( ) =>
 	{
 		const validator = new AnyOfValidator( [ new NumberValidator( ) ] );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { anyOf: [ { type: "number" } ] } );
 
@@ -37,7 +37,7 @@ describe( "AnyOfValidator", ( ) =>
 			new NumberValidator( ).lt( 17 ),
 			new NumberValidator( ).gt( 42 ),
 		] );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { anyOf: [
 			{ type: "number", exclusiveMaximum: 17 },

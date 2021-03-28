@@ -18,7 +18,7 @@ describe( "IfValidator", ( ) =>
 	it( "Valid basic schema with only if", ( ) =>
 	{
 		const validator = new IfValidator( new StringValidator( ) );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 		expect( schema ).toEqual( {
 			if: { type: "string" },
 		} );
@@ -34,7 +34,7 @@ describe( "IfValidator", ( ) =>
 		const validator =
 			new IfValidator( new StringValidator( ) )
 			.then( new StringValidator( ).enum( "foo", "bar" ) );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			if: { type: "string" },
@@ -54,7 +54,7 @@ describe( "IfValidator", ( ) =>
 		const validator =
 			new IfValidator( new StringValidator( ) )
 			.else( new NumberValidator( ).enum( 17, 42 ) );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			if: { type: "string" },
@@ -78,7 +78,7 @@ describe( "IfValidator", ( ) =>
 			new IfValidator( new StringValidator( ) )
 			.then( new StringValidator( ).enum( "foo", "bar" ) )
 			.else( new NumberValidator( ).enum( 17, 42 ) )
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			if: { type: "string" },

@@ -29,7 +29,7 @@ describe( "RequiredValidator", ( ) =>
 		const validator = new RequiredValidator(
 			new NumberValidator( ).enum( 2, 3 )
 		);
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "number", enum: [ 2, 3 ] } );
 

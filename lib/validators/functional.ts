@@ -1,3 +1,4 @@
+import { CoreValidator } from "./core/validator"
 import { BaseValidator } from "./base/validator"
 import { ValueValidator } from "./value/validator"
 import { BooleanValidator } from "./boolean/validator"
@@ -67,6 +68,8 @@ export type TypeOf< T, InclRequired = false > =
 		? U
 		: never
 	: T extends BaseValidator< infer U >
+	? U
+	: T extends CoreValidator< infer U >
 	? U
 	: never;
 

@@ -1,20 +1,14 @@
 import { RawValidator } from "./validator"
-import { validatorType } from "../../validation"
 import { validateJsonSchema, validate } from "../../json-schema"
 import { extractSingleJsonSchema } from "../../extract-json-schema"
 
 
 describe( "RawValidator", ( ) =>
 {
-	it( "Correct type", ( ) =>
-	{
-		expect( validatorType( new RawValidator( { } ) ) ).toEqual( "any" );
-	} );
-
 	it( "Valid basic schema", ( ) =>
 	{
 		const validator = new RawValidator( { type: 'string' } );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 		expect( schema ).toEqual( { type: "string" } );
 
 		expect( validateJsonSchema( schema ).ok ).toEqual( true );

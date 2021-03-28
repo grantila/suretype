@@ -17,7 +17,7 @@ describe( "RecursiveValidator", ( ) =>
 
 	it( "Valid basic schema", ( ) =>
 	{
-		expect( extractSingleJsonSchema( new RecursiveValidator( ) ) )
+		expect( extractSingleJsonSchema( new RecursiveValidator( ) ).schema )
 			.toEqual( { $ref: "#/definitions/Unknown_1" } );
 	} );
 
@@ -27,7 +27,7 @@ describe( "RecursiveValidator", ( ) =>
 			{ name: 'Foo' },
 			new RecursiveValidator( )
 		);
-		expect( extractSingleJsonSchema( schema ) )
+		expect( extractSingleJsonSchema( schema ).schema )
 			.toStrictEqual( { $ref: "#/definitions/Foo" } );
 	} );
 
@@ -40,7 +40,7 @@ describe( "RecursiveValidator", ( ) =>
 				bar: v.recursive( ),
 			} )
 		);
-		expect( extractSingleJsonSchema( schema ) ).toStrictEqual( {
+		expect( extractSingleJsonSchema( schema ).schema ).toStrictEqual( {
 			type: "object",
 			properties: {
 				foo: { type: "number" },

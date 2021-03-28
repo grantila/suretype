@@ -1,15 +1,16 @@
-import { TreeTraverser, BaseValidator } from "./validators/base/validator"
+import { TreeTraverser, CoreValidator } from "./validators/core/validator"
 import type { ExportRefMethod } from "./types"
 import { validatorToSchema } from "./validation"
-import { getAnnotations } from "./annotations"
+import { getName } from "./annotations"
+import { isRaw } from "./validators/raw/validator"
 
 
 export class TreeTraverserImpl implements TreeTraverser
 {
 	private initialValidators =
-		new Map< BaseValidator< unknown, any >, string >( );
+		new Map< CoreValidator< unknown >, string >( );
 	private extraValidators =
-		new Map< BaseValidator< unknown, any >, string >( );
+		new Map< CoreValidator< unknown >, string >( );
 	private validatorNames = new Set< string >( );
 	private definitions: { [ name: string ]: any; } = { };
 	private duplicates = new Map< string, number >( );
@@ -17,16 +18,41 @@ export class TreeTraverserImpl implements TreeTraverser
 	public currentSchemaName: string | undefined = undefined;
 
 	public constructor(
-		initialValidators: Array< BaseValidator< unknown, any > >,
+		initialValidators: Array< CoreValidator< unknown > >,
 		private refMethod: ExportRefMethod
 	)
 	{
-		initialValidators
+		const rawValidators = initialValidators.filter( isRaw );
+		const regularValidators =
+			initialValidators.filter( validator => !isRaw( validator ) );
+
+		rawValidators
+		.forEach( validator =>
+		{
+			const schema = validator.toSchema( );
+			if ( typeof schema.definitions === 'object' )
+			{
+				Object
+				.entries( schema )
+				.forEach( ( [ fragment, subSchema ] ) =>
+				{
+					const name = this.getNextName( fragment );
+					this.definitions[ name ] = subSchema;
+				} );
+			}
+			else
+			{
+				const name = this.getNextName( getName( validator ) );
+				this.definitions[ name ] = schema;
+			}
+		} );
+
+		regularValidators
 		.map( validator => this.makeRef( validator, false ) )
 		.forEach( nameAndValidator => { this.insert( nameAndValidator ); } );
 	}
 
-	public visit( validator: BaseValidator< unknown, any > ): any
+	public visit( validator: CoreValidator< unknown > ): any
 	{
 		const name = this.getValidatorName( validator );
 		if ( !name )
@@ -45,13 +71,13 @@ export class TreeTraverserImpl implements TreeTraverser
 		};
 	}
 
-	private getValidatorName( validator: BaseValidator< unknown, any > )
+	private getValidatorName( validator: CoreValidator< unknown > )
 	{
 		if ( this.refMethod === 'no-refs' )
 			return undefined;
 
-		const decorations = getAnnotations( validator );
-		if ( !decorations?.name )
+		const name = getName( validator );
+		if ( !name )
 			return undefined;
 
 		const nameIfInitial = this.initialValidators.get( validator );
@@ -71,7 +97,7 @@ export class TreeTraverserImpl implements TreeTraverser
 
 	private insert(
 		{ name, validator }:
-			{ name: string; validator: BaseValidator< unknown, any >; }
+			{ name: string; validator: CoreValidator< unknown >; }
 	)
 	{
 		this.currentSchemaName = name;
@@ -80,11 +106,9 @@ export class TreeTraverserImpl implements TreeTraverser
 		return name;
 	}
 
-	private makeRef( validator: BaseValidator< unknown, any >, extra: boolean )
+	private makeRef( validator: CoreValidator< unknown >, extra: boolean )
 	{
-		const decorations = getAnnotations( validator );
-
-		const name = this.getNextName( decorations?.name );
+		const name = this.getNextName( getName( validator ) );
 
 		if ( extra )
 			this.extraValidators.set( validator, name );

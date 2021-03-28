@@ -1,28 +1,31 @@
-import { AnyType } from "../types"
-import { BaseValidator } from "../base/validator"
+import { CoreValidator } from "../core/validator"
 
 
-export class RawValidator extends BaseValidator< unknown, RawValidator >
+export class RawValidator extends CoreValidator< unknown >
 {
-	protected type: AnyType = 'any';
-
-	public constructor( private jsonSchema: any )
+	public constructor(
+		private jsonSchema: any,
+		public readonly fragment?: string
+	)
 	{
 		super( );
 	}
 
-	protected toSchema( )
+	public toSchema( )
 	{
 		return this.jsonSchema;
 	}
 
-	protected clone( clean: boolean = false ): this
+	protected clone( _clean: boolean = false ): this
 	{
-		return this.setupClone(
-			clean,
-			new RawValidator(
-				JSON.parse( JSON.stringify( this.jsonSchema ) )
-			)
-		);
+		return new RawValidator(
+			JSON.parse( JSON.stringify( this.jsonSchema ) )
+		) as this;
 	}
+}
+
+export function isRaw( validator: CoreValidator< unknown > )
+: validator is RawValidator
+{
+	return validator instanceof RawValidator;
 }

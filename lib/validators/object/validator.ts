@@ -1,5 +1,6 @@
 import { Type } from "../types"
-import { BaseValidator, TreeTraverser } from "../base/validator"
+import { TreeTraverser } from "../core/validator"
+import { BaseValidator } from "../base/validator"
 import { validatorType } from "../../validation"
 import { ValueValidator } from "../value/validator"
 import { isRequired } from "../required/validator"

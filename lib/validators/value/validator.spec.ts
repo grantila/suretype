@@ -1,6 +1,6 @@
 import { Type } from "../types"
 import { ValueValidator } from "./validator"
-import { TreeTraverser } from "../base/validator"
+import { TreeTraverser } from "../core/validator"
 import { validatorType } from "../../validation"
 import { RequiredValidator, isRequired } from "../required/validator"
 import { DuplicateConstraintError } from "../../errors"
@@ -48,7 +48,7 @@ describe( "ValueValidator", ( ) =>
 
 	it( "Valid basic schema", ( ) =>
 	{
-		expect( extractSingleJsonSchema( new X( ) ) )
+		expect( extractSingleJsonSchema( new X( ) ).schema )
 			.toEqual( { type: "string" } );
 	} );
 
@@ -120,7 +120,9 @@ describe( "ValueValidator", ( ) =>
 	it( "required() returns RequiredValidator with correct JSON schema", ( ) =>
 	{
 		const r = new X( ).required( );
-		expect( extractSingleJsonSchema( r ) ).toEqual( { type: "string" } );
+		expect( extractSingleJsonSchema( r ).schema ).toEqual(
+			{ type: "string" }
+		);
 	} );
 
 	it( "empty anyOf()", ( ) =>
@@ -137,8 +139,10 @@ describe( "ValueValidator", ( ) =>
 	{
 		const x = new X( );
 		const y = x.anyOf( x => [ x.enum( "foo" ) ] );
-		expect( extractSingleJsonSchema( x ) ).toEqual( { type: "string" } );
-		expect( extractSingleJsonSchema( y ) ).toEqual( {
+		expect( extractSingleJsonSchema( x ).schema ).toEqual(
+			{ type: "string" }
+		);
+		expect( extractSingleJsonSchema( y ).schema ).toEqual( {
 			type: "string",
 			anyOf: [ { enum: [ "foo" ] } ],
 		} );
@@ -148,8 +152,10 @@ describe( "ValueValidator", ( ) =>
 	{
 		const x = new X( );
 		const y = x.anyOf( [ new StringValidator( ).enum( "foo" ) ] );
-		expect( extractSingleJsonSchema( x ) ).toEqual( { type: "string" } );
-		expect( extractSingleJsonSchema( y ) ).toEqual( {
+		expect( extractSingleJsonSchema( x ).schema ).toEqual(
+			{ type: "string" }
+		);
+		expect( extractSingleJsonSchema( y ).schema ).toEqual( {
 			type: "string",
 			anyOf: [ { enum: [ "foo" ] } ],
 		} );
@@ -159,8 +165,10 @@ describe( "ValueValidator", ( ) =>
 	{
 		const x = new X( );
 		const y = x.allOf( x => [ x.enum( "foo" ) ] );
-		expect( extractSingleJsonSchema( x ) ).toEqual( { type: "string" } );
-		expect( extractSingleJsonSchema( y ) ).toEqual( {
+		expect( extractSingleJsonSchema( x ).schema ).toEqual(
+			{ type: "string" }
+		);
+		expect( extractSingleJsonSchema( y ).schema ).toEqual( {
 			type: "string",
 			allOf: [ { enum: [ "foo" ] } ],
 		} );
@@ -170,8 +178,10 @@ describe( "ValueValidator", ( ) =>
 	{
 		const x = new X( );
 		const y = x.allOf( [ new StringValidator( ).enum( "foo" ) ] );
-		expect( extractSingleJsonSchema( x ) ).toEqual( { type: "string" } );
-		expect( extractSingleJsonSchema( y ) ).toEqual( {
+		expect( extractSingleJsonSchema( x ).schema ).toEqual(
+			{ type: "string" }
+		);
+		expect( extractSingleJsonSchema( y ).schema ).toEqual( {
 			type: "string",
 			allOf: [ { enum: [ "foo" ] } ],
 		} );
@@ -183,8 +193,10 @@ describe( "ValueValidator", ( ) =>
 		const y = x
 			.anyOf( x => [ x.enum( "foo" ), x.enum( "bar" ) ] )
 			.allOf( x => [ x.enum( "baz" ) ] );
-		expect( extractSingleJsonSchema( x ) ).toEqual( { type: "string" } );
-		expect( extractSingleJsonSchema( y ) ).toEqual( {
+		expect( extractSingleJsonSchema( x ).schema ).toEqual(
+			{ type: "string" }
+		);
+		expect( extractSingleJsonSchema( y ).schema ).toEqual( {
 			type: "string",
 			anyOf: [ { enum: [ "foo" ] }, { enum: [ "bar" ] } ],
 			allOf: [ { enum: [ "baz" ] } ],
@@ -195,8 +207,10 @@ describe( "ValueValidator", ( ) =>
 	{
 		const x = new X( );
 		const y = x.default( "foo" );
-		expect( extractSingleJsonSchema( x ) ).toEqual( { type: "string" } );
-		expect( extractSingleJsonSchema( y ) ).toEqual( {
+		expect( extractSingleJsonSchema( x ).schema ).toEqual(
+			{ type: "string" }
+		);
+		expect( extractSingleJsonSchema( y ).schema ).toEqual( {
 			type: "string",
 			default: "foo",
 		} );
