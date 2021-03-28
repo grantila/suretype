@@ -11,18 +11,20 @@
 Suretype is a JSON validator targeting TypeScript and JSON Schema. It is **ridiculously type safe** when used in TypeScript, which is good for accuraccy, but also for aiding IDE auto-complete.
 
 <details style="padding-left: 32px; border-left: 4px solid gray;">
-<summary>It's as easy as Joi, but ~50x faster.</summary>
+<summary>It's as easy as Joi, but ~50x faster, (at least) as typesafe as Superstruct, but ~80x faster.</summary>
 <p>
 
 ```
-Joi x 412,045 ops/sec ±0.75% (87 runs sampled)
-suretype x 22,161,985 ops/sec ±0.43% (90 runs sampled)
+❯ yarn benchmark
+Joi x 385,563 ops/sec ±0.39% (95 runs sampled)
+Superstruct x 257,141 ops/sec ±0.34% (90 runs sampled)
+suretype x 21,499,582 ops/sec ±0.85% (92 runs sampled)
 ```
 
 </p>
 </details>
 
-It supports most (if not all) of JSON schema, and *nothing beyond that*, so that the validator schemas written in TypeScript (or JavaScript) can be ensured to be convertible into JSON schema.
+It supports most (if not all) of JSON schema, and *nothing beyond that*, so that the validator schemas written in TypeScript (or JavaScript) can be ensured to be convertible into JSON schema. This also prevents suretype from becoming feature bloated - it has a small and extremely simple API.
 
 Errors are prettified using [awesome-ajv-errors][awesome-ajv-errors-url].
 
