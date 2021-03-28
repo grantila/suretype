@@ -30,3 +30,8 @@ export class RequiredValidator< T, U extends BaseValidator< T > >
 		return new RequiredValidator< T, U >( clonedInner ) as this;
 	}
 }
+
+export function isRequired( validator: BaseValidator< unknown > )
+{
+	return validator instanceof RequiredValidator;
+}

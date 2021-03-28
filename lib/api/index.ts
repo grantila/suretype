@@ -10,15 +10,20 @@ import { TupleValidator } from "../validators/tuple/validator"
 import { AnyOfValidator } from "../validators/or/validator"
 import { AllOfValidator } from "../validators/all-of/validator"
 import { IfValidator } from "../validators/if/validator"
+import { RawValidator } from "../validators/raw/validator"
+import { RecursiveValidator } from "../validators/recursive/validator"
 import { TypeOf } from "../validators/functional"
-import {
-	cloneValidator,
-	decorateValidator,
-	getDecorations,
-} from "../validation"
+import { cloneValidator } from "../validation"
 import { ArrayFunction, TupleFunction } from "../validators/array-types"
 import { ExtractObject } from "../validators/object-types"
-import { DecorationsHolder, Decorations } from "../validators/decorations"
+import {
+	AnnotationsHolder,
+	Annotations,
+	TopLevelAnnotations,
+	annotateValidator,
+	getAnnotations,
+} from "../annotations"
+import { RecursiveValue } from "../validators/types"
 
 
 const string = ( ) => new StringValidator( );
@@ -61,6 +66,8 @@ const any = ( ) => new AnyValidator( );
 const _if = < T extends BaseValidator< unknown > >( validator: T ) =>
 	new IfValidator< TypeOf< T > >( validator );
 
+const recursive = ( ) => new RecursiveValidator( );
+
 export const v = {
 	string,
 	number,
@@ -72,34 +79,60 @@ export const v = {
 	allOf,
 	if: _if,
 	any,
+	recursive,
 };
 
 /**
- * Decorate a validator with a name and other annotations
+ * Cast a recursive value (a value in a recursive type)
+ */
+export const recursiveCast = < T >( value: RecursiveValue ): T => value as any;
+
+/**
+ * Cast a value into a recursive value (inversion of recursiveCast)
+ */
+export const recursiveUnCast = < T >( value: T ) => value as RecursiveValue;
+
+export const raw = < T = unknown >( jsonSchema: any ) =>
+	new RawValidator( jsonSchema ) as BaseValidator< T >;
+
+/**
+ * Annotate a validator with a name and other decorations
  *
- * @param decorations Decorations
- * @param validator Target validator to decorate
- * @returns Decorated validator
+ * @param annotations Annotations
+ * @param validator Target validator to annotate
+ * @returns Annotated validator
  */
 export function suretype< T extends BaseValidator< unknown, any > >(
-	decorations: Decorations,
+	annotations: TopLevelAnnotations,
 	validator: T
 )
 : T
 {
-	return decorateValidator(
+	return annotateValidator(
 		cloneValidator( validator, false ),
-		new DecorationsHolder( decorations )
+		new AnnotationsHolder( annotations )
+	);
+}
+
+export function annotate< T extends BaseValidator< unknown, any > >(
+	annotations: Partial< Annotations >,
+	validator: T
+)
+: T
+{
+	return annotateValidator(
+		cloneValidator( validator, false ),
+		new AnnotationsHolder( annotations )
 	);
 }
 
 /**
- * Ensures a validator is decorated with a name. This will not overwrite the
+ * Ensures a validator is annotated with a name. This will not overwrite the
  * name of a validator, only ensure it has one.
  *
- * @param name The name to decorate with, unless already decorated
+ * @param name The name to annotate with, unless already annotated
  * @param validator The target validator
- * @returns Decorated validator
+ * @returns Annotated validator
  */
 export function ensureNamed< T extends BaseValidator< unknown, any > >(
 	name: string,
@@ -107,11 +140,12 @@ export function ensureNamed< T extends BaseValidator< unknown, any > >(
 )
 : T
 {
-	if ( getDecorations( validator )?.options.name )
+	const annotations = getAnnotations( validator );
+	if ( annotations?.name )
 		return validator;
 
-	return decorateValidator(
+	return annotateValidator(
 		cloneValidator( validator, false ),
-		new DecorationsHolder( { name } )
+		new AnnotationsHolder( { ...annotations, name } )
 	);
 }

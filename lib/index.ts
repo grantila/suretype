@@ -16,5 +16,11 @@ export {
 
 export { getValidatorSchema } from "./validation"
 
+export {
+	Annotations,
+	TopLevelAnnotations,
+	getAnnotations,
+} from "./annotations"
+
 import type { TypeOf } from "./validators/functional"
 export type { TypeOf }

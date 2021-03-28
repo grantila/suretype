@@ -18,12 +18,19 @@ describe( "index", ( ) =>
 				allOf: expect.any( Function ),
 				if: expect.any( Function ),
 				any: expect.any( Function ),
+				recursive: expect.any( Function ),
 			},
+			raw: expect.any( Function ),
 			suretype: expect.any( Function ),
+			annotate: expect.any( Function ),
+			recursiveCast: expect.any( Function ),
+			recursiveUnCast: expect.any( Function ),
 
 			// JSON Schema extraction
 			extractJsonSchema: expect.any( Function ),
 			extractSingleJsonSchema: expect.any( Function ),
+			// Annotations
+			getAnnotations: expect.any( Function ),
 
 			// Errors
 			DuplicateConstraintError: expect.any( Function ),

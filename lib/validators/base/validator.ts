@@ -1,11 +1,12 @@
 import { AnyType } from "../types"
-import { DecorationsHolder } from "../decorations"
+import { AnnotationsHolder } from "../../annotations"
 
 
 export interface TreeTraverser
 {
 	visit( validator: BaseValidator< unknown, any > ): any;
 	getSchema( ): { schema: any; duplicates: Map< string, number >; };
+	currentSchemaName: string | undefined;
 }
 
 export abstract class BaseValidator<
@@ -15,7 +16,7 @@ export abstract class BaseValidator<
 {
 	protected _parent: this | undefined = undefined;
 
-	protected _decorations: DecorationsHolder | undefined = undefined;
+	protected _annotations: AnnotationsHolder | undefined = undefined;
 
 	protected abstract type: AnyType;
 
@@ -33,10 +34,10 @@ export abstract class BaseValidator<
 
 	protected getJsonSchemaObject( traverser: TreeTraverser )
 	{
-		if ( !this._decorations )
+		if ( !this._annotations )
 			return { };
 
-		const { title, description, examples } = this._decorations.options;
+		const { title, description, examples } = this._annotations.options;
 
 		return {
 			...( title ? { title } : { } ),

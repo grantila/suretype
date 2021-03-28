@@ -13,7 +13,8 @@ export type AnyType =
 	| "any"
 	| "any-of"
 	| "all-of"
-	| "if";
+	| "if"
+	| "recursive";
 
 export type FilterProperties< T, Cond > =
 	{
@@ -26,3 +27,5 @@ export type SubType< T, Cond, Invert = false > =
 	Invert extends true
 	? Omit< T, FilterNames< T, Cond > >
 	: Pick< T, FilterNames< T, Cond > >;
+
+export abstract class RecursiveValue { }

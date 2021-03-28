@@ -1,6 +1,7 @@
 import { TreeTraverser, BaseValidator } from "./validators/base/validator"
 import type { ExportRefMethod } from "./types"
-import { validatorToSchema, getDecorations } from "./validation"
+import { validatorToSchema } from "./validation"
+import { getAnnotations } from "./annotations"
 
 
 export class TreeTraverserImpl implements TreeTraverser
@@ -12,6 +13,8 @@ export class TreeTraverserImpl implements TreeTraverser
 	private validatorNames = new Set< string >( );
 	private definitions: { [ name: string ]: any; } = { };
 	private duplicates = new Map< string, number >( );
+
+	public currentSchemaName: string | undefined = undefined;
 
 	public constructor(
 		initialValidators: Array< BaseValidator< unknown, any > >,
@@ -47,8 +50,8 @@ export class TreeTraverserImpl implements TreeTraverser
 		if ( this.refMethod === 'no-refs' )
 			return undefined;
 
-		const decorations = getDecorations( validator );
-		if ( !decorations )
+		const decorations = getAnnotations( validator );
+		if ( !decorations?.name )
 			return undefined;
 
 		const nameIfInitial = this.initialValidators.get( validator );
@@ -71,15 +74,17 @@ export class TreeTraverserImpl implements TreeTraverser
 			{ name: string; validator: BaseValidator< unknown, any >; }
 	)
 	{
+		this.currentSchemaName = name;
 		this.definitions[ name ] = validatorToSchema( validator, this );
+		this.currentSchemaName = undefined;
 		return name;
 	}
 
 	private makeRef( validator: BaseValidator< unknown, any >, extra: boolean )
 	{
-		const decorations = getDecorations( validator );
+		const decorations = getAnnotations( validator );
 
-		const name = this.getNextName( decorations?.options.name );
+		const name = this.getNextName( decorations?.name );
 
 		if ( extra )
 			this.extraValidators.set( validator, name );
