@@ -4,9 +4,11 @@ import type {
 	OnNonSuretypeValidator,
 } from "./types"
 import { DuplicateError } from "./errors"
-import { BaseValidator } from "./validators/base/validator"
-import { getAnnotations } from "./annotations"
+import { CoreValidator } from "./validators/core/validator"
+import { getName, getNames } from "./annotations"
 import { TreeTraverserImpl } from "./tree-traverser"
+import { isRaw } from "./validators/raw/validator"
+import { uniqValidators } from "./validation"
 
 
 export interface ExtractJsonSchemaOptions
@@ -28,7 +30,7 @@ export interface SchemaWithDefinitions
  * @param validators The validators to get the JSON schema from.
  */
 export function extractJsonSchema(
-	validators: Array< BaseValidator< any, any > >,
+	validators: Array< CoreValidator< unknown > >,
 	{
 		refMethod = 'ref-all',
 		onTopLevelNameConflict = 'error',
@@ -39,31 +41,35 @@ export function extractJsonSchema(
 {
 	if ( onNonSuretypeValidator === 'ignore' )
 	{
-		validators = validators
-			.filter( validator => getAnnotations( validator )?.name );
+		validators = validators.filter( validator => getName( validator ) );
 	}
 	else if ( onNonSuretypeValidator === 'error' )
 	{
 		validators.forEach( validator =>
 		{
-			if ( !getAnnotations( validator )?.name )
+			if ( !getName( validator ) )
 				throw new TypeError( "Got unnamed validator" );
 		} );
 	}
+
+	validators = uniqValidators( validators );
 
 	if ( onTopLevelNameConflict === 'error' )
 	{
 		const nameSet = new Set< string >( );
 		validators
-		.map( validator => getAnnotations( validator )?.name )
-		.filter( < T >( t: T ): t is NonNullable< T > => !!t )
-		.forEach( name =>
+		.map( validator => getNames( validator ) )
+		.filter( v => v.length > 0 )
+		.forEach( names =>
 		{
-			if ( nameSet.has( name ) )
-				throw new DuplicateError(
-					`Duplicate validators found with name "${name}"`
-				);
-			nameSet.add( name );
+			for ( const name of names )
+			{
+				if ( nameSet.has( name ) )
+					throw new DuplicateError(
+						`Duplicate validators found with name "${name}"`
+					);
+				nameSet.add( name );
+			}
 		} );
 	}
 
@@ -73,16 +79,25 @@ export function extractJsonSchema(
 	return { schema };
 }
 
+export type ExtractSingleSchemaResult =
+	{ schema: Record< string, any >; fragment?: undefined; }
+	|
+	{ schema: SchemaWithDefinitions; fragment: string; }
+
 /**
  * Get the JSON schema (as a JavaScript object) for a single schema validator.
  *
  * @param validator The validator to get the JSON schema from.
+ * @returns { schema, fragment } where either schema is a single schema and
+ *          fragment is undefined, or schema is a definition schema (with
+ *          multiple fragments) and fragment specifies the specific fragment.
  */
-export function extractSingleJsonSchema(
-	validator: BaseValidator< any, any >
-)
-: Record< string, any >
+export function extractSingleJsonSchema( validator: CoreValidator< unknown > )
+: ExtractSingleSchemaResult
 {
+	if ( isRaw( validator ) )
+		return { schema: validator.toSchema( ), fragment: validator.fragment };
+
 	const { schema: { definitions } } =
 		extractJsonSchema(
 			[ validator ],
@@ -92,5 +107,5 @@ export function extractSingleJsonSchema(
 				onTopLevelNameConflict: 'rename',
 			}
 		);
-	return Object.values( definitions )[ 0 ];
+	return { schema: Object.values( definitions )[ 0 ] };
 }

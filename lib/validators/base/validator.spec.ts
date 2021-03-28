@@ -26,6 +26,7 @@ describe( "BaseValidator", ( ) =>
 
 	it( "JSON schema is extractable", ( ) =>
 	{
-		expect( extractSingleJsonSchema( new X( ) ) ).toEqual( { foo: "bar" } );
+		expect( extractSingleJsonSchema( new X( ) ).schema )
+			.toEqual( { foo: "bar" } );
 	} );
 } );

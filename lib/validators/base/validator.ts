@@ -1,28 +1,22 @@
 import { AnyType } from "../types"
+import {
+	CoreValidator,
+	InternalCoreValidator,
+	TreeTraverser,
+} from "../core/validator"
 import { AnnotationsHolder } from "../../annotations"
 
 
-export interface TreeTraverser
-{
-	visit( validator: BaseValidator< unknown, any > ): any;
-	getSchema( ): { schema: any; duplicates: Map< string, number >; };
-	currentSchemaName: string | undefined;
-}
-
-export abstract class BaseValidator<
-	T,
-	U extends BaseValidator< T, U > = BaseValidator< T, any >
->
+export abstract class BaseValidator
+	<
+		T,
+		U extends BaseValidator< T, U > = BaseValidator< T, any >
+	>
+	extends CoreValidator< T >
 {
 	protected _parent: this | undefined = undefined;
 
-	protected _annotations: AnnotationsHolder | undefined = undefined;
-
 	protected abstract type: AnyType;
-
-	protected abstract toSchema( traverser: TreeTraverser ): any;
-
-	protected abstract clone( clean?: boolean ): this;
 
 	protected setupClone( clean: boolean, clone: U ): this
 	{
@@ -31,18 +25,27 @@ export abstract class BaseValidator<
 			ret._parent = this;
 		return ret;
 	}
+}
 
-	protected getJsonSchemaObject( traverser: TreeTraverser )
-	{
-		if ( !this._annotations )
-			return { };
+export abstract class InternalBaseValidator
+	extends BaseValidator< unknown, any >
+	implements InternalCoreValidator
+{
+	// CoreValidator
+	public _annotations: AnnotationsHolder | undefined = undefined;
+	public abstract toSchema( traverser: TreeTraverser ): any;
+	public abstract clone( clean?: boolean ): this;
 
-		const { title, description, examples } = this._annotations.options;
+	// BaseValidator
+	public _parent: this | undefined = undefined;
+	public abstract type: AnyType;
+	public abstract setupClone( clean: boolean, clone: any ): this;
+}
 
-		return {
-			...( title ? { title } : { } ),
-			...( description ? { description } : { } ),
-			...( examples ? { examples } : { } ),
-		};
-	}
+export function exposeBaseValidator< T extends BaseValidator< unknown > >(
+	validator: T
+)
+: InternalBaseValidator
+{
+	return validator as unknown as InternalBaseValidator;
 }

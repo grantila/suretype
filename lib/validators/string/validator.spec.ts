@@ -16,7 +16,7 @@ describe( "StringValidator", ( ) =>
 	it( "Valid basic schema", ( ) =>
 	{
 		const validator = new StringValidator( );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 		expect( schema ).toEqual( { type: "string" } );
 
 		expect( validateJsonSchema( schema ).ok ).toEqual( true );
@@ -32,7 +32,7 @@ describe( "StringValidator", ( ) =>
 	it( "Valid schema with enum values (empty)", ( ) =>
 	{
 		const validator = new StringValidator( ).enum( );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "string" } );
 
@@ -49,7 +49,7 @@ describe( "StringValidator", ( ) =>
 	it( "Valid schema with enum values (foo)", ( ) =>
 	{
 		const validator = new StringValidator( ).enum( "foo" );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "string", enum: [ "foo" ] } );
 
@@ -63,7 +63,7 @@ describe( "StringValidator", ( ) =>
 	it( "Valid schema with enum values (foo, foo)", ( ) =>
 	{
 		const validator = new StringValidator( ).enum( "foo", "foo" );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "string", enum: [ "foo" ] } );
 
@@ -77,7 +77,7 @@ describe( "StringValidator", ( ) =>
 	it( "Valid schema with enum values (foo, bar)", ( ) =>
 	{
 		const validator = new StringValidator( ).enum( "foo", "bar" );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "string", enum: [ "foo", "bar" ] } );
 
@@ -92,7 +92,7 @@ describe( "StringValidator", ( ) =>
 	it( "Valid schema with const value", ( ) =>
 	{
 		const validator = new StringValidator( ).const( "foo" );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "string", const: "foo" } );
 
@@ -119,7 +119,7 @@ describe( "StringValidator", ( ) =>
 	it( "Valid schema with minLength", ( ) =>
 	{
 		const validator = new StringValidator( ).minLength( 2 );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "string", minLength: 2 } );
 
@@ -133,7 +133,7 @@ describe( "StringValidator", ( ) =>
 	it( "Valid schema with maxLength", ( ) =>
 	{
 		const validator = new StringValidator( ).maxLength( 2 );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "string", maxLength: 2 } );
 
@@ -147,7 +147,7 @@ describe( "StringValidator", ( ) =>
 	it( "Valid schema with numeric", ( ) =>
 	{
 		const validator = new StringValidator( ).numeric( );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "string",
@@ -167,7 +167,7 @@ describe( "StringValidator", ( ) =>
 	it( "Valid schema with matches", ( ) =>
 	{
 		const validator = new StringValidator( ).matches( /^foo/ );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "string",
@@ -191,7 +191,7 @@ describe( "StringValidator", ( ) =>
 	it( "Valid schema with format", ( ) =>
 	{
 		const validator = new StringValidator( ).format( "date-time" );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( { type: "string", format: "date-time" } );
 

@@ -1,5 +1,6 @@
 import { AnyType } from "../types"
-import { BaseValidator, TreeTraverser } from "../base/validator"
+import { TreeTraverser } from "../core/validator"
+import { BaseValidator } from "../base/validator"
 
 
 export class AnyValidator extends BaseValidator< any, AnyValidator >

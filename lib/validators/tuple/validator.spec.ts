@@ -19,7 +19,7 @@ describe( "TupleValidator", ( ) =>
 	it( "zero-sized array", ( ) =>
 	{
 		const validator = new TupleValidator( [ ] );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "array",
@@ -39,7 +39,7 @@ describe( "TupleValidator", ( ) =>
 	it( "zero-sized array with additional", ( ) =>
 	{
 		const validator = new TupleValidator( [ ] ).additional( true );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "array",
@@ -59,7 +59,7 @@ describe( "TupleValidator", ( ) =>
 	it( "Valid schema with one-sized array", ( ) =>
 	{
 		const validator = new TupleValidator( [ new AnyValidator( ) ] );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "array",
@@ -79,7 +79,7 @@ describe( "TupleValidator", ( ) =>
 	it( "Valid schema with 1 item, and no additional", ( ) =>
 	{
 		const validator = new TupleValidator( [ new StringValidator( ) ] );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "array",
@@ -102,7 +102,7 @@ describe( "TupleValidator", ( ) =>
 	{
 		const validator = new TupleValidator( [ new StringValidator( ) ] )
 			.additional( true );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "array",
@@ -126,7 +126,7 @@ describe( "TupleValidator", ( ) =>
 		const validator = new TupleValidator( [
 			new StringValidator( ).required( )
 		] );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "array",
@@ -152,7 +152,7 @@ describe( "TupleValidator", ( ) =>
 			new StringValidator( ).required( )
 		] )
 			.additional( new NumberValidator( ) );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "array",
@@ -180,7 +180,7 @@ describe( "TupleValidator", ( ) =>
 		] )
 		.additional( new BooleanValidator( ) );
 
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "array",
@@ -215,7 +215,7 @@ describe( "TupleValidator", ( ) =>
 		.additional( new BooleanValidator( ) )
 		.minItems( 3 );
 
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 		expect( schema ).toEqual( {
 			type: "array",
 			items: [ { type: "string" }, { type: "number" } ],
@@ -247,7 +247,7 @@ describe( "TupleValidator", ( ) =>
 		.additional( new BooleanValidator( ) )
 		.maxItems( 3 );
 
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 		expect( schema ).toEqual( {
 			type: "array",
 			items: [ { type: "string" }, { type: "number" } ],

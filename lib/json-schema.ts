@@ -1,6 +1,6 @@
 import * as Ajv from "ajv"
 
-import { BaseValidator } from "./validators/base/validator"
+import { CoreValidator } from "./validators/core/validator"
 import { TypeOf } from "./validators/functional"
 import {
 	ValidationResult,
@@ -9,6 +9,7 @@ import {
 } from "./validation-error"
 import { extractSingleJsonSchema } from "./extract-json-schema"
 import { attachSchemaToValidator } from "./validation"
+import { isRaw } from "./validators/raw/validator"
 
 
 function validateWrapper( value: any, validator: Ajv.ValidateFunction )
@@ -99,26 +100,23 @@ export type EnsureFunction< T > =
 	< U = T >( value: any ) => T extends U ? U : never;
 
 export function compile
-<
-	T extends BaseValidator< unknown, any > = any,
-	U = TypeOf< T >
->
+	< T extends CoreValidator< unknown > = any, U = TypeOf< T > >
 (
 	schema: T,
 	opts: CompileOptionsEnsure
 )
 : TypeOf< T > extends U ? EnsureFunction< U > : never;
-export function compile< T extends BaseValidator< unknown, any > = any >(
+export function compile< T extends CoreValidator< unknown > = any >(
 	schema: T,
 	opts: CompileOptionsSimple
 )
 : SimpleValidateFunction< TypeOf< T > >;
-export function compile< T extends BaseValidator< unknown, any > >(
+export function compile< T extends CoreValidator< unknown > >(
 	schema: T,
 	opts?: CompileOptionsDefault
 )
 : ValidateFunction;
-export function compile< T extends BaseValidator< unknown, any > >(
+export function compile< T extends CoreValidator< unknown > >(
 	schema: T,
 	opts: CompileOptionsBase = { }
 )
@@ -129,9 +127,7 @@ export function compile< T extends BaseValidator< unknown, any > >(
 {
 	const { ajvOptions = { } } = opts;
 
-	const ajv = new Ajv( ajvOptions );
-
-	const validator = ajv.compile( extractSingleJsonSchema( schema ) );
+	const validator = innerCompile( ajvOptions, schema )
 
 	function validate( value: any )
 	{
@@ -150,7 +146,7 @@ export function compile< T extends BaseValidator< unknown, any > >(
 	return attachSchemaToValidator( validate, schema );
 }
 
-export function validate< T extends BaseValidator< unknown, any > >(
+export function validate< T extends CoreValidator< unknown > >(
 	schema: T,
 	value: any
 )
@@ -159,7 +155,7 @@ export function validate< T extends BaseValidator< unknown, any > >(
 	return validator( value );
 }
 
-export function ensure< R, T extends BaseValidator< unknown, any > >(
+export function ensure< R, T extends CoreValidator< unknown > >(
 	schema: TypeOf< T > extends R ? T : never,
 	value: any
 )
@@ -169,6 +165,28 @@ export function ensure< R, T extends BaseValidator< unknown, any > >(
 	return validator( value ) as R;
 }
 
+function innerCompile(
+	options: Ajv.Options,
+	validator: CoreValidator< unknown >
+)
+: Ajv.ValidateFunction
+{
+	const ajv = new Ajv( options );
+
+	if ( isRaw( validator ) && validator.fragment )
+	{
+		const { fragment } = validator;
+		ajv.addSchema( validator.toSchema( ) );
+		const validatorFn = ajv.getSchema( `#/definitions/${fragment}` );
+		if ( !validatorFn )
+			throw new ReferenceError( `No such fragment "${fragment}"` );
+		return validatorFn;
+	}
+	else
+	{
+		return ajv.compile( extractSingleJsonSchema( validator ).schema );
+	}
+}
 
 // Compile and validate JSON Schemas themselves
 

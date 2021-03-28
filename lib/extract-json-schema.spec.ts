@@ -17,9 +17,9 @@ describe( "extract-json-schema", ( ) =>
 		const schema2 = suretype( { name: "Foo" }, schema );
 
 		expect(
-			extractSingleJsonSchema( schema )
+			extractSingleJsonSchema( schema ).schema
 		).toStrictEqual(
-			extractSingleJsonSchema( schema2 )
+			extractSingleJsonSchema( schema2 ).schema
 		);
 		expect( schema.constructor ).toEqual( schema2.constructor );
 	} );
@@ -40,7 +40,7 @@ describe( "extract-json-schema", ( ) =>
 			inner
 		);
 
-		const jsonSchemaInner = extractSingleJsonSchema( inner );
+		const { schema: jsonSchemaInner } = extractSingleJsonSchema( inner );
 		const { schema: jsonSchemaOuter } = extractJsonSchema( [ schema ] );
 
 		expect( jsonSchemaOuter ).toEqual( {
@@ -78,8 +78,8 @@ describe( "extract-json-schema", ( ) =>
 			inner2
 		);
 
-		const jsonSchemaInner1 = extractSingleJsonSchema( inner1 );
-		const jsonSchemaInner2 = extractSingleJsonSchema( inner2 );
+		const { schema: jsonSchemaInner1 } = extractSingleJsonSchema( inner1 );
+		const { schema: jsonSchemaInner2 } = extractSingleJsonSchema( inner2 );
 		const { schema: jsonSchemaOuter } =
 			extractJsonSchema( [ schema1, schema2 ] );
 

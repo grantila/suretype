@@ -14,7 +14,7 @@ describe( "AnyValidator", ( ) =>
 	it( "Valid basic schema", ( ) =>
 	{
 		const validator = new AnyValidator( );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 		expect( schema ).toEqual( { } );
 
 		expect( validateJsonSchema( schema ).ok ).toEqual( true );

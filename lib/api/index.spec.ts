@@ -1,6 +1,6 @@
 import { suretype, annotate, v, ensureNamed } from './index'
 import { compile } from '..'
-import { getAnnotations } from '../annotations'
+import { getName } from '../annotations'
 
 
 describe( "suretype", ( ) =>
@@ -86,13 +86,13 @@ describe( "ensureNamed", ( ) =>
 			v.object( { foo: v.string( ) } )
 		);
 		const validator = ensureNamed( 'Badname', schema );
-		expect( getAnnotations( validator )?.name ).toBe( 'Goodname' );
+		expect( getName( validator ) ).toBe( 'Goodname' );
 	} );
 
 	it( "should change name of non-annotated validator", ( ) =>
 	{
 		const schema = v.object( { foo: v.string( ) } );
 		const validator = ensureNamed( 'Goodname', schema );
-		expect( getAnnotations( validator )?.name ).toBe( 'Goodname' );
+		expect( getName( validator ) ).toBe( 'Goodname' );
 	} );
 } );

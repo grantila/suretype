@@ -20,7 +20,7 @@ describe( "ArrayValidator", ( ) =>
 	{
 		const validator = new ArrayValidator( new StringValidator( ) );
 
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "array",
@@ -44,7 +44,7 @@ describe( "ArrayValidator", ( ) =>
 			new ArrayValidator( new StringValidator( ) )
 			.enum( [ "foo" ], [ "bar", "baz" ] );
 
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "array",
@@ -80,7 +80,7 @@ describe( "ArrayValidator", ( ) =>
 			)
 			.minItems( 3 );
 
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 		expect( schema ).toEqual( {
 			type: "array",
 			items: { anyOf: [ { type: "string" }, { type: "boolean" } ] },
@@ -110,7 +110,7 @@ describe( "ArrayValidator", ( ) =>
 			.minItems( 2 )
 			.maxItems( 3 );
 
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 		expect( schema ).toEqual( {
 			type: "array",
 			items: { type: "string" },
@@ -154,7 +154,7 @@ describe( "ArrayValidator", ( ) =>
 			new ArrayValidator( new StringValidator( ) )
 			.contains( new StringValidator( ).const( "foo" ) );
 
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 		expect( schema ).toEqual( {
 			type: "array",
 			items: { type: "string" },
@@ -177,7 +177,7 @@ describe( "ArrayValidator", ( ) =>
 		const validator =
 			new ArrayValidator( new StringValidator( ) ).unique( );
 
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 		expect( schema ).toEqual( {
 			type: "array",
 			items: { type: "string" },

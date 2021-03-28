@@ -1,4 +1,9 @@
-import { BaseValidator } from "./validators/base/validator"
+import {
+	CoreValidator,
+	exposeCoreValidator,
+} from "./validators/core/validator"
+import { isRaw } from "./validators/raw/validator"
+
 
 export interface Annotations
 {
@@ -18,21 +23,51 @@ export class AnnotationsHolder
 	{ }
 }
 
-type AnnotatedValidator< T extends BaseValidator< unknown, any > > =
-	T & { _annotations: AnnotationsHolder };
-
-export function annotateValidator< T extends BaseValidator< unknown > >(
+export function annotateValidator< T extends CoreValidator< unknown > >(
 	validator: T,
 	annotations: AnnotationsHolder
 ): T
 {
-	( validator as AnnotatedValidator< T > )._annotations = annotations;
+	exposeCoreValidator( validator )._annotations = annotations;
 	return validator;
 }
 
-export function getAnnotations< T extends BaseValidator< unknown > >(
+export function getAnnotations< T extends CoreValidator< unknown > >(
 	validator: T
 ): Annotations | undefined
 {
-	return ( validator as AnnotatedValidator< T > )._annotations?.options;
+	const annotations = exposeCoreValidator( validator )._annotations?.options;
+
+	if ( isRaw( validator ) && validator.fragment )
+	{
+		if ( !annotations?.name )
+			return { ...annotations, name: validator.fragment };
+	}
+
+	return annotations;
+}
+
+export function getName< T extends CoreValidator< unknown > >( validator: T )
+: string | undefined
+{
+	const name = exposeCoreValidator( validator )._annotations?.options?.name;
+
+	if ( !name && isRaw( validator ) && validator.fragment )
+	{
+		return validator.fragment;
+	}
+
+	return name;
+}
+
+export function getNames< T extends CoreValidator< unknown > >( validator: T )
+: Array< string >
+{
+	const name = exposeCoreValidator( validator )._annotations?.options?.name;
+
+	const otherNames = isRaw( validator ) && validator.fragment
+		? Object.keys( validator.toSchema( ).definitions )
+		: [ ];
+
+	return name ? [ ...new Set( [ name, ...otherNames ] ) ] : otherNames;
 }

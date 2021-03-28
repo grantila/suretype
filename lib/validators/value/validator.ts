@@ -1,5 +1,6 @@
 import { Type } from "../types"
-import { BaseValidator, TreeTraverser } from "../base/validator"
+import { TreeTraverser } from "../core/validator"
+import { BaseValidator } from "../base/validator"
 import { DuplicateConstraintError, DuplicateError } from "../../errors"
 import { RequiredValidator } from "../required/validator"
 

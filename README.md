@@ -266,7 +266,8 @@ The JSON schema for these can be extracted, either each type by itself:
 ```ts
 import { extractSingleJsonSchema } from "suretype"
 
-const jsonSchema = extractSingleJsonSchema( userSchema ); // The JSON schema for User
+// The JSON schema for User
+const { schema: jsonSchema } = extractSingleJsonSchema( userSchema );
 ```
 
 or as all types at once, into one big JSON schema. In this case, all validation schemas provided **must** be wrapped with `suretype()`, as they will become JSON schema *"definitions"* and therefore must have at least a name.
@@ -274,7 +275,7 @@ or as all types at once, into one big JSON schema. In this case, all validation 
 ```ts
 import { extractJsonSchema } from "suretype"
 
-const jsonSchema = extractJsonSchema( [ userSchema, messageSchema ] );
+const { schema: jsonSchema } = extractJsonSchema( [ userSchema, messageSchema ] );
 ```
 
 The `jsonSchema` *object* (which can be `JSON.stringify`'d) will be something like:

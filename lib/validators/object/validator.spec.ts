@@ -18,7 +18,7 @@ describe( "ObjectValidator", ( ) =>
 	it( "Valid schema without properties", ( ) =>
 	{
 		const validator = new ObjectValidator( { } );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "object",
@@ -35,7 +35,7 @@ describe( "ObjectValidator", ( ) =>
 	it( "Valid schema without properties and without additional", ( ) =>
 	{
 		const validator = new ObjectValidator( { } ).additional( false );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "object",
@@ -54,7 +54,7 @@ describe( "ObjectValidator", ( ) =>
 	{
 		const validator = new ObjectValidator( { } )
 			.additional( true );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "object",
@@ -73,7 +73,7 @@ describe( "ObjectValidator", ( ) =>
 	{
 		const validator = new ObjectValidator( { } )
 			.additional( new NumberValidator( ).enum( 1, 2 ) );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "object",
@@ -101,7 +101,7 @@ describe( "ObjectValidator", ( ) =>
 				num: new NumberValidator( ).enum( 17, 42 ),
 			} )
 			.additional( false );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "object",
@@ -144,7 +144,7 @@ describe( "ObjectValidator", ( ) =>
 			} )
 			.additional( false )
 			.enum( { foo: "bar", num: 42 }, { foo: "baz", num: 17 } );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "object",
@@ -202,7 +202,7 @@ describe( "ObjectValidator", ( ) =>
 				num: new NumberValidator( ).enum( 17, 42 ),
 			} )
 			.additional( true );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "object",
@@ -243,7 +243,7 @@ describe( "ObjectValidator", ( ) =>
 				num: new NumberValidator( ).enum( 17, 42 ),
 			} )
 			.additional( new NumberValidator( ).enum( 1, 2 ) );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "object",
@@ -299,7 +299,7 @@ describe( "ObjectValidator", ( ) =>
 				num: new NumberValidator( ).enum( 17, 42 ),
 			} )
 			.additional( false );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "object",
@@ -359,7 +359,7 @@ describe( "ObjectValidator", ( ) =>
 					num: new NumberValidator( ).enum( 42 ),
 				} ) ),
 			] );
-		const schema = extractSingleJsonSchema( validator );
+		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {
 			type: "object",
