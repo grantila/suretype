@@ -12,6 +12,9 @@ import { AnyOfValidator } from "./or/validator"
 import { AllOfValidator } from "./all-of/validator"
 import { IfValidator, ThenValidator, ElseValidator } from "./if/validator"
 import { RequiredValidator } from "./required/validator"
+import { RawValidator } from "./raw/validator"
+import { RecursiveValidator } from "./recursive/validator"
+import { RecursiveValue } from "./types"
 
 
 export type IsRequired< T > =
@@ -42,6 +45,10 @@ export type TypeOf< T, InclRequired = false > =
 	? U
 	: T extends AnyValidator
 	? any
+	: T extends RecursiveValidator
+	? RecursiveValue
+	: T extends RawValidator
+	? unknown
 	: T extends AnyOfValidator< infer U >
 	? U
 	: T extends AllOfValidator< infer U >

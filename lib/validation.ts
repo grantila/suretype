@@ -1,5 +1,4 @@
 import type { AnyType } from "./validators/types"
-import type { DecorationsHolder } from "./validators/decorations"
 import { BaseValidator, TreeTraverser } from "./validators/base/validator"
 
 
@@ -31,22 +30,6 @@ export function cloneValidator< T extends BaseValidator< unknown > >(
 ): T
 {
 	return ( validator as any ).clone( clean );
-}
-
-export function decorateValidator< T extends BaseValidator< unknown > >(
-	validator: T,
-	decorations: DecorationsHolder
-): T
-{
-	( validator as any )._decorations = decorations;
-	return validator;
-}
-
-export function getDecorations< T extends BaseValidator< unknown > >(
-	validator: T
-): DecorationsHolder | undefined
-{
-	return ( validator as any )._decorations;
 }
 
 const schemaLookup = new WeakMap< Function, BaseValidator< unknown > >( );

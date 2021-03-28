@@ -88,7 +88,7 @@ const data = ... // get data from somewhere, e.g. as a TypeScript unknown
 
 ## Standard validator
 
-The default behaviour of `compile` is to return a validator function returning decorated Ajv output.
+The default behaviour of `compile` is to return a validator function returning extended Ajv output.
 
 ```ts
 const userValidator = compile( userSchema );
@@ -147,28 +147,47 @@ const user = ensureUser< User >( data );
 ```
 
 
-# Decorating schemas
+## Raw JSON Schema validator
 
-You can decorate a validator schema using `suretype()`. The return value is still a validator schema, but when exporting it, the decorations will be included.
+Sometimes it's handy to not describe the validator schema programmatically, but rather use a raw JSON Schema. There will be no type deduction, so the corresponding interface must be provided explicitly. Only use this if you know the JSON Schema maps to the interface! `raw` works just like the `v.*` functions and returns a validator schema. It can also be annotated.
 
 ```ts
-import { suretype, v } from "suretype"
+import { raw, compile } from 'suretype'
+
+type User = ...; // Get this type from somewhere
+const userSchema = raw< User >( { type: 'object', properties: { /* ... */ } } );
+
+// Compile as usual
+const ensureUser = compile( userSchema, { ensure: true } );
+```
+
+
+# Annotating schemas
+
+You can annotate a validator schema using `suretype()` or `annotate()`. The return value is still a validator schema, but when exporting it, the annotations will be included.
+
+The difference between `suretype()` and `annotate()` is that `suretype()` requires the `name` property, where as it's optional in `annotate()`. Use `suretype()` to annotate top-level schemas so that they have proper names in the corresponding JSON Schema.
+
+Annotations are useful when exporting the schema to other formats (e.g. JSON Schema or pretty TypeScript interfaces).
+
+```ts
+import { suretype, annotate, v } from "suretype"
 
 const cartItemSchema = suretype(
-    // Decorations
+    // Annotations
     { name: "CartItem" },
     // The validator schema
     v.object( {
-        productId: v.string( ),
+        productId: annotate( { title: "The product id string" }, v.string( ) ),
         // ...
     } )
 );
 ```
 
-The decorator interface (i.e. the fields you can decorate) is:
+The interface (i.e. the fields you can use) is called `Annotations`:
 
 ```ts
-interface Decorations {
+interface Annotations {
 	name: string;
 	title?: string;
 	description?: string;
@@ -183,7 +202,7 @@ where only the `name` is required.
 
 The following are two types, one using (or *depending on*) the other. They are *named*, which will be reflected in the JSON schema, shown below.
 
-The `userSchema` is the same as in the above example, although it's wrapped in `suretype()` which decorates it with a name and other attributes.
+The `userSchema` is the same as in the above example, although it's wrapped in `suretype()` which annotates it with a name and other attributes.
 
 <details style="padding-left: 32px;border-left: 4px solid gray;">
 <summary>Given these validation schemas:</summary>

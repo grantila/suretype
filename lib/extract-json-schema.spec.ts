@@ -110,7 +110,7 @@ describe( "extract-json-schema", ( ) =>
 		const schema2 = v.string( );
 
 		expect( ( ) => extractJsonSchema( [ schema1, schema2 ] ) )
-			.toThrowError( /undecorated/ );
+			.toThrowError( /unnamed/ );
 	} );
 
 	it( "should ignore non-decorated validator schemas", ( ) =>

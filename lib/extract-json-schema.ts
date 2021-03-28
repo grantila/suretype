@@ -5,7 +5,7 @@ import type {
 } from "./types"
 import { DuplicateError } from "./errors"
 import { BaseValidator } from "./validators/base/validator"
-import { getDecorations } from "./validation"
+import { getAnnotations } from "./annotations"
 import { TreeTraverserImpl } from "./tree-traverser"
 
 
@@ -40,14 +40,14 @@ export function extractJsonSchema(
 	if ( onNonSuretypeValidator === 'ignore' )
 	{
 		validators = validators
-			.filter( validator => getDecorations( validator ) );
+			.filter( validator => getAnnotations( validator )?.name );
 	}
 	else if ( onNonSuretypeValidator === 'error' )
 	{
 		validators.forEach( validator =>
 		{
-			if ( !getDecorations( validator ) )
-				throw new TypeError( "Got undecorated validator" );
+			if ( !getAnnotations( validator )?.name )
+				throw new TypeError( "Got unnamed validator" );
 		} );
 	}
 
@@ -55,9 +55,9 @@ export function extractJsonSchema(
 	{
 		const nameSet = new Set< string >( );
 		validators
-		.map( validator => getDecorations( validator ) )
+		.map( validator => getAnnotations( validator )?.name )
 		.filter( < T >( t: T ): t is NonNullable< T > => !!t )
-		.forEach( ( { options: { name } } ) =>
+		.forEach( name =>
 		{
 			if ( nameSet.has( name ) )
 				throw new DuplicateError(

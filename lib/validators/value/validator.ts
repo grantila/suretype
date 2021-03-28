@@ -214,8 +214,3 @@ function cleanFromTypeProperty< T extends { type: any } >( t: T )
 	const { type, ...ret } = t;
 	return ret;
 }
-
-export function isRequired( validator: BaseValidator< unknown > )
-{
-	return validator instanceof RequiredValidator;
-}
