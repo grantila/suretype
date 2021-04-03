@@ -2,6 +2,15 @@ import type * as Ajv from "ajv"
 import { prettify } from "awesome-ajv-errors"
 
 
+export type ErrorHook = ( err: ValidationError ) => void;
+
+let errorHook: ErrorHook | undefined = undefined;
+
+export function setErrorHook( fn?: ErrorHook | undefined )
+{
+	errorHook = fn;
+}
+
 export interface ValidationErrorData
 {
 	errors: Array< Ajv.ErrorObject >;
@@ -30,9 +39,11 @@ export class ValidationError extends Error implements ValidationErrorData
 		data: unknown
 	)
 	{
-		super( );
+		super( 'Validation failed' );
 
 		makeExplanationGetter( this, 'explanation', errors, schema, data );
+
+		errorHook?.( this );
 	}
 }
 

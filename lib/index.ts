@@ -1,6 +1,7 @@
 export * from "./api"
 
 export * from "./errors"
+export { ValidationError } from "./validation-error"
 
 export * from './types'
 
