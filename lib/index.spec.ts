@@ -18,6 +18,7 @@ describe( "index", ( ) =>
 				allOf: expect.any( Function ),
 				if: expect.any( Function ),
 				any: expect.any( Function ),
+				unknown: expect.any( Function ),
 				recursive: expect.any( Function ),
 			},
 			raw: expect.any( Function ),

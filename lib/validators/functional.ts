@@ -44,8 +44,8 @@ export type TypeOf< T, InclRequired = false > =
 	? U
 	: T extends NullValidator< infer U >
 	? U
-	: T extends AnyValidator
-	? any
+	: T extends AnyValidator< infer U >
+	? U
 	: T extends RecursiveValidator
 	? RecursiveValue
 	: T extends RawValidator

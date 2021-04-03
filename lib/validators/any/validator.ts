@@ -3,7 +3,8 @@ import { TreeTraverser } from "../core/validator"
 import { BaseValidator } from "../base/validator"
 
 
-export class AnyValidator extends BaseValidator< any, AnyValidator >
+export class AnyValidator< T extends any | unknown = any >
+	extends BaseValidator< T, AnyValidator< T > >
 {
 	protected type: AnyType = "any";
 
@@ -16,6 +17,6 @@ export class AnyValidator extends BaseValidator< any, AnyValidator >
 
 	protected clone( clean: boolean = false )
 	{
-		return this.setupClone( clean, new AnyValidator( ) );
+		return this.setupClone( clean, new AnyValidator< T >( ) );
 	}
 }

@@ -64,6 +64,8 @@ const allOf =
 
 const any = ( ) => new AnyValidator( );
 
+const unknown = ( ) => new AnyValidator< unknown >( );
+
 const _if = < T extends BaseValidator< unknown > >( validator: T ) =>
 	new IfValidator< TypeOf< T > >( validator );
 
@@ -80,6 +82,7 @@ export const v = {
 	allOf,
 	if: _if,
 	any,
+	unknown,
 	recursive,
 };
 
