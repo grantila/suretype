@@ -35,6 +35,7 @@ describe( "index", ( ) =>
 			// Errors
 			DuplicateConstraintError: expect.any( Function ),
 			DuplicateError: expect.any( Function ),
+			ValidationError: expect.any( Function ),
 
 			// Validation schema lookup
 			getValidatorSchema: expect.any( Function ),
