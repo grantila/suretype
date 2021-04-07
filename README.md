@@ -6,7 +6,7 @@
 [![Node.JS version][node-version]][node-url]
 
 
-<img src="https://raw.githubusercontent.com/grantila/suretype/master/assets/logo.svg" width="100%" />
+<img src="https://raw.githubusercontent.com/grantila/suretype/master/.github/images/logo.svg" width="100%" />
 
 Suretype is a JSON validator targeting TypeScript and JSON Schema. It is **ridiculously type safe** when used in TypeScript, which is good for accuraccy, but also for aiding IDE auto-complete.
 
@@ -46,14 +46,11 @@ From a validator schema defined with suretype, you can trivially:
  * Compile a validator function (using the **very** fast [Ajv](https://www.npmjs.com/package/ajv))
  * Extract the corresponding JSON Schema
  * Deduce a TypeScript type corresponding to the validator schema (at compile-time!)
-
-<!--
  * Using [typeconv](https://github.com/grantila/typeconv):
-   * Export (convert) the validator schema into JSON Schema, Open API, TypeScript types or GraphQL, or;
+   * [Export](#exporting-using-typeconv) (convert) the validator schema into JSON Schema, Open API, TypeScript types or GraphQL, or;
    * The opposite (!); convert JSON Schema, Open API, TypeScript types or GraphQL **into** suretype validators! 🎉
 
-The above makes it ideal in TypeScript environments. When used in RESTful applications, the JSON Schema can be used to document the APIs using OpenAPI. When used in libraries / clients, the TypeScript interfaces can be extracted to standalone files (including JSDoc comments).
--->
+The above makes it ideal in TypeScript environments. When used in RESTful applications, the exported schema can be used to document the APIs using OpenAPI. When used in libraries / clients, the TypeScript interfaces can be extracted to well-documented standalone files (including JSDoc comments).
 
 
 # Minimal example
@@ -321,8 +318,9 @@ The `jsonSchema` *object* (which can be `JSON.stringify`'d) will be something li
 </p>
 </details>
 
-<!--
-# suretype ❤️ typeconv
+<img src="https://raw.githubusercontent.com/grantila/suretype/master/.github/images/suretype-typeconv.svg" width="25%" />
+
+### Exporting using typeconv
 
 A better (well, often much more practical) way of converting suretype validator schemas into JSON Schema is by using [`typeconv`][typeconv-github-url] [![npm version][typeconv-image]][typeconv-npm-url].
 
@@ -332,8 +330,13 @@ You can convert from suretype validator schemas to:
  * Open API
  * GraphQL
 
+When converting **from** suretype, typeconv will convert all *exported* validator schemas from the source files.
+
+Example *from* Open API *to* SureType; `$ npx typeconv -f oapi -t st -o generated 'schemas/**/*.yml'`
+
 You can also convert **from** any of these formats ***into*** suretype validators!
--->
+
+Example *from* SureType *to* TypeScript; `$ npx typeconv -f st -t ts -o generated 'src/validators/**/*.ts'`
 
 
 [npm-image]: https://img.shields.io/npm/v/suretype.svg
