@@ -2,6 +2,7 @@ import { AnyType } from "../types"
 import { TreeTraverser } from "../core/validator"
 import { BaseValidator } from "../base/validator"
 import { TypeOf } from "../functional"
+import { RequiredValidator } from "../required/validator"
 
 
 export class ElseValidator< T > extends BaseValidator< T, ElseValidator< T > >
@@ -14,6 +15,11 @@ export class ElseValidator< T > extends BaseValidator< T, ElseValidator< T > >
 	protected constructor( )
 	{
 		super( );
+	}
+
+	public required( ): RequiredValidator< T, this >
+	{
+		return new RequiredValidator( this );
 	}
 
 	protected toSchema( traverser: TreeTraverser )

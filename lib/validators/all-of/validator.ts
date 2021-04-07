@@ -1,6 +1,7 @@
 import { AnyType } from "../types"
 import { TreeTraverser } from "../core/validator"
 import { BaseValidator } from "../base/validator"
+import { RequiredValidator } from "../required/validator"
 
 
 export class AllOfValidator< T > extends BaseValidator< T, AllOfValidator< T > >
@@ -15,6 +16,11 @@ export class AllOfValidator< T > extends BaseValidator< T, AllOfValidator< T > >
 			throw new RangeError(
 				"all-of validators must have at least 1 item"
 			);
+	}
+
+	public required( ): RequiredValidator< T, this >
+	{
+		return new RequiredValidator( this );
 	}
 
 	protected toSchema( traverser: TreeTraverser )
