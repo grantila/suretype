@@ -14,7 +14,15 @@ const joiSchema =
 		id: Joi.number( ).required( ),
 		level: Joi.string( ).valid( "debug", "info", "notice" ).required( ),
 		bool: Joi.boolean( ),
-		sub: Joi.object( { x: Joi.any( ) } ),
+		nul: Joi.any( ).valid( null ),
+		arr: Joi.array( ).items( Joi.string( ), Joi.number( ) ),
+		sub: Joi.object( {
+			x: Joi.any( ),
+			tup: Joi.array( ).ordered(
+				Joi.boolean( ).required( ),
+				Joi.number( ).required( )
+			).required( ),
+		} ),
 	} )
 	.unknown( true );
 
@@ -23,7 +31,12 @@ const superstructSchema =
 		id: ss.number( ),
 		level: ss.enums( [ "debug", "info", "notice" ] ),
 		bool: ss.optional( ss.boolean( ) ),
-		sub: ss.optional( ss.object( { x: ss.any( ) } ) ),
+		nul: ss.literal( null ),
+		arr: ss.array( ss.union( [ ss.string( ), ss.number( ) ] ) ),
+		sub: ss.optional( ss.object( {
+			x: ss.optional( ss.any( ) ),
+			tup: ss.tuple( [ ss.boolean( ), ss.number( ) ] ),
+		} ) ),
 	} );
 
 const zodSchema =
@@ -35,7 +48,12 @@ const zodSchema =
 			z.literal( "notice" )
 		] ),
 		bool: z.boolean( ).optional( ),
-		sub: z.object( { x: z.any( ) } ).optional( ),
+		nul: z.null( ),
+		arr: z.array( z.union( [ z.string( ), z.number( ) ] ) ),
+		sub: z.object( {
+			x: z.any( ).optional( ),
+			tup: z.tuple( [ z.boolean( ), z.number( ) ] ),
+		} ).optional( ),
 	} );
 
 const owSchema =
@@ -43,7 +61,12 @@ const owSchema =
 		id: ow.number,
 		level: ow.string.oneOf( [ "debug", "info", "notice" ] ),
 		bool: ow.optional.boolean,
-		sub: ow.optional.object.partialShape( { x: ow.any( ) } ),
+		nul: ow.optional.null,
+		arr: ow.optional.array.ofType(ow.any(ow.string, ow.number)),
+		sub: ow.optional.object.partialShape( {
+			x: ow.optional.any( ),
+			tup: ow.array.exactShape( [ ow.boolean, ow.number ] ),
+		} ),
 	} );
 
 const suretypeSchema =
@@ -51,12 +74,26 @@ const suretypeSchema =
 		id: v.number( ).required( ),
 		level: v.string( ).enum( "debug", "info", "notice" ).required( ),
 		bool: v.boolean( ),
-		sub: v.object( { x: v.any( ) } ),
+		nul: v.null( ),
+		arr: v.array( v.anyOf( [ v.string( ), v.number( ) ] ) ),
+		sub: v.object( {
+			x: v.any( ),
+			tup: v.array( [ v.boolean( ), v.number( ) ] ).required( ),
+		} ),
 	} )
 	.additional( true );
 
 const makeValue = ( ): TypeOf< typeof suretypeSchema> =>
-	( { id: Math.random( ), level: "info", sub: { x: "foo" } } );
+	( {
+		id: Math.random( ),
+		level: "info",
+		nul: null,
+		arr: [ "foo", 42, "bar" ],
+		sub: {
+			x: "foo",
+			tup: [ true, 4711 ],
+		},
+	} );
 
 const joiValidator = Joi.compile( joiSchema );
 const ssValidator = ( val: any ) => ss.assert( val, superstructSchema );

@@ -10,9 +10,9 @@
 
 Suretype is a JSON validator targeting TypeScript and JSON Schema. It is **ridiculously type safe** when used in TypeScript, which is good for accuraccy, but also for aiding IDE auto-complete.
 
-It's as easy as Joi, but ~50x faster.
+It's as easy as Joi, but ~70x faster.
 
-It's (at least) as typesafe as Superstruct, but ~80x faster. ~3000x faster than Zod and ~220x faster than ow.
+It's (at least) as typesafe as Superstruct, but ~100x faster. ~2500x faster than Zod and ~1600x faster than ow.
 
 *These are x (**times**) not %*
 
@@ -22,16 +22,16 @@ It's (at least) as typesafe as Superstruct, but ~80x faster. ~3000x faster than 
 
 ```
 ❯ yarn benchmark
-Joi x 384,285 ops/sec ±0.42% (94 runs sampled)
-Superstruct x 248,358 ops/sec ±0.54% (93 runs sampled)
-Zod x 7,264 ops/sec ±1.06% (87 runs sampled)
-ow x 94,136 ops/sec ±0.78% (90 runs sampled)
-SureType x 21,371,281 ops/sec ±0.86% (90 runs sampled)
+Joi x 123,593 ops/sec ±0.60% (94 runs sampled)
+Superstruct x 87,898 ops/sec ±0.33% (92 runs sampled)
+Zod x 3,498 ops/sec ±1.15% (91 runs sampled)
+ow x 5,533 ops/sec ±0.93% (85 runs sampled)
+SureType x 8,982,429 ops/sec ±0.53% (91 runs sampled)
 -----
-56x faster than Joi
-86x faster than Superstruct
-2942x faster than Zod
-227x faster than ow
+73x faster than Joi
+102x faster than Superstruct
+2568x faster than Zod
+1623x faster than ow
 ```
 
 </p>
