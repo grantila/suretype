@@ -318,9 +318,10 @@ The `jsonSchema` *object* (which can be `JSON.stringify`'d) will be something li
 </p>
 </details>
 
-<img src="https://raw.githubusercontent.com/grantila/suretype/master/.github/images/suretype-typeconv.svg" width="25%" />
 
 ### Exporting using typeconv
+
+<img src="https://raw.githubusercontent.com/grantila/suretype/master/.github/images/suretype-typeconv.svg" width="25%" />
 
 A better (well, often much more practical) way of converting suretype validator schemas into JSON Schema is by using [`typeconv`][typeconv-github-url] [![npm version][typeconv-image]][typeconv-npm-url].
 
@@ -332,11 +333,11 @@ You can convert from suretype validator schemas to:
 
 When converting **from** suretype, typeconv will convert all *exported* validator schemas from the source files.
 
-Example *from* Open API *to* SureType; `$ npx typeconv -f oapi -t st -o generated 'schemas/**/*.yml'`
+Example *from* SureType *to* TypeScript; `$ npx typeconv -f st -t ts -o generated 'src/validators/**/*.ts'`
 
 You can also convert **from** any of these formats ***into*** suretype validators!
 
-Example *from* SureType *to* TypeScript; `$ npx typeconv -f st -t ts -o generated 'src/validators/**/*.ts'`
+Example *from* Open API *to* SureType; `$ npx typeconv -f oapi -t st -o generated 'schemas/**/*.yml'`
 
 
 [npm-image]: https://img.shields.io/npm/v/suretype.svg
