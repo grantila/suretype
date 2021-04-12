@@ -27,6 +27,23 @@ describe( "index", ( ) =>
 			recursiveCast: expect.any( Function ),
 			recursiveUnCast: expect.any( Function ),
 
+			// All validators
+			CoreValidator: expect.any( Function ),
+			BaseValidator: expect.any( Function ),
+			BooleanValidator: expect.any( Function ),
+			NumberValidator: expect.any( Function ),
+			StringValidator: expect.any( Function ),
+			NullValidator: expect.any( Function ),
+			AnyValidator: expect.any( Function ),
+			ObjectValidator: expect.any( Function ),
+			ArrayValidator: expect.any( Function ),
+			TupleValidator: expect.any( Function ),
+			AnyOfValidator: expect.any( Function ),
+			AllOfValidator: expect.any( Function ),
+			IfValidator: expect.any( Function ),
+			RawValidator: expect.any( Function ),
+			RecursiveValidator: expect.any( Function ),
+
 			// JSON Schema extraction
 			extractJsonSchema: expect.any( Function ),
 			extractSingleJsonSchema: expect.any( Function ),

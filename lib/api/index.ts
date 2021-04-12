@@ -27,6 +27,25 @@ import {
 import { RecursiveValue } from "../validators/types"
 
 
+export {
+	CoreValidator,
+	BaseValidator,
+	BooleanValidator,
+	NumberValidator,
+	StringValidator,
+	NullValidator,
+	AnyValidator,
+	ObjectValidator,
+	ArrayValidator,
+	TupleValidator,
+	AnyOfValidator,
+	AllOfValidator,
+	IfValidator,
+	RawValidator,
+	RecursiveValidator,
+}
+
+
 const string = ( ) => new StringValidator( );
 
 const number = ( ) => new NumberValidator( );
