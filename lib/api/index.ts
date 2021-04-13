@@ -118,6 +118,16 @@ export const recursiveUnCast = < T >( value: T ) => value as RecursiveValue;
 export const raw = < T = unknown >( jsonSchema: any, fragment?: string ) =>
 	new RawValidator( jsonSchema, fragment ) as CoreValidator< T >;
 
+export function retype< T extends CoreValidator< unknown > >( validator: T )
+{
+	return {
+		as< U >( ): TypeOf< T > extends U ? CoreValidator< U > : never
+		{
+			return validator as CoreValidator< U > as any;
+		}
+	};
+}
+
 /**
  * Annotate a validator with a name and other decorations
  *

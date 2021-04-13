@@ -22,6 +22,7 @@ describe( "index", ( ) =>
 				recursive: expect.any( Function ),
 			},
 			raw: expect.any( Function ),
+			retype: expect.any( Function ),
 			suretype: expect.any( Function ),
 			annotate: expect.any( Function ),
 			recursiveCast: expect.any( Function ),

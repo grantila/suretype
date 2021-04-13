@@ -1,4 +1,4 @@
-import { suretype, annotate, v, ensureNamed } from './index'
+import { suretype, annotate, v, ensureNamed, retype } from './index'
 import { compile } from '..'
 import { getName } from '../annotations'
 
@@ -61,6 +61,31 @@ describe( "annotate", ( ) =>
 		expect( innerValidator( invalid ).ok ).toBe( false );
 		expect( outerValidator( valid ).ok ).toBe( true );
 		expect( outerValidator( invalid ).ok ).toBe( false );
+	} );
+} );
+
+describe( "retype", ( ) =>
+{
+	it( "should retype", ( ) =>
+	{
+		const validator = v.object( {
+			foo: v.string( ).const( "bar" ),
+			obj: v.object( { prop: v.string( ) } ).required( ),
+		} );
+
+		interface NiceType
+		{
+			foo?: string;
+			obj: {
+				prop?: string;
+			}
+		};
+
+		const nicerValidator = retype( validator ).as< NiceType >( );
+		const ensureNice = compile( nicerValidator, { ensure: true } );
+		const willBeNice = ensureNice( { obj: { prop: 'value' } } );
+
+		expect( willBeNice.obj ).toStrictEqual( { prop: 'value' } );
 	} );
 } );
 
