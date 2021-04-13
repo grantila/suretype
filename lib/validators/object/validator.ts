@@ -4,7 +4,7 @@ import { BaseValidator } from "../base/validator"
 import { validatorType } from "../../validation"
 import { ValueValidator } from "../value/validator"
 import { isRequired } from "../required/validator"
-import { TypeOf } from "../functional"
+import { AdditionalProperties, TypeOf } from "../functional"
 import { AnyValidator } from "../any/validator"
 
 
@@ -53,10 +53,11 @@ export class ObjectValidator< T extends { } >
 	 */
 	public additional( type: false ): this;
 	public additional( type: true )
-	: ObjectValidator< T & { [ key: string ]: unknown; } >;
+	: ObjectValidator< AdditionalProperties< T, unknown > >;
 	public additional< U extends BaseValidator< unknown > >( type: U )
-	: ObjectValidator< T & { [ key: string ]: TypeOf< U > } >;
-	public additional( type: boolean | BaseValidator< unknown > ): this
+	: ObjectValidator< AdditionalProperties< T, TypeOf< U > > >;
+	public additional( type: boolean | BaseValidator< unknown > )
+	: any
 	{
 		const clone = this.clone( );
 		clone._additional =

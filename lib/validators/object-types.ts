@@ -18,9 +18,9 @@ export type ExtractObject<
 		T extends { [ key: string ]: BaseValidator< unknown >; }
 	> =
 	{
-		[ P in keyof RequiredKeys< T > ]-?: TypeOf< T[ P ], true >;
+		[ P in keyof RequiredKeys< T > ]-?: TypeOf< T[ P ], true > & unknown;
 	}
 	&
 	{
-		[ P in keyof OptionalKeys< T > ]+?: TypeOf< T[ P ] >;
+		[ P in keyof OptionalKeys< T > ]+?: TypeOf< T[ P ] > & unknown;
 	};

@@ -24,10 +24,12 @@ export type IsRequired< T > =
 export type ExtractRequired< T > =
 	T extends RequiredValidator< infer U, infer _ > ? U : never;
 
-export type FlattenObject< T, P extends keyof T = keyof T > =
-	{
-		[ K in P ]: T[ K ];
-	};
+export type ValuesOf< T extends { } > = T[ keyof T ] & unknown;
+
+export type FlattenObject< T > = { [ K in keyof T ]: T[ K ] & unknown; };
+
+export type AdditionalProperties< T, U > =
+	FlattenObject< T & Record< string, U | ValuesOf< T > > >;
 
 export type TypeOf< T, InclRequired = false > =
 	T extends ObjectValidator< infer U >
