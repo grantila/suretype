@@ -1,7 +1,6 @@
 import { Type } from "../types"
 import { ValueValidator } from "../value/validator"
-import { TreeTraverser } from "../core/validator"
-import { BaseValidator } from "../base/validator"
+import { CoreValidator, TreeTraverser } from "../core/validator"
 import { DuplicateConstraintError } from "../../errors"
 import { Writeable } from "../functional"
 
@@ -16,9 +15,9 @@ export class ArrayValidator< T extends Array< any > >
 	private _unique: undefined | boolean = undefined;
 	private _minItems: undefined | number = undefined;
 	private _maxItems: undefined | number = undefined;
-	private _contains: BaseValidator< unknown > | undefined = undefined;
+	private _contains: CoreValidator< unknown > | undefined = undefined;
 
-	constructor( private validator: BaseValidator< any > )
+	constructor( private validator: CoreValidator< any > )
 	{
 		super( );
 	}
@@ -67,7 +66,7 @@ export class ArrayValidator< T extends Array< any > >
 		return clone;
 	}
 
-	public contains( validator: BaseValidator< any > ): this
+	public contains( validator: CoreValidator< any > ): this
 	{
 		if ( this._contains !== undefined )
 			throw new DuplicateConstraintError( "contains" );

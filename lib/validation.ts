@@ -4,11 +4,7 @@ import {
 	exposeCoreValidator,
 	TreeTraverser,
 } from "./validators/core/validator"
-import {
-	BaseValidator,
-	exposeBaseValidator,
-} from "./validators/base/validator"
-import { isRaw } from "./validators/raw/validator"
+import { getRaw } from "./validators/raw/validator"
 
 
 export function validatorToSchema< T extends CoreValidator< unknown > >(
@@ -19,11 +15,11 @@ export function validatorToSchema< T extends CoreValidator< unknown > >(
 	return exposeCoreValidator( validator ).toSchema( traverser );
 }
 
-export function validatorType< T extends BaseValidator< unknown > >(
+export function validatorType< T extends CoreValidator< unknown > >(
 	validator: T
 ): AnyType
 {
-	return exposeBaseValidator( validator ).type;
+	return exposeCoreValidator( validator ).type;
 }
 
 export function cloneValidator< T extends CoreValidator< unknown > >(
@@ -67,10 +63,12 @@ export function uniqValidators( validators: Array< CoreValidator< unknown > > )
 	return [
 		...new Map(
 			validators.map( validator =>
-				isRaw( validator )
-				? [ validator.toSchema( ), validator ]
-				: [ { }, validator ]
-			)
+			{
+				const raw = getRaw( validator );
+				return raw
+					? [ raw.toSchema( ), raw ]
+					: [ { }, validator ]
+			} )
 		)
 		.values( )
 	];

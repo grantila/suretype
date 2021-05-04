@@ -6,6 +6,7 @@ import { NumberValidator } from "../number/validator"
 import { StringValidator } from "../string/validator"
 import { BooleanValidator } from "../boolean/validator"
 import { extractSingleJsonSchema } from "../../extract-json-schema"
+import { RawValidator } from "../raw/validator"
 
 
 describe( "TupleValidator", ( ) =>
@@ -242,6 +243,40 @@ describe( "TupleValidator", ( ) =>
 	{
 		const validator = new TupleValidator( [
 			new StringValidator( ).required( ),
+			new NumberValidator( ),
+		] )
+		.additional( new BooleanValidator( ) )
+		.maxItems( 3 );
+
+		const { schema } = extractSingleJsonSchema( validator );
+		expect( schema ).toEqual( {
+			type: "array",
+			items: [ { type: "string" }, { type: "number" } ],
+			minItems: 1,
+			maxItems: 3,
+			additionalItems: { type: "boolean" },
+		} );
+
+		expect( validateJsonSchema( schema ).ok ).toEqual( true );
+		expect( validate( validator, true ).ok ).toEqual( false );
+		expect( validate( validator, "foo" ).ok ).toEqual( false );
+		expect( validate( validator, 3.14 ).ok ).toEqual( false );
+		expect( validate( validator, { } ).ok ).toEqual( false );
+		expect( validate( validator, [ ] ).ok ).toEqual( false );
+		expect( validate( validator, [ "foo" ] ).ok ).toEqual( true );
+		expect( validate( validator, [ "foo", 42 ] ).ok ).toEqual( true );
+		expect( validate( validator, [ "foo", true ] ).ok ).toEqual( false );
+		expect( validate( validator, [ "foo", 42, true ] ).ok )
+			.toEqual( true );
+		expect( validate( validator, [ "foo", 42, true, false ] ).ok )
+			.toEqual( false );
+	} );
+
+
+	it( "Valid schema with maxItems (raw)", ( ) =>
+	{
+		const validator = new TupleValidator( [
+			new RawValidator( { type: "string" } ).required( ),
 			new NumberValidator( ),
 		] )
 		.additional( new BooleanValidator( ) )

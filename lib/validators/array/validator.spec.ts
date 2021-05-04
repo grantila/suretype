@@ -6,6 +6,7 @@ import { AnyOfValidator } from "../or/validator"
 import { StringValidator } from "../string/validator"
 import { BooleanValidator } from "../boolean/validator"
 import { extractSingleJsonSchema } from "../../extract-json-schema"
+import { RawValidator } from "../raw/validator"
 
 
 describe( "ArrayValidator", ( ) =>
@@ -195,5 +196,38 @@ describe( "ArrayValidator", ( ) =>
 		expect( validate( validator, [ "foo", "bar" ] ).ok ).toEqual( true );
 		expect( validate( validator, [ "foo", "bar", "bar" ] ).ok )
 			.toEqual( false );
+	} );
+
+	it( "Valid schema with raw", ( ) =>
+	{
+		const validator =
+			new ArrayValidator(
+				new AnyOfValidator( [
+					new StringValidator( ).required( ),
+					new RawValidator( { type: "boolean" } )
+				] )
+			)
+			.minItems( 3 );
+
+		const { schema } = extractSingleJsonSchema( validator );
+		expect( schema ).toEqual( {
+			type: "array",
+			items: { anyOf: [ { type: "string" }, { type: "boolean" } ] },
+			minItems: 3,
+		} );
+
+		expect( validateJsonSchema( schema ).ok ).toEqual( true );
+		expect( validate( validator, true ).ok ).toEqual( false );
+		expect( validate( validator, "foo" ).ok ).toEqual( false );
+		expect( validate( validator, 3.14 ).ok ).toEqual( false );
+		expect( validate( validator, { } ).ok ).toEqual( false );
+		expect( validate( validator, [ ] ).ok ).toEqual( false );
+		expect( validate( validator, [ "foo" ] ).ok ).toEqual( false );
+		expect( validate( validator, [ "foo", 42 ] ).ok ).toEqual( false );
+		expect( validate( validator, [ "foo", true ] ).ok ).toEqual( false );
+		expect( validate( validator, [ "foo", false, true ] ).ok )
+			.toEqual( true );
+		expect( validate( validator, [ "foo", false, true, false ] ).ok )
+			.toEqual( true );
 	} );
 } );

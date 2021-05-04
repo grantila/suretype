@@ -1,6 +1,5 @@
 import { Type } from "../types"
-import { TreeTraverser } from "../core/validator"
-import { BaseValidator } from "../base/validator"
+import { CoreValidator, TreeTraverser } from "../core/validator"
 import { validatorType } from "../../validation"
 import { ValueValidator } from "../value/validator"
 import { isRequired } from "../required/validator"
@@ -12,18 +11,18 @@ export class ObjectValidator< T extends { } >
 	extends ValueValidator< T, ObjectValidator< T > >
 {
 	protected type: Type = "object";
-	private _properties: { [ key: string ]: BaseValidator< unknown > };
-	private _additional: BaseValidator< unknown > | boolean | undefined =
+	private _properties: { [ key: string ]: CoreValidator< unknown > };
+	private _additional: CoreValidator< unknown > | boolean | undefined =
 		undefined;
 
-	constructor( properties: { [ key: string ]: BaseValidator< unknown > } )
+	constructor( properties: { [ key: string ]: CoreValidator< unknown > } )
 	{
 		super( );
 
 		this._properties = properties;
 	}
 
-	protected chainedAdditional( ): BaseValidator< unknown > | boolean
+	protected chainedAdditional( ): CoreValidator< unknown > | boolean
 	{
 		return this._additional
 			?? this._parent?.chainedAdditional( )
@@ -54,9 +53,9 @@ export class ObjectValidator< T extends { } >
 	public additional( type: false ): this;
 	public additional( type: true )
 	: ObjectValidator< AdditionalProperties< T, unknown > >;
-	public additional< U extends BaseValidator< unknown > >( type: U )
+	public additional< U extends CoreValidator< unknown > >( type: U )
 	: ObjectValidator< AdditionalProperties< T, TypeOf< U > > >;
-	public additional( type: boolean | BaseValidator< unknown > )
+	public additional( type: boolean | CoreValidator< unknown > )
 	: any
 	{
 		const clone = this.clone( );

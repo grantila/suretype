@@ -3,6 +3,7 @@ import { validatorType } from "../../validation"
 import { validateJsonSchema, validate } from "../../json-schema"
 import { NumberValidator } from "../number/validator"
 import { extractSingleJsonSchema } from "../../extract-json-schema"
+import { RawValidator } from "../raw/validator"
 
 
 describe( "AnyOfValidator", ( ) =>
@@ -28,6 +29,26 @@ describe( "AnyOfValidator", ( ) =>
 		expect( validateJsonSchema( schema ).ok ).toEqual( true );
 		expect( validate( validator, true ).ok ).toEqual( false );
 		expect( validate( validator, "foo" ).ok ).toEqual( false );
+		expect( validate( validator, 3.14 ).ok ).toEqual( true );
+	} );
+
+	it( "Valid schema with one item", ( ) =>
+	{
+		const rawValidator = new RawValidator( { type: "string" } );
+		const validator = new AnyOfValidator( [
+			new NumberValidator( ),
+			rawValidator
+		] );
+
+		const { schema } = extractSingleJsonSchema( validator );
+
+		expect( schema ).toEqual( {
+			anyOf: [ { type: "number" }, { type: "string" } ]
+		} );
+
+		expect( validateJsonSchema( schema ).ok ).toEqual( true );
+		expect( validate( validator, true ).ok ).toEqual( false );
+		expect( validate( validator, "foo" ).ok ).toEqual( true );
 		expect( validate( validator, 3.14 ).ok ).toEqual( true );
 	} );
 

@@ -9,7 +9,7 @@ import {
 } from "./validation-error"
 import { extractSingleJsonSchema } from "./extract-json-schema"
 import { attachSchemaToValidator } from "./validation"
-import { isRaw } from "./validators/raw/validator"
+import { getRaw } from "./validators/raw/validator"
 
 
 function validateWrapper( value: any, validator: Ajv.ValidateFunction )
@@ -173,10 +173,11 @@ function innerCompile(
 {
 	const ajv = new Ajv( options );
 
-	if ( isRaw( validator ) && validator.fragment )
+	const raw = getRaw( validator );
+	if ( raw && raw.fragment )
 	{
-		const { fragment } = validator;
-		ajv.addSchema( validator.toSchema( ) );
+		const { fragment } = raw;
+		ajv.addSchema( raw.toSchema( ) );
 		const validatorFn = ajv.getSchema( `#/definitions/${fragment}` );
 		if ( !validatorFn )
 			throw new ReferenceError( `No such fragment "${fragment}"` );

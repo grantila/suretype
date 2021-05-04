@@ -1,6 +1,7 @@
 import { ObjectValidator } from "./validator"
 import { validatorType } from "../../validation"
 import { validateJsonSchema, validate } from "../../json-schema"
+import { RawValidator } from "../raw/validator"
 import { NumberValidator } from "../number/validator"
 import { StringValidator } from "../string/validator"
 import { BooleanValidator } from "../boolean/validator"
@@ -245,6 +246,65 @@ describe( "ObjectValidator", ( ) =>
 		val.foo;
 		val.xxx;
 		fn( val ); // Tests type usage at compile-time
+		expect( validate( validator, val ).ok ).toEqual( true );
+	} );
+
+	it( "Valid schema with properties, additional, enum (all raw)", ( ) =>
+	{
+		const validator =
+			v.object( {
+				foo: new RawValidator( {
+					type: "string", enum: [ "bar", "baz" ]
+				} ).required( ),
+				num: new NumberValidator( ).enum( 17, 42 ),
+				obj: v.object( { p: new RawValidator( { type: "string" } ) } ),
+			} )
+			.additional( new RawValidator( { type: "boolean" } ) );
+		const { schema } = extractSingleJsonSchema( validator );
+
+		expect( schema ).toEqual( {
+			type: "object",
+			properties: {
+				foo: { type: "string", enum: [ "bar", "baz" ] },
+				num: { type: "number", enum: [ 17, 42 ] },
+				obj: {
+					type: "object",
+					properties: {
+						p: { type: "string" },
+					},
+				},
+			},
+			required: [ "foo" ],
+			additionalProperties: { type: 'boolean' },
+		} );
+
+		expect( validateJsonSchema( schema ).ok ).toEqual( true );
+		expect( validate( validator, true ).ok ).toEqual( false );
+		expect( validate( validator, "foo" ).ok ).toEqual( false );
+		expect( validate( validator, 3.14 ).ok ).toEqual( false );
+		expect( validate( validator, {
+			foo: "bar",
+			num: 18,
+		} ).ok ).toEqual( false );
+		expect( validate( validator, {
+			foo: "bak",
+			num: 17,
+		} ).ok ).toEqual( false );
+		expect( validate( validator, {
+			foo: "bar",
+			num: 17,
+			else: "true",
+		} ).ok ).toEqual( false );
+		expect( validate( validator, {
+			foo: "bar",
+			num: 17,
+			else: true,
+		} ).ok ).toEqual( true );
+
+		const val = {
+			foo: "bar",
+			num: 17,
+		};
 		expect( validate( validator, val ).ok ).toEqual( true );
 	} );
 

@@ -1,4 +1,5 @@
 import { AnnotationsHolder } from "../../annotations"
+import { AnyType } from "../types"
 
 
 export interface TreeTraverser
@@ -15,6 +16,8 @@ export abstract class CoreValidator< T >
 	protected abstract toSchema( traverser: TreeTraverser ): any;
 
 	protected abstract clone( clean?: boolean ): this;
+
+	protected abstract type: AnyType;
 
 	protected getJsonSchemaObject( traverser: TreeTraverser )
 	{
@@ -34,6 +37,7 @@ export abstract class CoreValidator< T >
 export abstract class InternalCoreValidator extends CoreValidator< unknown >
 {
 	public _annotations: AnnotationsHolder | undefined = undefined;
+	public abstract type: AnyType;
 	public abstract toSchema( traverser: TreeTraverser ): any;
 	public abstract clone( clean?: boolean ): this;
 }

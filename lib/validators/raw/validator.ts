@@ -1,8 +1,15 @@
 import { CoreValidator } from "../core/validator"
+import {
+	extractRequiredValidator,
+	RequiredValidator,
+} from "../required/validator"
+import { AnyType } from "../types"
 
 
 export class RawValidator extends CoreValidator< unknown >
 {
+	protected type: AnyType = 'raw';
+
 	public constructor(
 		private jsonSchema: any,
 		public readonly fragment?: string
@@ -16,6 +23,11 @@ export class RawValidator extends CoreValidator< unknown >
 		return this.jsonSchema;
 	}
 
+	public required( ): RequiredValidator< unknown, this >
+	{
+		return new RequiredValidator( this );
+	}
+
 	protected clone( _clean: boolean = false ): this
 	{
 		return new RawValidator(
@@ -24,8 +36,14 @@ export class RawValidator extends CoreValidator< unknown >
 	}
 }
 
-export function isRaw( validator: CoreValidator< unknown > )
-: validator is RawValidator
+export function isRaw( validator: CoreValidator< unknown > ): boolean
 {
 	return validator instanceof RawValidator;
+}
+
+export function getRaw( validator: CoreValidator< unknown > )
+: RawValidator | undefined
+{
+	validator = extractRequiredValidator( validator );
+	return isRaw( validator ) ? validator as RawValidator : undefined;
 }
