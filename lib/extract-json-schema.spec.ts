@@ -255,4 +255,26 @@ describe( "extract-json-schema", ( ) =>
 			expect( jsonSchemaOuter ).toMatchSnapshot( );
 		} )
 	}
+
+	it( "should keep references in lookup table", ( ) =>
+	{
+		const schema1 = suretype(
+			{ name: "Foo" },
+			v.number( )
+		);
+		const schema2 = v.anyOf( [ v.string( ), v.boolean( ) ] );
+		const schema3 = v.anyOf( [ v.string( ), schema1 ] );
+
+		const { schema, lookup } = extractJsonSchema(
+			[ schema1, schema2, schema3 ],
+			{ onNonSuretypeValidator: 'lookup' }
+		);
+
+		schema;
+		lookup;
+		expect( schema ).toMatchSnapshot( );
+		expect( lookup.get( schema1 ) ).toMatchSnapshot( );
+		expect( lookup.get( schema2 ) ).toMatchSnapshot( );
+		expect( lookup.get( schema3 ) ).toMatchSnapshot( );
+	} );
 } );

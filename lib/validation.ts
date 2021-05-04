@@ -62,6 +62,8 @@ export function getValidatorSchema( val: any )
 export function uniqValidators( validators: Array< CoreValidator< unknown > > )
 : typeof validators
 {
+	validators = [ ...new Set( validators ) ];
+
 	return [
 		...new Map(
 			validators.map( validator =>

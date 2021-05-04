@@ -8,6 +8,7 @@ export type OnTopLevelNameConflict =
 	| 'rename'; // Rename the validators to a unique name
 
 export type OnNonSuretypeValidator =
-	| 'error'        // Fail the operation
-	| 'ignore'       // Ignore, don't export
-	| 'create-name'; // Create a name 'Unknown'
+	| 'error'       // Fail the operation
+	| 'ignore'      // Ignore, don't export
+	| 'create-name' // Create a name 'Unknown'
+	| 'lookup';     // Provide in lookup table

@@ -11,6 +11,7 @@ export { ValidateFunction, compile, validate }
 export {
 	ExtractJsonSchemaOptions,
 	SchemaWithDefinitions,
+	ExtractedJsonSchema,
 	extractJsonSchema,
 	extractSingleJsonSchema,
 } from "./extract-json-schema"
