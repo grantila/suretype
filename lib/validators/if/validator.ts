@@ -1,5 +1,5 @@
 import { AnyType } from "../types"
-import { TreeTraverser } from "../core/validator"
+import { CoreValidator, TreeTraverser } from "../core/validator"
 import { BaseValidator } from "../base/validator"
 import { TypeOf } from "../functional"
 import { RequiredValidator } from "../required/validator"
@@ -8,9 +8,9 @@ import { RequiredValidator } from "../required/validator"
 export class ElseValidator< T > extends BaseValidator< T, ElseValidator< T > >
 {
 	protected type: AnyType = "if";
-	protected _if: undefined | BaseValidator< unknown > = undefined;
-	protected _then: undefined | BaseValidator< unknown > = undefined;
-	protected _else: undefined | BaseValidator< unknown > = undefined;
+	protected _if: undefined | CoreValidator< unknown > = undefined;
+	protected _then: undefined | CoreValidator< unknown > = undefined;
+	protected _else: undefined | CoreValidator< unknown > = undefined;
 
 	protected constructor( )
 	{
@@ -26,7 +26,7 @@ export class ElseValidator< T > extends BaseValidator< T, ElseValidator< T > >
 	{
 		return {
 			...super.getJsonSchemaObject( traverser ),
-			if: traverser.visit( this._if as BaseValidator< unknown > ),
+			if: traverser.visit( this._if as CoreValidator< unknown > ),
 			...( this._then ? { then: traverser.visit( this._then ) } : { } ),
 			...( this._else ? { else: traverser.visit( this._else ) } : { } ),
 		};
@@ -54,7 +54,7 @@ export class ThenValidator< T > extends ElseValidator< T >
 		super( );
 	}
 
-	public else< U extends BaseValidator< unknown > >( validator: U )
+	public else< U extends CoreValidator< unknown > >( validator: U )
 	: ElseValidator< T | TypeOf< U > >
 	{
 		const then = new ElseValidator< U >( );
@@ -82,16 +82,16 @@ export class ThenValidator< T > extends ElseValidator< T >
 export class IfValidator< T > extends ThenValidator< unknown >
 {
 	protected type: AnyType = "if";
-	protected _if: BaseValidator< unknown >;
+	protected _if: CoreValidator< unknown >;
 
-	constructor( validator: BaseValidator< T > )
+	constructor( validator: CoreValidator< T > )
 	{
 		super( );
 
 		this._if = validator;
 	}
 
-	public then< U extends BaseValidator< unknown > >( validator: U )
+	public then< U extends CoreValidator< unknown > >( validator: U )
 	: ThenValidator< TypeOf< U > >
 	{
 		const then = new ThenValidator< U >( );

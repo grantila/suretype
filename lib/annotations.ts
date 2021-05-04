@@ -2,7 +2,7 @@ import {
 	CoreValidator,
 	exposeCoreValidator,
 } from "./validators/core/validator"
-import { isRaw } from "./validators/raw/validator"
+import { getRaw } from "./validators/raw/validator"
 
 
 export interface Annotations
@@ -38,10 +38,11 @@ export function getAnnotations< T extends CoreValidator< unknown > >(
 {
 	const annotations = exposeCoreValidator( validator )._annotations?.options;
 
-	if ( isRaw( validator ) && validator.fragment )
+	const raw = getRaw( validator );
+	if ( raw && raw.fragment )
 	{
 		if ( !annotations?.name )
-			return { ...annotations, name: validator.fragment };
+			return { ...annotations, name: raw.fragment };
 	}
 
 	return annotations;
@@ -52,9 +53,10 @@ export function getName< T extends CoreValidator< unknown > >( validator: T )
 {
 	const name = exposeCoreValidator( validator )._annotations?.options?.name;
 
-	if ( !name && isRaw( validator ) && validator.fragment )
+	const raw = getRaw( validator );
+	if ( !name && raw && raw.fragment )
 	{
-		return validator.fragment;
+		return raw.fragment;
 	}
 
 	return name;
@@ -65,8 +67,9 @@ export function getNames< T extends CoreValidator< unknown > >( validator: T )
 {
 	const name = exposeCoreValidator( validator )._annotations?.options?.name;
 
-	const otherNames = isRaw( validator ) && validator.fragment
-		? Object.keys( validator.toSchema( ).definitions )
+	const raw = getRaw( validator );
+	const otherNames = raw && raw.fragment
+		? Object.keys( raw.toSchema( ).definitions )
 		: [ ];
 
 	return name ? [ ...new Set( [ name, ...otherNames ] ) ] : otherNames;

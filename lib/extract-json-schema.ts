@@ -7,7 +7,7 @@ import { DuplicateError } from "./errors"
 import { CoreValidator } from "./validators/core/validator"
 import { getName, getNames } from "./annotations"
 import { TreeTraverserImpl } from "./tree-traverser"
-import { isRaw } from "./validators/raw/validator"
+import { getRaw } from "./validators/raw/validator"
 import { uniqValidators } from "./validation"
 
 
@@ -105,8 +105,9 @@ export type ExtractSingleSchemaResult =
 export function extractSingleJsonSchema( validator: CoreValidator< unknown > )
 : ExtractSingleSchemaResult
 {
-	if ( isRaw( validator ) )
-		return { schema: validator.toSchema( ), fragment: validator.fragment };
+	const raw = getRaw( validator );
+	if ( raw )
+		return { schema: raw.toSchema( ), fragment: raw.fragment };
 
 	const { schema: { definitions } } =
 		extractJsonSchema(

@@ -51,15 +51,15 @@ const string = ( ) => new StringValidator( );
 const number = ( ) => new NumberValidator( );
 
 const object =
-	< T extends { [ key: string ]: BaseValidator< unknown >; } >( obj: T ) =>
+	< T extends { [ key: string ]: CoreValidator< unknown >; } >( obj: T ) =>
 		new ObjectValidator< ExtractObject< T > >( obj );
 
 const tuple: TupleFunction =
-	< U extends BaseValidator< unknown >[ ] >( types: U ) =>
+	< U extends CoreValidator< unknown >[ ] >( types: U ) =>
 		new TupleValidator< any, any, any, any >( types );
 
 const array: ArrayFunction =
-	< U extends BaseValidator< unknown > >( itemType?: U ) =>
+	< U extends CoreValidator< unknown > >( itemType?: U ) =>
 		new ArrayValidator< Array< TypeOf< U > > >( itemType ?? any( ) );
 
 const arrayOrTuple = (
@@ -74,18 +74,18 @@ const boolean = ( ) => new BooleanValidator( );
 const _null = ( ) => new NullValidator( );
 
 const anyOf =
-	< T extends BaseValidator< unknown > >( validators: ReadonlyArray< T > ) =>
+	< T extends CoreValidator< unknown > >( validators: ReadonlyArray< T > ) =>
 	new AnyOfValidator< TypeOf< T > >( validators );
 
 const allOf =
-	< T extends BaseValidator< unknown > >( validators: ReadonlyArray< T > ) =>
+	< T extends CoreValidator< unknown > >( validators: ReadonlyArray< T > ) =>
 	new AllOfValidator< TypeOf< T > >( validators );
 
 const any = ( ) => new AnyValidator( );
 
 const unknown = ( ) => new AnyValidator< unknown >( );
 
-const _if = < T extends BaseValidator< unknown > >( validator: T ) =>
+const _if = < T extends CoreValidator< unknown > >( validator: T ) =>
 	new IfValidator< TypeOf< T > >( validator );
 
 const recursive = ( ) => new RecursiveValidator( );

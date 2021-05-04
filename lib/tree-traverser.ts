@@ -2,7 +2,7 @@ import { TreeTraverser, CoreValidator } from "./validators/core/validator"
 import type { ExportRefMethod } from "./types"
 import { validatorToSchema } from "./validation"
 import { getName } from "./annotations"
-import { isRaw } from "./validators/raw/validator"
+import { getRaw, isRaw } from "./validators/raw/validator"
 
 
 export interface SchemaResult
@@ -31,7 +31,9 @@ export class TreeTraverserImpl implements TreeTraverser
 		private allowUnnamed: boolean
 	)
 	{
-		const rawValidators = validators.filter( isRaw );
+		const rawValidators = validators
+			.filter( isRaw )
+			.map( validator => getRaw( validator )! );
 		const regularValidators =
 			validators.filter( validator => !isRaw( validator ) );
 

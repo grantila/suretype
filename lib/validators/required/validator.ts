@@ -1,13 +1,13 @@
 import { AnyType } from "../types"
-import { TreeTraverser } from "../core/validator"
+import { CoreValidator, TreeTraverser } from "../core/validator"
 import { BaseValidator } from "../base/validator"
 import { validatorType, cloneValidator } from "../../validation"
 
 
-export class RequiredValidator< T, U extends BaseValidator< T > >
+export class RequiredValidator< T, U extends CoreValidator< T > >
 	extends BaseValidator< T, RequiredValidator< T, U > >
 {
-	constructor( private validator: U )
+	constructor( protected validator: U )
 	{
 		super( );
 	}
@@ -32,7 +32,21 @@ export class RequiredValidator< T, U extends BaseValidator< T > >
 	}
 }
 
-export function isRequired( validator: BaseValidator< unknown > )
+export abstract class InternalRequiredValidator
+	extends RequiredValidator< unknown, CoreValidator< unknown > >
+{
+	public abstract validator: CoreValidator< unknown >;
+}
+
+export function isRequired( validator: CoreValidator< unknown > )
 {
 	return validator instanceof RequiredValidator;
+}
+
+export function extractRequiredValidator( validator: CoreValidator< unknown > )
+: CoreValidator< unknown >
+{
+	return validator instanceof RequiredValidator
+		? ( validator as InternalRequiredValidator ).validator
+		: validator;
 }

@@ -2,12 +2,15 @@ import { CoreValidator, exposeCoreValidator } from "./validator"
 import { extractSingleJsonSchema } from "../../extract-json-schema"
 import { getAnnotations } from "../../annotations";
 import { annotate } from "../../api";
+import { AnyType } from "../types";
 
 
 describe( "CoreValidator", ( ) =>
 {
 	class X extends CoreValidator< string >
 	{
+		type: AnyType = 'any';
+
 		protected toSchema( )
 		{
 			return { foo: "bar" };

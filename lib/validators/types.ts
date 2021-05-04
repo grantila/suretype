@@ -10,6 +10,7 @@ export type Type =
 
 export type AnyType =
 	| Type
+	| "raw"
 	| "any"
 	| "any-of"
 	| "all-of"

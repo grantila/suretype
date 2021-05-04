@@ -1,8 +1,7 @@
 import { Type } from "../types"
 import { ValueValidator } from "../value/validator"
 import { isRequired } from "../required/validator"
-import { TreeTraverser } from "../core/validator"
-import { BaseValidator } from "../base/validator"
+import { CoreValidator, TreeTraverser } from "../core/validator"
 import { AnyValidator } from "../any/validator"
 import { DuplicateConstraintError } from "../../errors"
 import { ArrayOf, ArrayOfWithRest } from "../array-types"
@@ -12,9 +11,9 @@ import type { If, Is, And, Extends, GreaterThan, LengthOf } from "meta-types"
 
 export class TupleValidator<
 	T extends any[ ],
-	U extends BaseValidator< unknown >[ ],
+	U extends CoreValidator< unknown >[ ],
 	N extends number, // First optional index
-	A extends false | BaseValidator< unknown, any > // Additional elements
+	A extends false | CoreValidator< unknown > // Additional elements
 >
 	extends ValueValidator< T, TupleValidator< T, U, N, A > >
 {
@@ -23,10 +22,10 @@ export class TupleValidator<
 	private _numRequired: number;
 	private _minItems: undefined | number = undefined;
 	private _maxItems: undefined | number = undefined;
-	private _contains: BaseValidator< unknown > | undefined = undefined;
-	private _additional: BaseValidator< unknown > | undefined = undefined;
+	private _contains: CoreValidator< unknown > | undefined = undefined;
+	private _additional: CoreValidator< unknown > | undefined = undefined;
 
-	constructor( private validators: ReadonlyArray< BaseValidator< any > > )
+	constructor( private validators: ReadonlyArray< CoreValidator< any > > )
 	{
 		super( );
 
@@ -46,7 +45,7 @@ export class TupleValidator<
 	}
 
 	private static findMinItems(
-		validators: ReadonlyArray< BaseValidator< any > >
+		validators: ReadonlyArray< CoreValidator< any > >
 	)
 	: number
 	{
@@ -133,7 +132,7 @@ export class TupleValidator<
 		typeof type extends false
 		? this
 		: TupleValidator< ArrayOfWithRest< U, any, N >, U, N, AnyValidator >;
-	public additional< B extends BaseValidator< unknown > >( type: B )
+	public additional< B extends CoreValidator< unknown > >( type: B )
 	:
 		TupleValidator<
 			ArrayOfWithRest< U, TypeOf< B >, N >,
@@ -141,16 +140,16 @@ export class TupleValidator<
 			N,
 			B
 		>;
-	public additional< B extends boolean, T2 >( type: B | BaseValidator< T2 > )
+	public additional< B extends boolean, T2 >( type: B | CoreValidator< T2 > )
 	:
 		B extends false
 		? this
-		: typeof type extends BaseValidator< unknown >
+		: typeof type extends CoreValidator< unknown >
 		? TupleValidator<
 			ArrayOfWithRest< U, T2, N >,
 			U,
 			N,
-			BaseValidator< T2 >
+			CoreValidator< T2 >
 		>
 		: TupleValidator< ArrayOfWithRest< U, any, N >, U, N, AnyValidator >
 	{
@@ -163,11 +162,11 @@ export class TupleValidator<
 			? new AnyValidator( )
 			: type === false
 			? undefined
-			: type as BaseValidator< T2 >;
+			: type as CoreValidator< T2 >;
 		return clone as any;
 	}
 
-	public contains( validator: BaseValidator< any > ): this
+	public contains( validator: CoreValidator< any > ): this
 	{
 		if ( this._contains !== undefined )
 			throw new DuplicateConstraintError( "contains" );

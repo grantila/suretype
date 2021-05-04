@@ -1,6 +1,7 @@
 import { IfValidator } from "./validator"
 import { validatorType } from "../../validation"
 import { validateJsonSchema, validate } from "../../json-schema"
+import { RawValidator } from "../raw/validator"
 import { StringValidator } from "../string/validator"
 import { NumberValidator } from "../number/validator"
 import { suretype } from "../../api"
@@ -77,7 +78,35 @@ describe( "IfValidator", ( ) =>
 		const validator =
 			new IfValidator( new StringValidator( ) )
 			.then( new StringValidator( ).enum( "foo", "bar" ) )
-			.else( new NumberValidator( ).enum( 17, 42 ) )
+			.else( new NumberValidator( ).enum( 17, 42 ) );
+		const { schema } = extractSingleJsonSchema( validator );
+
+		expect( schema ).toEqual( {
+			if: { type: "string" },
+			then: { type: "string", enum: [ "foo", "bar" ] },
+			else: { type: "number", enum: [ 17, 42 ] },
+		} );
+
+		expect( validateJsonSchema( schema ).ok ).toEqual( true );
+		expect( validate( validator, false ).ok ).toEqual( false );
+		expect( validate( validator, "foo" ).ok ).toEqual( true );
+		expect( validate( validator, "bar" ).ok ).toEqual( true );
+		expect( validate( validator, "baz" ).ok ).toEqual( false );
+		expect( validate( validator, 3.14 ).ok ).toEqual( false );
+		expect( validate( validator, 17 ).ok ).toEqual( true );
+		expect( validate( validator, 18 ).ok ).toEqual( false );
+		expect( validate( validator, 42 ).ok ).toEqual( true );
+	} );
+
+
+	it( "Valid basic schema with if, then, else with raw validators", ( ) =>
+	{
+		const validator =
+			new IfValidator( new RawValidator( { type: "string" } ) )
+			.then(
+				new RawValidator( { type: "string", enum: [ "foo", "bar" ] } )
+			)
+			.else( new RawValidator( { type: "number", enum: [ 17, 42 ] } ) );
 		const { schema } = extractSingleJsonSchema( validator );
 
 		expect( schema ).toEqual( {

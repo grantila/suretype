@@ -1,5 +1,5 @@
 import { AnyType } from "../types"
-import { TreeTraverser } from "../core/validator"
+import { CoreValidator, TreeTraverser } from "../core/validator"
 import { BaseValidator } from "../base/validator"
 import { RequiredValidator } from "../required/validator"
 
@@ -8,7 +8,7 @@ export class AnyOfValidator< T > extends BaseValidator< T, AnyOfValidator< T > >
 {
 	protected type: AnyType = "any-of";
 
-	constructor( private validators: ReadonlyArray< BaseValidator< T > > )
+	constructor( private validators: ReadonlyArray< CoreValidator< T > > )
 	{
 		super( );
 
