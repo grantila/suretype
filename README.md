@@ -272,10 +272,55 @@ or as all types at once, into one big JSON schema. In this case, all validation 
 ```ts
 import { extractJsonSchema } from "suretype"
 
-const { schema: jsonSchema } = extractJsonSchema( [ userSchema, messageSchema ] );
+const { schema: jsonSchema, lookup } =
+    extractJsonSchema( [ userSchema, messageSchema ], { /* opts... */ } );
 ```
 
-The `jsonSchema` *object* (which can be `JSON.stringify`'d) will be something like:
+An optional second argument can be provided on the form:
+
+```ts
+interface ExtractJsonSchemaOptions {
+    refMethod?: ExportRefMethod;
+    onTopLevelNameConflict?: OnTopLevelNameConflict;
+    onNonSuretypeValidator?: OnNonSuretypeValidator;
+}
+```
+
+The `ExportRefMethod` type is a string union defined as:
+```ts
+    | 'no-refs'  // Don't ref anything. Inline all types to monolith types.
+    | 'provided' // Reference types that are explicitly provided.
+    | 'ref-all'  // Ref all provided types and those with names, suretype()'d.
+```
+
+The `OnTopLevelNameConflict` type is a string union defined as:
+```ts
+    | 'error'  // Fail the operation
+    | 'rename' // Rename the validators to a unique name
+```
+
+The `OnNonSuretypeValidator` type is a string union defined as:
+```ts
+    | 'error'       // Fail the operation
+    | 'ignore'      // Ignore, don't export
+    | 'create-name' // Create a name 'Unknown'
+    | 'lookup'      // Provide in lookup table
+```
+
+If `lookup` is specified, it allows unnamed validators. They won't exist in the resulting schema, but in a lookup table next to it. This lookup table will always exist, using this setting will simply allow unnamed validators.
+
+The result is an object on the form:
+
+```ts
+interface ExtractedJsonSchema {
+    schema: SchemaWithDefinitions; // Contains a 'definitions' property
+    lookup: Map< CoreValidator< unknown >, any >;
+}
+```
+
+The `lookup` is useful to lookup the json schema for a certain validator object reference, especially unnamed ones which are not included in the schema.
+
+In the example above, the `jsonSchema` *object* (which can be `JSON.stringify`'d) will be something like:
 
 <details style="padding-left: 32px;border-left: 4px solid gray;">
 <summary>JSON Schema</summary>

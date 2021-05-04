@@ -36,6 +36,48 @@ Object {
 }
 `;
 
+exports[`extract-json-schema should keep references in lookup table 1`] = `
+Object {
+  "definitions": Object {
+    "Foo": Object {
+      "type": "number",
+    },
+  },
+}
+`;
+
+exports[`extract-json-schema should keep references in lookup table 2`] = `
+Object {
+  "type": "number",
+}
+`;
+
+exports[`extract-json-schema should keep references in lookup table 3`] = `
+Object {
+  "anyOf": Array [
+    Object {
+      "type": "string",
+    },
+    Object {
+      "type": "boolean",
+    },
+  ],
+}
+`;
+
+exports[`extract-json-schema should keep references in lookup table 4`] = `
+Object {
+  "anyOf": Array [
+    Object {
+      "type": "string",
+    },
+    Object {
+      "$ref": "#/definitions/Foo",
+    },
+  ],
+}
+`;
+
 exports[`extract-json-schema should produce proper definitions for referenced schemas (using method no-refs) 1`] = `
 Object {
   "definitions": Object {

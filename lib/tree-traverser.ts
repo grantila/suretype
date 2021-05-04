@@ -5,6 +5,13 @@ import { getName } from "./annotations"
 import { isRaw } from "./validators/raw/validator"
 
 
+export interface SchemaResult
+{
+	schema: any;
+	duplicates: Map< string, number >;
+	lookup: Map< CoreValidator< unknown >, any >;
+}
+
 export class TreeTraverserImpl implements TreeTraverser
 {
 	private initialValidators =
@@ -13,18 +20,20 @@ export class TreeTraverserImpl implements TreeTraverser
 		new Map< CoreValidator< unknown >, string >( );
 	private validatorNames = new Set< string >( );
 	private definitions: { [ name: string ]: any; } = { };
+	private lookupMap = new Map< CoreValidator< unknown >, any >( );
 	private duplicates = new Map< string, number >( );
 
 	public currentSchemaName: string | undefined = undefined;
 
 	public constructor(
-		initialValidators: Array< CoreValidator< unknown > >,
-		private refMethod: ExportRefMethod
+		validators: Array< CoreValidator< unknown > >,
+		private refMethod: ExportRefMethod,
+		private allowUnnamed: boolean
 	)
 	{
-		const rawValidators = initialValidators.filter( isRaw );
+		const rawValidators = validators.filter( isRaw );
 		const regularValidators =
-			initialValidators.filter( validator => !isRaw( validator ) );
+			validators.filter( validator => !isRaw( validator ) );
 
 		rawValidators
 		.forEach( validator =>
@@ -33,7 +42,7 @@ export class TreeTraverserImpl implements TreeTraverser
 			if ( typeof schema.definitions === 'object' )
 			{
 				Object
-				.entries( schema )
+				.entries( schema.definitions )
 				.forEach( ( [ fragment, subSchema ] ) =>
 				{
 					const name = this.getNextName( fragment );
@@ -42,8 +51,13 @@ export class TreeTraverserImpl implements TreeTraverser
 			}
 			else
 			{
+				this.lookupMap.set( validator, schema );
+
 				const name = this.getNextName( getName( validator ) );
-				this.definitions[ name ] = schema;
+				if ( name )
+					this.definitions[ name ] = schema;
+				else if ( !allowUnnamed )
+					throw new TypeError( "Got unnamed validator" );
 			}
 		} );
 
@@ -60,14 +74,14 @@ export class TreeTraverserImpl implements TreeTraverser
 		return { $ref: `#/definitions/${name}` };
 	}
 
-	public getSchema( )
-	: { schema: any; duplicates: Map< string, number >; }
+	public getSchema( ): SchemaResult
 	{
 		return {
 			schema: {
 				definitions: this.definitions,
 			},
 			duplicates: this.duplicates,
+			lookup: this.lookupMap,
 		};
 	}
 
@@ -97,18 +111,30 @@ export class TreeTraverserImpl implements TreeTraverser
 
 	private insert(
 		{ name, validator }:
-			{ name: string; validator: CoreValidator< unknown >; }
+			{ name?: string; validator: CoreValidator< unknown >; }
 	)
 	{
-		this.currentSchemaName = name;
-		this.definitions[ name ] = validatorToSchema( validator, this );
+		if ( name )
+			this.currentSchemaName = name;
+
+		const schema = validatorToSchema( validator, this );
+		this.lookupMap.set( validator, schema );
+		if ( name )
+			this.definitions[ name ] = schema;
+
 		this.currentSchemaName = undefined;
+
 		return name;
 	}
 
 	private makeRef( validator: CoreValidator< unknown >, extra: boolean )
 	{
-		const name = this.getNextName( getName( validator ) );
+		const baseName = getName( validator );
+
+		if ( !baseName && !extra && this.allowUnnamed )
+			return { validator };
+
+		const name = this.getNextName( baseName );
 
 		if ( extra )
 			this.extraValidators.set( validator, name );
@@ -135,15 +161,14 @@ export class TreeTraverserImpl implements TreeTraverser
 		const iterationName = baseName ?? 'Unknown';
 
 		let i = baseName ? 1 : 0;
-		while ( ++i )
+		while ( true )
 		{
-			const name = iterationName + `_${i}`;
+			const name = iterationName + `_${++i}`;
 			if ( !this.validatorNames.has( name ) )
 			{
 				this.validatorNames.add( name );
 				return name;
 			}
 		}
-		return 'x'; // TS-dummy
 	}
 }

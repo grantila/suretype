@@ -23,6 +23,12 @@ export interface SchemaWithDefinitions
 	definitions: { [ name: string ]: any; };
 }
 
+export interface ExtractedJsonSchema
+{
+	schema: SchemaWithDefinitions;
+	lookup: Map< CoreValidator< unknown >, any >;
+}
+
 /**
  * Get the JSON schema (as a JavaScript object) for an array of schema
  * validators.
@@ -37,7 +43,7 @@ export function extractJsonSchema(
 		onNonSuretypeValidator = 'error',
 	}: ExtractJsonSchemaOptions = { }
 )
-: { schema: SchemaWithDefinitions }
+: ExtractedJsonSchema
 {
 	if ( onNonSuretypeValidator === 'ignore' )
 	{
@@ -73,10 +79,14 @@ export function extractJsonSchema(
 		} );
 	}
 
-	const traverser = new TreeTraverserImpl( validators, refMethod );
-	const { schema } = traverser.getSchema( );
+	const traverser = new TreeTraverserImpl(
+		validators,
+		refMethod,
+		onNonSuretypeValidator === 'lookup'
+	);
+	const { schema, lookup } = traverser.getSchema( );
 
-	return { schema };
+	return { schema, lookup };
 }
 
 export type ExtractSingleSchemaResult =
