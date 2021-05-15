@@ -5,8 +5,21 @@ export { ValidationError } from "./validation-error"
 
 export * from './types'
 
-import { ValidateFunction, compile, validate } from "./json-schema"
-export { ValidateFunction, compile, validate }
+import {
+	ValidateFunction,
+	EnsureFunction,
+	SimpleValidateFunction,
+	compile,
+	validate,
+} from "./json-schema"
+
+export {
+	ValidateFunction,
+	EnsureFunction,
+	SimpleValidateFunction,
+	compile,
+	validate,
+}
 
 export {
 	ExtractJsonSchemaOptions,
