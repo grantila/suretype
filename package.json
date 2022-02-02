@@ -3,6 +3,7 @@
   "version": "0.0.0-development",
   "description": "Typesafe JSON (Schema) validator with magic powers 🧙‍♂️",
   "author": "Gustaf Räntilä",
+  "contributors": ["Krispin Wandel"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/grantila/suretype/issues"
@@ -56,7 +57,6 @@
   },
   "dependencies": {
     "ajv": "^6.11.0",
-    "awesome-ajv-errors": "^1.0.1",
     "meta-types": "^1.1.0"
   },
   "config": {

@@ -1,210 +1,207 @@
 import * as Ajv from "ajv"
 
-import { CoreValidator } from "./validators/core/validator"
-import { TypeOf } from "./validators/functional"
+import {CoreValidator} from "./validators/core/validator"
+import {TypeOf} from "./validators/functional"
 import {
-	ValidationResult,
-	ValidationError,
-	makeExplanationGetter,
+    ValidationResult,
+    ValidationError,
+    makeExplanationGetter,
 } from "./validation-error"
-import { extractSingleJsonSchema } from "./extract-json-schema"
-import { attachSchemaToValidator } from "./validation"
-import { getRaw } from "./validators/raw/validator"
+import {extractSingleJsonSchema} from "./extract-json-schema"
+import {attachSchemaToValidator} from "./validation"
+import {getRaw} from "./validators/raw/validator"
 
 
-function validateWrapper( value: any, validator: Ajv.ValidateFunction )
-: ValidationResult
-{
-	const ok = validator( value );
-	if ( ok )
-		return { ok: true };
+function validateWrapper(
+    value: any,
+    validator: Ajv.ValidateFunction,
+    prettify?: (payload: { errors: Array<Ajv.ErrorObject>, schema: unknown, data: unknown }) => string
+)
+    : ValidationResult {
+    const ok = validator(value);
+    if (ok)
+        return {ok: true};
 
-	const ret: ValidationResult = {
-		ok: false,
-		errors: [ ...validator.errors as Array< Ajv.ErrorObject > ],
-	};
+    const ret: ValidationResult = {
+        ok: false,
+        errors: [...validator.errors as Array<Ajv.ErrorObject>],
+    };
 
-	return makeExplanationGetter(
-		ret,
-		'explanation',
-		ret.errors,
-		validator.schema,
-		value,
-		true
-	);
+    return makeExplanationGetter(
+        ret,
+        'explanation',
+        ret.errors,
+        validator.schema,
+        value,
+        prettify,
+        true
+    );
 }
 
 // Compile JSON Schemas and validate data
 
-export function compileSchema( schema: { }, opts: Ajv.Options = { } )
-{
-	const ajv = new Ajv( opts );
+export function compileSchema(schema: {}, opts: Ajv.Options = {}) {
+    const ajv = new Ajv(opts);
 
-	const validator = ajv.compile( schema );
+    const validator = ajv.compile(schema);
 
-	return function validate( value: any )
-	{
-		return validateWrapper( value, validator );
-	}
+    return function validate(value: any) {
+        return validateWrapper(value, validator);
+    }
 }
 
-export function validateSchema( schema: { }, value: any )
-{
-	const validator = compileSchema( schema );
-	return validator( value );
+export function validateSchema(schema: {}, value: any) {
+    const validator = compileSchema(schema);
+    return validator(value);
 }
 
 
 // Compile suretype validators and validate data
 
-export interface CompileOptionsBase
-{
-	/**
-	 * Ajv options
-	 */
-	ajvOptions?: Ajv.Options;
+export interface CompileOptionsBase {
+    /**
+     * Ajv options
+     */
+    ajvOptions?: Ajv.Options;
 
-	/**
-	 * If true, the validator function will not return {ok: boolean} but will
-	 * return the payload if it validates, or throw a ValidationError
-	 * otherwise.
-	 */
-	ensure?: boolean;
+    /**
+     * If true, the validator function will not return {ok: boolean} but will
+     * return the payload if it validates, or throw a ValidationError
+     * otherwise.
+     */
+    ensure?: boolean;
 
-	/**
-	 * If true, the validator function will return true if the data was valid,
-	 * and false other.
-	 * This value can be used in conditionals to provide deduced types.
-	 */
-	simple?: boolean;
-}
-export interface CompileOptionsDefault extends CompileOptionsBase
-{
-	ensure?: false;
-	simple?: false;
-}
-export interface CompileOptionsEnsure extends CompileOptionsBase
-{
-	ensure: true;
-	simple?: never;
-}
-export interface CompileOptionsSimple extends CompileOptionsBase
-{
-	ensure?: never;
-	simple: true;
+    /**
+     * If true, the validator function will return true if the data was valid,
+     * and false other.
+     * This value can be used in conditionals to provide deduced types.
+     */
+    simple?: boolean;
+
+    /**
+     * Function you can use to prettify AJV errors. The result of prettify will be accessible via:
+     * const result = validate(schema)
+     * if(!result.ok) console.error(result.explanation)
+     */
+    prettify?: (payload: { errors: Array<Ajv.ErrorObject>, schema: unknown, data: unknown }) => string
 }
 
-export type ValidateFunction = ( value: any ) => ValidationResult;
-export type SimpleValidateFunction< T > = ( value: any ) => value is T;
-export type EnsureFunction< T > =
-	< U = T >( value: any ) => T extends U ? U : never;
+export interface CompileOptionsDefault extends CompileOptionsBase {
+    ensure?: false;
+    simple?: false;
+}
 
-export function compile
-	< T extends CoreValidator< unknown > = any, U = TypeOf< T > >
+export interface CompileOptionsEnsure extends CompileOptionsBase {
+    ensure: true;
+    simple?: never;
+}
+
+export interface CompileOptionsSimple extends CompileOptionsBase {
+    ensure?: never;
+    simple: true;
+}
+
+export type ValidateFunction = (value: any) => ValidationResult;
+export type SimpleValidateFunction<T> = (value: any) => value is T;
+export type EnsureFunction<T> =
+    <U = T>(value: any) => T extends U ? U : never;
+
+export function compile<T extends CoreValidator<unknown> = any, U = TypeOf<T>>
 (
-	schema: T,
-	opts: CompileOptionsEnsure
+    schema: T,
+    opts: CompileOptionsEnsure
 )
-: TypeOf< T > extends U ? EnsureFunction< U > : never;
-export function compile< T extends CoreValidator< unknown > = any >(
-	schema: T,
-	opts: CompileOptionsSimple
+    : TypeOf<T> extends U ? EnsureFunction<U> : never;
+export function compile<T extends CoreValidator<unknown> = any>(
+    schema: T,
+    opts: CompileOptionsSimple
 )
-: SimpleValidateFunction< TypeOf< T > >;
-export function compile< T extends CoreValidator< unknown > >(
-	schema: T,
-	opts?: CompileOptionsDefault
+    : SimpleValidateFunction<TypeOf<T>>;
+export function compile<T extends CoreValidator<unknown>>(
+    schema: T,
+    opts?: CompileOptionsDefault
 )
-: ValidateFunction;
-export function compile< T extends CoreValidator< unknown > >(
-	schema: T,
-	opts: CompileOptionsBase = { }
+    : ValidateFunction;
+export function compile<T extends CoreValidator<unknown>>(
+    schema: T,
+    opts: CompileOptionsBase = {},
 )
-:
-	| ValidateFunction
-	| SimpleValidateFunction< TypeOf< T > >
-	| EnsureFunction< TypeOf< T > >
-{
-	const { ajvOptions = { } } = opts;
+    :
+    | ValidateFunction
+    | SimpleValidateFunction<TypeOf<T>>
+    | EnsureFunction<TypeOf<T>> {
+    const {ajvOptions = {}} = opts;
+    const {prettify} = opts
 
-	const validator = innerCompile( ajvOptions, schema )
+    const validator = innerCompile(ajvOptions, schema)
 
-	function validate( value: any )
-	{
-		const res = validateWrapper( value, validator );
+    function validate(value: any) {
+        const res = validateWrapper(value, validator);
 
-		if ( !opts.ensure && !opts.simple )
-			return res;
-		else if ( opts.simple )
-			return res.ok;
-		else if ( res.ok )
-			return value;
-		else
-			throw new ValidationError( res.errors, schema, value );
-	}
+        if (!opts.ensure && !opts.simple)
+            return res;
+        else if (opts.simple)
+            return res.ok;
+        else if (res.ok)
+            return value;
+        else
+            throw new ValidationError(res.errors, schema, value, prettify);
+    }
 
-	return attachSchemaToValidator( validate, schema );
+    return attachSchemaToValidator(validate, schema);
 }
 
-export function validate< T extends CoreValidator< unknown > >(
-	schema: T,
-	value: any
-)
-{
-	const validator = compile( schema );
-	return validator( value );
+export function validate<T extends CoreValidator<unknown>>(
+    schema: T,
+    value: any
+) {
+    const validator = compile(schema);
+    return validator(value);
 }
 
-export function ensure< R, T extends CoreValidator< unknown > >(
-	schema: TypeOf< T > extends R ? T : never,
-	value: any
+export function ensure<R, T extends CoreValidator<unknown>>(
+    schema: TypeOf<T> extends R ? T : never,
+    value: any
 )
-: R
-{
-	const validator = compile( schema, { ensure: true } );
-	return validator( value ) as R;
+    : R {
+    const validator = compile(schema, {ensure: true});
+    return validator(value) as R;
 }
 
 function innerCompile(
-	options: Ajv.Options,
-	validator: CoreValidator< unknown >
+    options: Ajv.Options,
+    validator: CoreValidator<unknown>,
 )
-: Ajv.ValidateFunction
-{
-	const ajv = new Ajv( options );
+    : Ajv.ValidateFunction {
+    const ajv = new Ajv(options);
 
-	const raw = getRaw( validator );
-	if ( raw && raw.fragment )
-	{
-		const { fragment } = raw;
-		ajv.addSchema( raw.toSchema( ) );
-		const validatorFn = ajv.getSchema( `#/definitions/${fragment}` );
-		if ( !validatorFn )
-			throw new ReferenceError( `No such fragment "${fragment}"` );
-		return validatorFn;
-	}
-	else
-	{
-		return ajv.compile( extractSingleJsonSchema( validator ).schema );
-	}
+    const raw = getRaw(validator);
+    if (raw && raw.fragment) {
+        const {fragment} = raw;
+        ajv.addSchema(raw.toSchema());
+        const validatorFn = ajv.getSchema(`#/definitions/${fragment}`);
+        if (!validatorFn)
+            throw new ReferenceError(`No such fragment "${fragment}"`);
+        return validatorFn;
+    } else {
+        return ajv.compile(extractSingleJsonSchema(validator).schema);
+    }
 }
 
 // Compile and validate JSON Schemas themselves
 
 let _jsonSchemaValidator: ValidateFunction;
-export function getJsonSchemaValidator( )
-{
-	if ( !_jsonSchemaValidator )
-	{
-		const jsonSchemaSchema =
-			require( "ajv/lib/refs/json-schema-draft-07.json" );
-		_jsonSchemaValidator = compileSchema( jsonSchemaSchema );
-	}
-	return _jsonSchemaValidator;
+
+export function getJsonSchemaValidator() {
+    if (!_jsonSchemaValidator) {
+        const jsonSchemaSchema =
+            require("ajv/lib/refs/json-schema-draft-07.json");
+        _jsonSchemaValidator = compileSchema(jsonSchemaSchema);
+    }
+    return _jsonSchemaValidator;
 }
 
-export function validateJsonSchema( schema: { } )
-{
-	const validator = getJsonSchemaValidator( );
-	return validator( schema );
+export function validateJsonSchema(schema: {}) {
+    const validator = getJsonSchemaValidator();
+    return validator(schema);
 }

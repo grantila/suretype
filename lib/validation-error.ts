@@ -1,5 +1,5 @@
 import type * as Ajv from "ajv"
-import { prettify } from "awesome-ajv-errors"
+// import { prettify } from "awesome-ajv-errors"
 
 
 export type ErrorHook = ( err: ValidationError ) => void;
@@ -36,12 +36,13 @@ export class ValidationError extends Error implements ValidationErrorData
 	constructor(
 		public errors: Array< Ajv.ErrorObject >,
 		schema: unknown,
-		data: unknown
+		data: unknown,
+		prettify?: (payload: {errors: Array< Ajv.ErrorObject >, schema: unknown, data: unknown}) => string
 	)
 	{
 		super( 'Validation failed' );
 
-		makeExplanationGetter( this, 'explanation', errors, schema, data );
+		makeExplanationGetter( this, 'explanation', errors, schema, data, prettify );
 
 		errorHook?.( this );
 	}
@@ -51,10 +52,11 @@ export function makeExplanation(
 	errors: Array< Ajv.ErrorObject >,
 	schema: unknown,
 	data: unknown,
-	noFallback = false
+	prettify?: (payload: {errors: Array< Ajv.ErrorObject >, schema: unknown, data: unknown}) => string,
+	noFallback = false,
 )
 {
-	if ( schema && typeof schema === 'object' )
+	if ( prettify && schema && typeof schema === 'object' )
 		return prettify( {
 			errors,
 			schema,
@@ -72,7 +74,8 @@ export function makeExplanationGetter< T extends { }, P extends string >(
 	errors: Array< Ajv.ErrorObject >,
 	schema: unknown,
 	data: unknown,
-	noFallback = false
+	prettify?: (payload: {errors: Array< Ajv.ErrorObject >, schema: unknown, data: unknown}) => string,
+	noFallback = false,
 )
 : T & { [ p in P ]: string; }
 {
@@ -83,7 +86,7 @@ export function makeExplanationGetter< T extends { }, P extends string >(
 			if ( cache !== undefined )
 				return cache;
 
-			cache = makeExplanation( errors, schema, data, noFallback );
+			cache = makeExplanation( errors, schema, data, prettify );
 			return cache;
 		}
 	} );
