@@ -1,7 +1,7 @@
-import { CoreValidator } from "./core/validator"
-import { RequiredValidator } from "./required/validator"
-import { SubType } from "./types"
-import { TypeOf } from "./functional"
+import { CoreValidator } from "./core/validator.js"
+import { RequiredValidator } from "./required/validator.js"
+import { SubType } from "./types.js"
+import { TypeOf } from "./functional.js"
 
 
 export type RequiredKeys<

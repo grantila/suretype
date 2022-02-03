@@ -8,19 +8,20 @@
     "url": "https://github.com/grantila/suretype/issues"
   },
   "homepage": "https://github.com/grantila/suretype#readme",
-  "main": "./dist/nodejs.js",
-  "browser": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "directories": {},
+  "main": "./dist/index-nodejs.js",
+  "browser": "./dist/index-browser.js",
+  "types": "./dist/index-node.d.ts",
+  "type": "module",
+  "sideEffects": true,
   "engines": {
-    "node": ">=12"
+    "node": "^14.13.1 || >=16.0.0"
   },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig.prod.json",
-    "test": "jest",
+    "test": "NODE_OPTIONS=--experimental-vm-modules FORCE_COLOR=0 jest",
     "benchmark": "ts-node benchmark",
     "cz": "git-cz"
   },
@@ -37,27 +38,29 @@
     "typescript"
   ],
   "devDependencies": {
+    "@babel/preset-env": "^7.15.6",
+    "@babel/preset-typescript": "^7.15.0",
     "@hapi/joi": "^17.1.0",
-    "@types/benchmark": "^2.1.0",
-    "@types/hapi__joi": "^17.1.6",
-    "@types/jest": "^26.0.20",
-    "@types/node": "^14.14.32",
+    "@types/benchmark": "^2.1.1",
+    "@types/hapi__joi": "^17.1.8",
+    "@types/jest": "^27.4.0",
+    "@types/node": "^17.0.16",
     "benchmark": "^2.1.4",
     "cz-conventional-changelog": "^3.1.0",
-    "jest": "^26.6.3",
+    "jest": "^27.5.0",
     "ow": "^0.23.0",
     "rimraf": "^3.0.1",
     "superstruct": "^0.15.0",
     "tempy": "^1.0.0",
-    "ts-jest": "^26.5.3",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.3",
+    "ts-jest-resolver": "^2.0.0",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.5",
     "zod": "^1.11.13"
   },
   "dependencies": {
     "ajv": "^6.11.0",
-    "awesome-ajv-errors": "^1.0.1",
-    "meta-types": "^1.1.0"
+    "awesome-ajv-errors": "^4.0.1",
+    "meta-types": "^1.1.1"
   },
   "config": {
     "commitizen": {

@@ -1,7 +1,7 @@
-import { AnyType } from "../types"
-import { CoreValidator, TreeTraverser } from "../core/validator"
-import { BaseValidator } from "../base/validator"
-import { validatorType, cloneValidator } from "../../validation"
+import { AnyType } from "../types.js"
+import { CoreValidator, TreeTraverser } from "../core/validator.js"
+import { BaseValidator } from "../base/validator.js"
+import { validatorType, cloneValidator } from "../../validation.js"
 
 
 export class RequiredValidator< T, U extends CoreValidator< T > >

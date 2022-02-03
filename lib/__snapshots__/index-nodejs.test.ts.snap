@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`nodejs should get decorated ValidationError 1`] = `
+"The type of the .foo value should be number, e.g. 42 (as number)
+
+  1 | {
+> 2 |   \\"foo\\": \\"42\\"
+    |          ^^^^ Replace this with e.g. 42 (as number)
+  3 | }"
+`;
+
+exports[`short-hands ensure 1`] = `
+"Validation failed
+The type of the .lastName value should be string, e.g. \\"42\\" (as string)
+
+  1 | {
+  2 |   \\"firstName\\": \\"Foo\\",
+> 3 |   \\"lastName\\": 42
+    |               ^^ Replace this with e.g. \\"42\\" (as string)
+  4 | }"
+`;

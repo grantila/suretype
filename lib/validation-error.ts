@@ -1,5 +1,7 @@
 import type * as Ajv from "ajv"
-import { prettify } from "awesome-ajv-errors"
+
+import { getPrettify } from "./ajv-errors.js"
+import { SuretypeOptions, getSuretypeOptions } from "./options.js"
 
 
 export type ErrorHook = ( err: ValidationError ) => void;
@@ -28,6 +30,13 @@ export interface ValidationResultValid
 }
 export type ValidationResult = ValidationResultInvalid | ValidationResultValid;
 
+export interface ExplanationOptions extends SuretypeOptions
+{
+	schema: unknown;
+	data: unknown;
+	noFallback?: boolean;
+}
+
 export class ValidationError extends Error implements ValidationErrorData
 {
 	// @ts-ignore
@@ -35,30 +44,37 @@ export class ValidationError extends Error implements ValidationErrorData
 
 	constructor(
 		public errors: Array< Ajv.ErrorObject >,
-		schema: unknown,
-		data: unknown
+		options: ExplanationOptions
 	)
 	{
 		super( 'Validation failed' );
 
-		makeExplanationGetter( this, 'explanation', errors, schema, data );
+		makeExplanationGetter( this, 'explanation', errors, options );
 
 		errorHook?.( this );
 	}
 }
 
-export function makeExplanation(
+function makeExplanation(
 	errors: Array< Ajv.ErrorObject >,
-	schema: unknown,
-	data: unknown,
-	noFallback = false
+	{
+		schema,
+		data,
+		colors = getSuretypeOptions( ).colors,
+		location = getSuretypeOptions( ).location,
+		bigNumbers = getSuretypeOptions( ).bigNumbers,
+		noFallback = false
+	}: ExplanationOptions
 )
 {
 	if ( schema && typeof schema === 'object' )
-		return prettify( {
+		return getPrettify( )( {
 			errors,
 			schema,
-			data
+			data,
+			colors,
+			location,
+			bigNumbers,
 		} );
 	else if ( !noFallback )
 		return JSON.stringify( errors, null, 2 );
@@ -70,9 +86,7 @@ export function makeExplanationGetter< T extends { }, P extends string >(
 	target: T,
 	property: P,
 	errors: Array< Ajv.ErrorObject >,
-	schema: unknown,
-	data: unknown,
-	noFallback = false
+	options: ExplanationOptions
 )
 : T & { [ p in P ]: string; }
 {
@@ -83,7 +97,7 @@ export function makeExplanationGetter< T extends { }, P extends string >(
 			if ( cache !== undefined )
 				return cache;
 
-			cache = makeExplanation( errors, schema, data, noFallback );
+			cache = makeExplanation( errors, options );
 			return cache;
 		}
 	} );

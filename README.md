@@ -53,6 +53,14 @@ From a validator schema defined with suretype, you can trivially:
 The above makes it ideal in TypeScript environments. When used in RESTful applications, the exported schema can be used to document the APIs using OpenAPI. When used in libraries / clients, the TypeScript interfaces can be extracted to well-documented standalone files (including JSDoc comments).
 
 
+## Versions
+
+ * Since version 3;
+   * This is a [pure ESM][pure-esm] package. It requires at least Node 14.13.1, and cannot be used from CommonJS.
+   * This package **can** be used in browsers without special hacks. It will not pretty-print codeframes or use colors if the bundling setup doesn't support it, but will to try to load support for it.
+   * You can control colorized/stylized output globally or per validator
+
+
 # Minimal example
 
 The following is a validator schema using suretype:
@@ -157,6 +165,19 @@ const user = ensureUser< User >( data );
 ```
 
 
+## Validate or ensure without compiling
+
+Instead of creating a validator from `compile`, you can use the shorthands `validate`, `isValid` and `ensure`. They correspond to compiling without options, compiling in simple-mode and in ensure-mode.
+
+```ts
+import { validate, isValid, ensure } from 'suretype'
+
+const validation = validate( userSchema, data ); // -> Validation object
+const isUser = isValid( userSchema, data );      // -> Type-guarded boolean
+const user = ensure( userSchema, data );         // -> user is data of type userSchema
+```
+
+
 ## Raw JSON Schema validator
 
 Sometimes it's handy to not describe the validator schema programmatically, but rather use a raw JSON Schema. There will be no type deduction, so the corresponding interface must be provided explicitly. Only use this if you know the JSON Schema maps to the interface! `raw` works just like the `v.*` functions and returns a validator schema. It can also be annotated.
@@ -169,6 +190,32 @@ const userSchema = raw< User >( { type: 'object', properties: { /* ... */ } } );
 
 // Compile as usual
 const ensureUser = compile( userSchema, { ensure: true } );
+```
+
+
+## Configure
+
+You can configure colorization and styling, instead of relying on support detection.
+
+Either globally:
+```ts
+import { setSuretypeOptions } from 'suretype'
+
+setSuretypeOptions( {
+    colors: true | false,
+    location: true | false,
+    bigNumbers: true | false,
+} );
+```
+
+and/or per validator, e.g.:
+```ts
+import { compile } from 'suretype'
+
+const ensureThing = compile(
+    schemaThing,
+    { ensure: true, color: true, location: false }
+);
 ```
 
 
@@ -401,3 +448,4 @@ Example *from* Open API *to* SureType; `$ npx typeconv -f oapi -t st -o generate
 [typeconv-image]: https://img.shields.io/npm/v/typeconv.svg
 [typeconv-github-url]: https://github.com/grantila/typeconv
 [typeconv-npm-url]: https://npmjs.org/package/typeconv
+[pure-esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c

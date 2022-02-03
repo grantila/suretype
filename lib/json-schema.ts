@@ -1,18 +1,22 @@
-import * as Ajv from "ajv"
+import Ajv from "ajv"
 
-import { CoreValidator } from "./validators/core/validator"
-import { TypeOf } from "./validators/functional"
+import { CoreValidator } from "./validators/core/validator.js"
+import { TypeOf } from "./validators/functional.js"
 import {
 	ValidationResult,
 	ValidationError,
 	makeExplanationGetter,
-} from "./validation-error"
-import { extractSingleJsonSchema } from "./extract-json-schema"
-import { attachSchemaToValidator } from "./validation"
-import { getRaw } from "./validators/raw/validator"
+} from "./validation-error.js"
+import { extractSingleJsonSchema } from "./extract-json-schema.js"
+import { attachSchemaToValidator } from "./validation.js"
+import { getRaw } from "./validators/raw/validator.js"
 
 
-function validateWrapper( value: any, validator: Ajv.ValidateFunction )
+function validateWrapper(
+	value: any,
+	validator: Ajv.ValidateFunction,
+	opts: CompileOptionsCore
+)
 : ValidationResult
 {
 	const ok = validator( value );
@@ -28,23 +32,28 @@ function validateWrapper( value: any, validator: Ajv.ValidateFunction )
 		ret,
 		'explanation',
 		ret.errors,
-		validator.schema,
-		value,
-		true
+		{
+			schema: validator.schema,
+			data: value,
+			colors: opts?.colors,
+			noFallback: true,
+		}
 	);
 }
 
 // Compile JSON Schemas and validate data
 
-export function compileSchema( schema: { }, opts: Ajv.Options = { } )
+export function compileSchema( schema: { }, opts: CompileOptionsCore = { } )
 {
-	const ajv = new Ajv( opts );
+	const { ajvOptions = { } } = opts;
+
+	const ajv = new Ajv( ajvOptions );
 
 	const validator = ajv.compile( schema );
 
 	return function validate( value: any )
 	{
-		return validateWrapper( value, validator );
+		return validateWrapper( value, validator, opts );
 	}
 }
 
@@ -57,13 +66,22 @@ export function validateSchema( schema: { }, value: any )
 
 // Compile suretype validators and validate data
 
-export interface CompileOptionsBase
+export interface CompileOptionsCore
 {
 	/**
 	 * Ajv options
 	 */
 	ajvOptions?: Ajv.Options;
 
+	/**
+	 * Use colors or disable colors for this validator (will fallback to the
+	 * default set using `setSuretypeOptions`)
+	 */
+	colors?: boolean;
+}
+
+export interface CompileOptionsBase extends CompileOptionsCore
+{
 	/**
 	 * If true, the validator function will not return {ok: boolean} but will
 	 * return the payload if it validates, or throw a ValidationError
@@ -125,13 +143,13 @@ export function compile< T extends CoreValidator< unknown > >(
 	| SimpleValidateFunction< TypeOf< T > >
 	| EnsureFunction< TypeOf< T > >
 {
-	const { ajvOptions = { } } = opts;
+	const { ajvOptions = { }, colors } = opts;
 
 	const validator = innerCompile( ajvOptions, schema )
 
 	function validate( value: any )
 	{
-		const res = validateWrapper( value, validator );
+		const res = validateWrapper( value, validator, opts );
 
 		if ( !opts.ensure && !opts.simple )
 			return res;
@@ -140,7 +158,10 @@ export function compile< T extends CoreValidator< unknown > >(
 		else if ( res.ok )
 			return value;
 		else
-			throw new ValidationError( res.errors, schema, value );
+			throw new ValidationError(
+				res.errors,
+				{ schema, data:value, colors }
+			);
 	}
 
 	return attachSchemaToValidator( validate, schema );
@@ -148,21 +169,33 @@ export function compile< T extends CoreValidator< unknown > >(
 
 export function validate< T extends CoreValidator< unknown > >(
 	schema: T,
-	value: any
+	value: any,
+	options?: CompileOptionsCore
 )
 {
-	const validator = compile( schema );
+	const validator = compile( schema, options );
 	return validator( value );
 }
 
-export function ensure< R, T extends CoreValidator< unknown > >(
-	schema: TypeOf< T > extends R ? T : never,
-	value: any
+export function isValid< T extends CoreValidator< unknown > >(
+	schema: T,
+	value: any,
+	options?: CompileOptionsCore
 )
-: R
+: value is TypeOf< T, false >
 {
-	const validator = compile( schema, { ensure: true } );
-	return validator( value ) as R;
+	const validator = compile( schema, { ...options, simple: true } );
+	return validator( value );
+}
+
+export function ensure< T extends CoreValidator< unknown > >(
+	schema: T,
+	value: any,
+	options?: CompileOptionsCore
+)
+{
+	const validator = compile( schema, { ...options, ensure: true } );
+	return validator( value );
 }
 
 function innerCompile(
@@ -191,15 +224,18 @@ function innerCompile(
 
 // Compile and validate JSON Schemas themselves
 
+let _schemaDraft07: any = undefined;
+export function setSchemaDraft07( draft: any )
+{
+	_schemaDraft07 = draft;
+}
+
 let _jsonSchemaValidator: ValidateFunction;
-export function getJsonSchemaValidator( )
+function getJsonSchemaValidator( )
 {
 	if ( !_jsonSchemaValidator )
-	{
-		const jsonSchemaSchema =
-			require( "ajv/lib/refs/json-schema-draft-07.json" );
-		_jsonSchemaValidator = compileSchema( jsonSchemaSchema );
-	}
+		_jsonSchemaValidator = compileSchema( _schemaDraft07 );
+
 	return _jsonSchemaValidator;
 }
 

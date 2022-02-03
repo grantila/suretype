@@ -1,8 +1,8 @@
 import {
 	CoreValidator,
 	exposeCoreValidator,
-} from "./validators/core/validator"
-import { getRaw } from "./validators/raw/validator"
+} from "./validators/core/validator.js"
+import { getRaw } from "./validators/raw/validator.js"
 
 
 export interface Annotations

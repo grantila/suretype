@@ -1,10 +1,10 @@
-import { Type } from "../types"
-import { CoreValidator, TreeTraverser } from "../core/validator"
-import { validatorType } from "../../validation"
-import { ValueValidator } from "../value/validator"
-import { isRequired } from "../required/validator"
-import { AdditionalProperties, TypeOf } from "../functional"
-import { AnyValidator } from "../any/validator"
+import { Type } from "../types.js"
+import { CoreValidator, TreeTraverser } from "../core/validator.js"
+import { validatorType } from "../../validation.js"
+import { ValueValidator } from "../value/validator.js"
+import { isRequired } from "../required/validator.js"
+import { AdditionalProperties, TypeOf } from "../functional.js"
+import { AnyValidator } from "../any/validator.js"
 
 
 export class ObjectValidator< T extends { } >
