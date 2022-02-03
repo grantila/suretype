@@ -1,7 +1,3 @@
-import { BaseValidator } from "./base/validator"
-import { ArrayValidator } from "./array/validator"
-import { TupleValidator } from "./tuple/validator"
-import type { TypeOf, IsRequired } from "./functional"
 import type {
 	OptionalFrom,
 	Last,
@@ -10,6 +6,11 @@ import type {
 	ReverseRest,
 	Overwrite
 } from "meta-types"
+
+import { BaseValidator } from "./base/validator.js"
+import { ArrayValidator } from "./array/validator.js"
+import { TupleValidator } from "./tuple/validator.js"
+import type { TypeOf, IsRequired } from "./functional.js"
 
 
 export type FirstOptionalIndex

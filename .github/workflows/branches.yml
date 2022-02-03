@@ -16,9 +16,7 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 12.x
           - 14.x
-          - 15.x
           - 16.x
     steps:
     - uses: actions/checkout@v2
@@ -31,3 +29,7 @@ jobs:
     - run: yarn test
       env:
         CI: true
+    - run: yarn
+      working-directory: ./webpack
+    - run: yarn build-test
+      working-directory: ./webpack

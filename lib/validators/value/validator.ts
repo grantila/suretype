@@ -1,8 +1,8 @@
-import { Type } from "../types"
-import { TreeTraverser } from "../core/validator"
-import { BaseValidator } from "../base/validator"
-import { DuplicateConstraintError, DuplicateError } from "../../errors"
-import { RequiredValidator } from "../required/validator"
+import { Type } from "../types.js"
+import { TreeTraverser } from "../core/validator.js"
+import { BaseValidator } from "../base/validator.js"
+import { DuplicateConstraintError, DuplicateError } from "../../errors.js"
+import { RequiredValidator } from "../required/validator.js"
 
 
 export abstract class ValueValidator< T, U extends ValueValidator< T, U > >

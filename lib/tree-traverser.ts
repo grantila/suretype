@@ -1,8 +1,8 @@
-import { TreeTraverser, CoreValidator } from "./validators/core/validator"
-import type { ExportRefMethod } from "./types"
-import { validatorToSchema } from "./validation"
-import { getName } from "./annotations"
-import { getRaw, isRaw } from "./validators/raw/validator"
+import { TreeTraverser, CoreValidator } from "./validators/core/validator.js"
+import type { ExportRefMethod } from "./types.js"
+import { validatorToSchema } from "./validation.js"
+import { getName } from "./annotations.js"
+import { getRaw, isRaw } from "./validators/raw/validator.js"
 
 
 export interface SchemaResult

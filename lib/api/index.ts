@@ -1,30 +1,30 @@
-import { CoreValidator } from "../validators/core/validator"
-import { BaseValidator } from "../validators/base/validator"
-import { BooleanValidator } from "../validators/boolean/validator"
-import { NumberValidator } from "../validators/number/validator"
-import { StringValidator } from "../validators/string/validator"
-import { NullValidator } from "../validators/null/validator"
-import { AnyValidator } from "../validators/any/validator"
-import { ObjectValidator } from "../validators/object/validator"
-import { ArrayValidator } from "../validators/array/validator"
-import { TupleValidator } from "../validators/tuple/validator"
-import { AnyOfValidator } from "../validators/or/validator"
-import { AllOfValidator } from "../validators/all-of/validator"
-import { IfValidator } from "../validators/if/validator"
-import { RawValidator } from "../validators/raw/validator"
-import { RecursiveValidator } from "../validators/recursive/validator"
-import { TypeOf } from "../validators/functional"
-import { cloneValidator } from "../validation"
-import { ArrayFunction, TupleFunction } from "../validators/array-types"
-import { ExtractObject } from "../validators/object-types"
+import { CoreValidator } from "../validators/core/validator.js"
+import { BaseValidator } from "../validators/base/validator.js"
+import { BooleanValidator } from "../validators/boolean/validator.js"
+import { NumberValidator } from "../validators/number/validator.js"
+import { StringValidator } from "../validators/string/validator.js"
+import { NullValidator } from "../validators/null/validator.js"
+import { AnyValidator } from "../validators/any/validator.js"
+import { ObjectValidator } from "../validators/object/validator.js"
+import { ArrayValidator } from "../validators/array/validator.js"
+import { TupleValidator } from "../validators/tuple/validator.js"
+import { AnyOfValidator } from "../validators/or/validator.js"
+import { AllOfValidator } from "../validators/all-of/validator.js"
+import { IfValidator } from "../validators/if/validator.js"
+import { RawValidator } from "../validators/raw/validator.js"
+import { RecursiveValidator } from "../validators/recursive/validator.js"
+import { TypeOf } from "../validators/functional.js"
+import { cloneValidator } from "../validation.js"
+import { ArrayFunction, TupleFunction } from "../validators/array-types.js"
+import { ExtractObject } from "../validators/object-types.js"
 import {
 	AnnotationsHolder,
 	Annotations,
 	TopLevelAnnotations,
 	annotateValidator,
 	getAnnotations,
-} from "../annotations"
-import { RecursiveValue } from "../validators/types"
+} from "../annotations.js"
+import { RecursiveValue } from "../validators/types.js"
 
 
 export {

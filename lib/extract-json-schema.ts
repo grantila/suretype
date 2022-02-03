@@ -2,13 +2,13 @@ import type {
 	ExportRefMethod,
 	OnTopLevelNameConflict,
 	OnNonSuretypeValidator,
-} from "./types"
-import { DuplicateError } from "./errors"
-import { CoreValidator } from "./validators/core/validator"
-import { getName, getNames } from "./annotations"
-import { TreeTraverserImpl } from "./tree-traverser"
-import { getRaw } from "./validators/raw/validator"
-import { uniqValidators } from "./validation"
+} from "./types.js"
+import { DuplicateError } from "./errors.js"
+import { CoreValidator } from "./validators/core/validator.js"
+import { getName, getNames } from "./annotations.js"
+import { TreeTraverserImpl } from "./tree-traverser.js"
+import { getRaw } from "./validators/raw/validator.js"
+import { uniqValidators } from "./validation.js"
 
 
 export interface ExtractJsonSchemaOptions

@@ -1,8 +1,8 @@
-import { Type } from "../types"
-import { ValueValidator } from "../value/validator"
-import { CoreValidator, TreeTraverser } from "../core/validator"
-import { DuplicateConstraintError } from "../../errors"
-import { Writeable } from "../functional"
+import { Type } from "../types.js"
+import { ValueValidator } from "../value/validator.js"
+import { CoreValidator, TreeTraverser } from "../core/validator.js"
+import { DuplicateConstraintError } from "../../errors.js"
+import { Writeable } from "../functional.js"
 
 
 // NOTE:

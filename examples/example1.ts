@@ -1,4 +1,4 @@
-import { v, suretype, compile, TypeOf } from "../lib"
+import { v, suretype, compile, TypeOf } from "../lib/index-core"
 
 const userSchema = suretype(
 	{

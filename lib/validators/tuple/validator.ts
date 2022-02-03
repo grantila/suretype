@@ -1,12 +1,13 @@
-import { Type } from "../types"
-import { ValueValidator } from "../value/validator"
-import { isRequired } from "../required/validator"
-import { CoreValidator, TreeTraverser } from "../core/validator"
-import { AnyValidator } from "../any/validator"
-import { DuplicateConstraintError } from "../../errors"
-import { ArrayOf, ArrayOfWithRest } from "../array-types"
-import { TypeOf, Writeable } from "../functional"
 import type { If, Is, And, Extends, GreaterThan, LengthOf } from "meta-types"
+
+import { Type } from "../types.js"
+import { ValueValidator } from "../value/validator.js"
+import { isRequired } from "../required/validator.js"
+import { CoreValidator, TreeTraverser } from "../core/validator.js"
+import { AnyValidator } from "../any/validator.js"
+import { DuplicateConstraintError } from "../../errors.js"
+import { ArrayOf, ArrayOfWithRest } from "../array-types.js"
+import { TypeOf, Writeable } from "../functional.js"
 
 
 export class TupleValidator<

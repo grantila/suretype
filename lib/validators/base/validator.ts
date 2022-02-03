@@ -1,10 +1,10 @@
-import { AnyType } from "../types"
+import { AnyType } from "../types.js"
 import {
 	CoreValidator,
 	InternalCoreValidator,
 	TreeTraverser,
-} from "../core/validator"
-import { AnnotationsHolder } from "../../annotations"
+} from "../core/validator.js"
+import { AnnotationsHolder } from "../../annotations.js"
 
 
 export abstract class BaseValidator

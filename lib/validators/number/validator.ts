@@ -1,8 +1,8 @@
-import { Type } from "../types"
-import { TreeTraverser } from "../core/validator"
-import { ValueValidator } from "../value/validator"
-import { objectOf } from "../../utils"
-import { DuplicateError, DuplicateConstraintError } from "../../errors"
+import { Type } from "../types.js"
+import { TreeTraverser } from "../core/validator.js"
+import { ValueValidator } from "../value/validator.js"
+import { objectOf } from "../../utils.js"
+import { DuplicateError, DuplicateConstraintError } from "../../errors.js"
 
 
 export class NumberValidator< T extends number = number >

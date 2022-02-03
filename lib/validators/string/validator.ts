@@ -1,9 +1,9 @@
-import { Type } from "../types"
-import { TreeTraverser } from "../core/validator"
-import { ValueValidator } from "../value/validator"
-import { Formats } from "./types"
-import { objectOf } from "../../utils"
-import { DuplicateConstraintError } from "../../errors"
+import { Type } from "../types.js"
+import { TreeTraverser } from "../core/validator.js"
+import { ValueValidator } from "../value/validator.js"
+import { Formats } from "./types.js"
+import { objectOf } from "../../utils.js"
+import { DuplicateConstraintError } from "../../errors.js"
 
 
 export class StringValidator< T extends string = string >

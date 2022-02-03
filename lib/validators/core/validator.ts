@@ -1,5 +1,5 @@
-import { AnnotationsHolder } from "../../annotations"
-import { AnyType } from "../types"
+import { AnnotationsHolder } from "../../annotations.js"
+import { AnyType } from "../types.js"
 
 
 export interface TreeTraverser

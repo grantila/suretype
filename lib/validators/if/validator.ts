@@ -1,8 +1,8 @@
-import { AnyType } from "../types"
-import { CoreValidator, TreeTraverser } from "../core/validator"
-import { BaseValidator } from "../base/validator"
-import { TypeOf } from "../functional"
-import { RequiredValidator } from "../required/validator"
+import { AnyType } from "../types.js"
+import { CoreValidator, TreeTraverser } from "../core/validator.js"
+import { BaseValidator } from "../base/validator.js"
+import { TypeOf } from "../functional.js"
+import { RequiredValidator } from "../required/validator.js"
 
 
 export class ElseValidator< T > extends BaseValidator< T, ElseValidator< T > >
