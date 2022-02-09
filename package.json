@@ -10,7 +10,7 @@
   "homepage": "https://github.com/grantila/suretype#readme",
   "main": "./dist/index-nodejs.js",
   "browser": "./dist/index-browser.js",
-  "types": "./dist/index-node.d.ts",
+  "types": "./dist/index-nodejs.d.ts",
   "type": "module",
   "sideEffects": true,
   "engines": {
