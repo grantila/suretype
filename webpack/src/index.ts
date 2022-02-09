@@ -18,7 +18,7 @@ const schemaThing = v.object( {
 	type: v.string( ).enum( 'big', 'small' ).required( ),
 } );
 
-const styling = { color: true, location: true };
+const styling = { colors: true, location: true } as const;
 const ensureThing = compile( schemaThing, { ensure: true, ...styling } );
 const validateThing = compile( schemaThing, { ...styling } );
 
@@ -56,7 +56,7 @@ async function printResult( )
 		console.log( 'END ensure' );
 	}
 
-	const result =  validateThing( data );
+	const result = validateThing( data );
 
 	console.log( 'START validate' );
 	console.log( result.explanation );
