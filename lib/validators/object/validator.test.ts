@@ -1,6 +1,6 @@
 import { ObjectValidator } from "./validator.js"
 import { validatorType } from "../../validation.js"
-import { validateJsonSchema, validate } from "../../json-schema.js"
+import { validateJsonSchema, validate, ensure } from "../../json-schema.js"
 import { RawValidator } from "../raw/validator.js"
 import { NumberValidator } from "../number/validator.js"
 import { StringValidator } from "../string/validator.js"
@@ -600,5 +600,29 @@ describe( "ObjectValidator", ( ) =>
 			foo: "yada",
 			num: 3.14,
 		} ).ok ).toEqual( true );
+	} );
+
+	it( "Ensure right error message from awesome-ajv-errors", ( ) =>
+	{
+		const userSchema = v
+			.object( {
+				firstName: v.string( ).required( ),
+			})
+			.additional( v.number( ) );
+
+		const user = {
+			firstName: "Joe",
+			otherThing: true,
+		};
+
+		try
+		{
+			ensure( userSchema, user ); // Will throw
+		}
+		catch ( err: any )
+		{
+			expect( err.explanation ).not.toContain( 'Invalid pointer-path' );
+			expect( err.explanation ).toContain( 'value should be number' );
+		}
 	} );
 } );
