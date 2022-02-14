@@ -68,14 +68,24 @@ function makeExplanation(
 )
 {
 	if ( schema && typeof schema === 'object' )
-		return getPrettify( )( {
-			errors,
-			schema,
-			data,
-			colors,
-			location,
-			bigNumbers,
-		} );
+	{
+		try
+		{
+			return getPrettify( )( {
+				errors,
+				schema,
+				data,
+				colors,
+				location,
+				bigNumbers,
+			} );
+		}
+		catch ( err: any )
+		{
+			console.error( err?.stack );
+			return err.message ?? 'Unknown error';
+		}
+	}
 	else if ( !noFallback )
 		return JSON.stringify( errors, null, 2 );
 	else
