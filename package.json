@@ -59,7 +59,7 @@
   },
   "dependencies": {
     "ajv": "^6.11.0",
-    "awesome-ajv-errors": "^4.1.0",
+    "awesome-ajv-errors": "^4.1.1",
     "meta-types": "^1.1.1"
   },
   "config": {
