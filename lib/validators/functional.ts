@@ -28,7 +28,7 @@ export type ValuesOf< T extends { } > = T[ keyof T ] & unknown;
 
 export type FlattenObject< T > = { [ K in keyof T ]: T[ K ] & unknown; };
 
-export type AdditionalProperties< T, U > =
+export type AdditionalProperties< T extends { }, U > =
 	FlattenObject< T & Record< string, U | ValuesOf< T > > >;
 
 export type TypeOf< T, InclRequired = false > =
