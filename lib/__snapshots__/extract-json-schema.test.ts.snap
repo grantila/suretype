@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`extract-json-schema should be able to rename top-level names 1`] = `
-Object {
-  "definitions": Object {
-    "Foo": Object {
+{
+  "definitions": {
+    "Foo": {
       "type": "number",
     },
-    "Foo_2": Object {
+    "Foo_2": {
       "type": "string",
     },
   },
@@ -14,12 +14,12 @@ Object {
 `;
 
 exports[`extract-json-schema should call non-decorated validator schemas 'Unknown' 1`] = `
-Object {
-  "definitions": Object {
-    "Foo": Object {
+{
+  "definitions": {
+    "Foo": {
       "type": "number",
     },
-    "Unknown_1": Object {
+    "Unknown_1": {
       "type": "string",
     },
   },
@@ -27,9 +27,9 @@ Object {
 `;
 
 exports[`extract-json-schema should ignore non-decorated validator schemas 1`] = `
-Object {
-  "definitions": Object {
-    "Foo": Object {
+{
+  "definitions": {
+    "Foo": {
       "type": "number",
     },
   },
@@ -37,9 +37,9 @@ Object {
 `;
 
 exports[`extract-json-schema should keep references in lookup table 1`] = `
-Object {
-  "definitions": Object {
-    "Foo": Object {
+{
+  "definitions": {
+    "Foo": {
       "type": "number",
     },
   },
@@ -47,18 +47,18 @@ Object {
 `;
 
 exports[`extract-json-schema should keep references in lookup table 2`] = `
-Object {
+{
   "type": "number",
 }
 `;
 
 exports[`extract-json-schema should keep references in lookup table 3`] = `
-Object {
-  "anyOf": Array [
-    Object {
+{
+  "anyOf": [
+    {
       "type": "string",
     },
-    Object {
+    {
       "type": "boolean",
     },
   ],
@@ -66,12 +66,12 @@ Object {
 `;
 
 exports[`extract-json-schema should keep references in lookup table 4`] = `
-Object {
-  "anyOf": Array [
-    Object {
+{
+  "anyOf": [
+    {
       "type": "string",
     },
-    Object {
+    {
       "$ref": "#/definitions/Foo",
     },
   ],
@@ -79,31 +79,31 @@ Object {
 `;
 
 exports[`extract-json-schema should produce proper definitions for referenced schemas (using method no-refs) 1`] = `
-Object {
-  "definitions": Object {
-    "Bar": Object {
+{
+  "definitions": {
+    "Bar": {
       "description": "Desc",
-      "examples": Array [
+      "examples": [
         "Ex",
       ],
-      "properties": Object {
-        "bak": Object {
+      "properties": {
+        "bak": {
           "type": "number",
         },
-        "bar": Object {
+        "bar": {
           "exclusiveMinimum": 17,
           "type": "number",
         },
-        "baz": Object {
+        "baz": {
           "type": "number",
         },
-        "foo": Object {
+        "foo": {
           "description": "Description",
-          "examples": Array [
+          "examples": [
             "Example",
           ],
-          "properties": Object {
-            "foo": Object {
+          "properties": {
+            "foo": {
               "const": "bar",
               "type": "string",
             },
@@ -112,19 +112,19 @@ Object {
           "type": "object",
         },
       },
-      "required": Array [
+      "required": [
         "bar",
       ],
       "title": "T",
       "type": "object",
     },
-    "Foo": Object {
+    "Foo": {
       "description": "Description",
-      "examples": Array [
+      "examples": [
         "Example",
       ],
-      "properties": Object {
-        "foo": Object {
+      "properties": {
+        "foo": {
           "const": "bar",
           "type": "string",
         },
@@ -137,41 +137,41 @@ Object {
 `;
 
 exports[`extract-json-schema should produce proper definitions for referenced schemas (using method provided) 1`] = `
-Object {
-  "definitions": Object {
-    "Bar": Object {
+{
+  "definitions": {
+    "Bar": {
       "description": "Desc",
-      "examples": Array [
+      "examples": [
         "Ex",
       ],
-      "properties": Object {
-        "bak": Object {
+      "properties": {
+        "bak": {
           "type": "number",
         },
-        "bar": Object {
+        "bar": {
           "exclusiveMinimum": 17,
           "type": "number",
         },
-        "baz": Object {
+        "baz": {
           "type": "number",
         },
-        "foo": Object {
+        "foo": {
           "$ref": "#/definitions/Foo",
         },
       },
-      "required": Array [
+      "required": [
         "bar",
       ],
       "title": "T",
       "type": "object",
     },
-    "Foo": Object {
+    "Foo": {
       "description": "Description",
-      "examples": Array [
+      "examples": [
         "Example",
       ],
-      "properties": Object {
-        "foo": Object {
+      "properties": {
+        "foo": {
           "const": "bar",
           "type": "string",
         },
@@ -184,44 +184,44 @@ Object {
 `;
 
 exports[`extract-json-schema should produce proper definitions for referenced schemas (using method ref-all) 1`] = `
-Object {
-  "definitions": Object {
-    "Bar": Object {
+{
+  "definitions": {
+    "Bar": {
       "description": "Desc",
-      "examples": Array [
+      "examples": [
         "Ex",
       ],
-      "properties": Object {
-        "bak": Object {
+      "properties": {
+        "bak": {
           "$ref": "#/definitions/Baz",
         },
-        "bar": Object {
+        "bar": {
           "exclusiveMinimum": 17,
           "type": "number",
         },
-        "baz": Object {
+        "baz": {
           "$ref": "#/definitions/Baz",
         },
-        "foo": Object {
+        "foo": {
           "$ref": "#/definitions/Foo",
         },
       },
-      "required": Array [
+      "required": [
         "bar",
       ],
       "title": "T",
       "type": "object",
     },
-    "Baz": Object {
+    "Baz": {
       "type": "number",
     },
-    "Foo": Object {
+    "Foo": {
       "description": "Description",
-      "examples": Array [
+      "examples": [
         "Example",
       ],
-      "properties": Object {
-        "foo": Object {
+      "properties": {
+        "foo": {
           "const": "bar",
           "type": "string",
         },
@@ -234,35 +234,35 @@ Object {
 `;
 
 exports[`extract-json-schema should produce two (referenced) definitions for 2 schemas 1`] = `
-Object {
-  "definitions": Object {
-    "Bar": Object {
+{
+  "definitions": {
+    "Bar": {
       "description": "Desc",
-      "examples": Array [
+      "examples": [
         "Ex",
       ],
-      "properties": Object {
-        "bar": Object {
+      "properties": {
+        "bar": {
           "exclusiveMinimum": 17,
           "type": "number",
         },
-        "foo": Object {
+        "foo": {
           "$ref": "#/definitions/Foo",
         },
       },
-      "required": Array [
+      "required": [
         "bar",
       ],
       "title": "T",
       "type": "object",
     },
-    "Foo": Object {
+    "Foo": {
       "description": "Description",
-      "examples": Array [
+      "examples": [
         "Example",
       ],
-      "properties": Object {
-        "foo": Object {
+      "properties": {
+        "foo": {
           "const": "bar",
           "type": "string",
         },

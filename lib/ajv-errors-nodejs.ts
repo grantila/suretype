@@ -1,4 +1,4 @@
-import { prettify } from "awesome-ajv-errors/dist/index-node.js"
+import { prettify } from "awesome-ajv-errors"
 
 import { setPrettify } from "./ajv-errors.js"
 

@@ -1,4 +1,4 @@
-import { v, compile } from 'suretype'
+import { v, compile, setSuretypeOptions } from 'suretype'
 
 
 const div1 = document.createElement( 'div' );
@@ -30,6 +30,7 @@ const data = {
 
 console.log( 'START HANDLE STYLES' );
 console.log( !!process.env.shouldHandleStyles );
+setSuretypeOptions( { location: !!process.env.shouldHandleStyles } );
 console.log( 'END HANDLE STYLES' );
 
 function makeHTML( text: string ): string

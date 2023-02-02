@@ -45,7 +45,7 @@ const expectSame = ( testName, got, expected ) =>
 			}
 	);
 
-	await page.goto( `file://${pagePath}` );
+	await page.goto( `file://${pagePath}`, { waitUntil: 'networkidle2' } );
 
 	await new Promise( resolve => setTimeout( resolve, 2000 ) );
 
