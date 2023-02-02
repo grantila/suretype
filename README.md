@@ -2,7 +2,6 @@
 [![downloads][downloads-image]][npm-url]
 [![build status][build-image]][build-url]
 [![coverage status][coverage-image]][coverage-url]
-[![Language grade: JavaScript][lgtm-image]][lgtm-url]
 [![Node.JS version][node-version]][node-url]
 
 
@@ -435,12 +434,10 @@ Example *from* Open API *to* SureType; `$ npx typeconv -f oapi -t st -o generate
 [npm-image]: https://img.shields.io/npm/v/suretype.svg
 [npm-url]: https://npmjs.org/package/suretype
 [downloads-image]: https://img.shields.io/npm/dm/suretype.svg
-[build-image]: https://img.shields.io/github/workflow/status/grantila/suretype/Master.svg
+[build-image]: https://img.shields.io/github/actions/workflow/status/grantila/suretype/master.yml?branch=master
 [build-url]: https://github.com/grantila/suretype/actions?query=workflow%3AMaster
 [coverage-image]: https://coveralls.io/repos/github/grantila/suretype/badge.svg?branch=master
 [coverage-url]: https://coveralls.io/github/grantila/suretype?branch=master
-[lgtm-image]: https://img.shields.io/lgtm/grade/javascript/g/grantila/suretype.svg?logo=lgtm&logoWidth=18
-[lgtm-url]: https://lgtm.com/projects/g/grantila/suretype/context:javascript
 [node-version]: https://img.shields.io/node/v/suretype
 [node-url]: https://nodejs.org/en/
 [awesome-ajv-errors-url]: https://github.com/grantila/awesome-ajv-errors
