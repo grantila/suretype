@@ -37,6 +37,9 @@
     "schema",
     "typescript"
   ],
+  "workspaces": [
+    "webpack"
+  ],
   "devDependencies": {
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
@@ -66,5 +69,6 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "packageManager": "yarn@3.2.4"
 }
