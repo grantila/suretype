@@ -62,8 +62,8 @@
   },
   "dependencies": {
     "ajv": "^6.11.0",
-    "awesome-ajv-errors": "^5.0.0",
-    "meta-types": "^1.1.1"
+    "awesome-ajv-errors": "^5.1.0",
+    "meta-types": "^2.0.0"
   },
   "config": {
     "commitizen": {

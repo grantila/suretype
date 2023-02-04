@@ -2835,31 +2835,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"awesome-ajv-errors@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "awesome-ajv-errors@npm:5.0.0"
+"awesome-ajv-errors@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "awesome-ajv-errors@npm:5.1.0"
   dependencies:
-    awesome-code-frame: ^1.0.1
-    chalk: ^5.0.1
-    jsonpointer: ^5.0.0
-    jsonpos: ^4.1.1
+    awesome-code-frame: ^1.1.0
+    chalk: ^5.2.0
+    jsonpointer: ^5.0.1
+    jsonpos: ^4.1.2
     leven: ^4.0.0
     terminal-link: ^3.0.0
   peerDependencies:
     ajv: ^6 || ^7 || ^8
-  checksum: 497ba9be4da849d402b277e9ed977402ade161ecd8d9a8ba3b25697e5bc284f85a543460d3348629ae8e5d47e30e9bfe99ce2c91b9571b3d045e4ecb4a1970c6
+  checksum: aeeb62614c0199ea801fffce44bbcd67a22bf9a0ad6514d0726f9f8ea9a3f34372b3f42db812c4f6e5dbc6c21dee9156306e824c1d72e5b22ca0d05a364bf809
   languageName: node
   linkType: hard
 
-"awesome-code-frame@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "awesome-code-frame@npm:1.0.1"
+"awesome-code-frame@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "awesome-code-frame@npm:1.1.0"
   dependencies:
-    "@babel/helper-validator-identifier": ^7.16.7
-    chalk: ^5.0.1
+    "@babel/helper-validator-identifier": ^7.19.1
+    chalk: ^5.2.0
     charcodes: ^0.2.0
-    js-tokens: ^7.0.0
-  checksum: b5a6e67861a78783a4f41838f3b1e1d9c549e1d8d38407ae9002242ba1425c8069848331e184defd9ca16457da538e64f0e1c68c993f89f991401c4da2135917
+    js-tokens: ^8.0.1
+  checksum: b0bf657a45222076b825ce0ede9f56fe90d54a22a298afad4d3b6cb5815b513bfa2dfac48233b9b29e5b3090762f0b3066cef8682d6e60dd439359b39364d73b
   languageName: node
   linkType: hard
 
@@ -3213,7 +3213,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^5.0.1":
+"chalk@npm:^5.2.0":
   version: 5.2.0
   resolution: "chalk@npm:5.2.0"
   checksum: 03d8060277de6cf2fd567dc25fcf770593eb5bb85f460ce443e49255a30ff1242edd0c90a06a03803b0466ff0687a939b41db1757bec987113e83de89a003caa
@@ -5317,10 +5317,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-tokens@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "js-tokens@npm:7.0.0"
-  checksum: 0f8f6d4c8cf8226c47e68e2aba5d0726c0ded08bfb2625c339b2c80e1558b9b3d31b7721e6a6f9549c2fde30d93f804bcc9f6620b0e85ba3bc43f960812c7d32
+"js-tokens@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "js-tokens@npm:8.0.1"
+  checksum: fb7bcd476c5b902ffb766382ca85aecb86ec66a607e419377026293b5877774e465f6cbe4229c8d85db3776ccc91c3aee518a0e04a005e260e57353f6f9278a8
   languageName: node
   linkType: hard
 
@@ -5425,14 +5425,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonpointer@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "jsonpointer@npm:5.0.0"
-  checksum: c7ec0b6bb596b81de687bc12945586bbcdc80dfb54919656d2690d76334f796a936270067ee9f1b5bbc2d9ecc551afb366ac35e6685aa61f07b5b68d1e5e857d
+"jsonpointer@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "jsonpointer@npm:5.0.1"
+  checksum: 0b40f712900ad0c846681ea2db23b6684b9d5eedf55807b4708c656f5894b63507d0e28ae10aa1bddbea551241035afe62b6df0800fc94c2e2806a7f3adecd7c
   languageName: node
   linkType: hard
 
-"jsonpos@npm:^4.1.1":
+"jsonpos@npm:^4.1.2":
   version: 4.1.2
   resolution: "jsonpos@npm:4.1.2"
   dependencies:
@@ -5624,10 +5624,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"meta-types@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "meta-types@npm:1.1.1"
-  checksum: 4dc31cf2eca16529ea8fc317e7d21cf8e88d85a64bc7894c8a00cf7395c1ac2d56d6655767c0a8ec02c80b8916555cf2968fad14629b06c5fefd00cb9b731b40
+"meta-types@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "meta-types@npm:2.0.0"
+  checksum: 15f4a7ccb55bf56659ab472fece931ad3218ca85a4230446e8c5c37e82a6221d00e410a7ddfb1639f1d08658ed557b5954bea84f3de9a1143289e91b4f0872c1
   languageName: node
   linkType: hard
 
@@ -6964,11 +6964,11 @@ __metadata:
     "@types/jest": ^29.4.0
     "@types/node": ^18.11.18
     ajv: ^6.11.0
-    awesome-ajv-errors: ^5.0.0
+    awesome-ajv-errors: ^5.1.0
     benchmark: ^2.1.4
     cz-conventional-changelog: ^3.3.0
     jest: ^29.4.1
-    meta-types: ^1.1.1
+    meta-types: ^2.0.0
     ow: ^1.1.1
     rimraf: ^4.1.2
     superstruct: ^1.0.3
