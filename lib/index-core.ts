@@ -1,7 +1,13 @@
 export * from "./api/index.js"
 
 export * from "./errors.js"
-export { ValidationError } from "./validation-error.js"
+export {
+	type ValidationResult,
+	type ValidationResultValid,
+	type ValidationResultInvalid,
+	type ValidationErrorData,
+	ValidationError,
+} from "./validation-error.js"
 
 export * from "./types.js"
 
