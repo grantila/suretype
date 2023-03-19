@@ -13,10 +13,10 @@
   },
   "devDependencies": {
     "html-webpack-plugin": "^5.5.0",
-    "puppeteer": "^19.6.3",
+    "puppeteer": "^19.7.5",
     "suretype": "workspace:^",
     "ts-loader": "^9.4.2",
-    "webpack": "^5.75.0",
+    "webpack": "^5.76.2",
     "webpack-cli": "^5.0.1"
   }
 }
