@@ -265,16 +265,17 @@ describe( "extract-json-schema", ( ) =>
 		const schema2 = v.anyOf( [ v.string( ), v.boolean( ) ] );
 		const schema3 = v.anyOf( [ v.string( ), schema1 ] );
 
-		const { schema, lookup } = extractJsonSchema(
+		const { schema, lookup, schemaRefName } = extractJsonSchema(
 			[ schema1, schema2, schema3 ],
 			{ onNonSuretypeValidator: 'lookup' }
 		);
 
-		schema;
-		lookup;
 		expect( schema ).toMatchSnapshot( );
 		expect( lookup.get( schema1 ) ).toMatchSnapshot( );
 		expect( lookup.get( schema2 ) ).toMatchSnapshot( );
 		expect( lookup.get( schema3 ) ).toMatchSnapshot( );
+		expect( schemaRefName.get( lookup.get( schema1 ) ) ).toBe( 'Foo' );
+		expect( schemaRefName.get( lookup.get( schema2 ) ) ).toBeUndefined( );
+		expect( schemaRefName.get( lookup.get( schema3 ) ) ).toBeUndefined( );
 	} );
 } );

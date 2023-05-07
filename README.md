@@ -318,7 +318,7 @@ or as all types at once, into one big JSON schema. In this case, all validation 
 ```ts
 import { extractJsonSchema } from "suretype"
 
-const { schema: jsonSchema, lookup } =
+const { schema: jsonSchema, lookup, schemaRefName } =
     extractJsonSchema( [ userSchema, messageSchema ], { /* opts... */ } );
 ```
 
@@ -361,10 +361,13 @@ The result is an object on the form:
 interface ExtractedJsonSchema {
     schema: SchemaWithDefinitions; // Contains a 'definitions' property
     lookup: Map< CoreValidator< unknown >, any >;
+    schemaRefName: Map< any, string >;
 }
 ```
 
 The `lookup` is useful to lookup the json schema for a certain validator object reference, especially unnamed ones which are not included in the schema.
+
+The `schemaRefName` contains a lookup map from (top-level) schema object to its name as used when referring to it, not necessarily the same as what it is internally named, if there where naming conflicts and `OnTopLevelNameConflict` is `rename`.
 
 In the example above, the `jsonSchema` *object* (which can be `JSON.stringify`'d) will be something like:
 

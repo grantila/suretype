@@ -25,8 +25,22 @@ export interface SchemaWithDefinitions
 
 export interface ExtractedJsonSchema
 {
+	/**
+	 * The extracted schema definitions
+	 */
 	schema: SchemaWithDefinitions;
+
+	/**
+	 * Lookup from validator to schema object
+	 */
 	lookup: Map< CoreValidator< unknown >, any >;
+
+	/**
+	 * Lookup from top-level schema object to its corresponding name.
+	 * This is its referrable name, which might not be the same as its inner
+	 * name if it had to be renamed due to top-level naming conflicts.
+	 */
+	schemaRefName: Map< any, string >;
 }
 
 /**
@@ -86,7 +100,15 @@ export function extractJsonSchema(
 	);
 	const { schema, lookup } = traverser.getSchema( );
 
-	return { schema, lookup };
+	const schemaRefName = new Map< any, string >( );
+	Object
+		.entries( ( schema as SchemaWithDefinitions ).definitions )
+		.forEach( ( [ name, schema ] ) =>
+		{
+			schemaRefName.set( schema, name );
+		} );
+
+	return { schema, lookup, schemaRefName };
 }
 
 export type ExtractSingleSchemaResult =
