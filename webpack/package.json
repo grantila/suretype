@@ -12,11 +12,11 @@
     "build-test": "yarn build-test-plain && yarn build-test-styles"
   },
   "devDependencies": {
-    "html-webpack-plugin": "^5.5.0",
-    "puppeteer": "^19.7.5",
+    "html-webpack-plugin": "^5.5.1",
+    "puppeteer": "^19.11.1",
     "suretype": "workspace:^",
-    "ts-loader": "^9.4.2",
-    "webpack": "^5.76.2",
-    "webpack-cli": "^5.0.1"
+    "ts-loader": "^9.4.3",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1"
   }
 }
