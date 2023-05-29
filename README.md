@@ -58,6 +58,8 @@ The above makes it ideal in TypeScript environments. When used in RESTful applic
    * This is a [pure ESM][pure-esm] package. It requires at least Node 14.13.1, and cannot be used from CommonJS.
    * This package **can** be used in browsers without special hacks. It will not pretty-print codeframes or use colors if the bundling setup doesn't support it, but will to try to load support for it.
    * You can control colorized/stylized output globally or per validator
+ * Since version 4;
+   *  Inverted required/optional; Schemas now default to required fields, so `.required()` is removed. To have fields optional, use `.optional()`.
 
 
 # Minimal example
@@ -68,9 +70,9 @@ The following is a validator schema using suretype:
 import { v } from "suretype"
 
 const userSchema = v.object( {
-    firstName: v.string( ).required( ),
-    lastName: v.string( ),
-    age: v.number( ).gte( 21 ),
+    firstName: v.string( ),
+    lastName: v.string( ).optional( ),
+    age: v.number( ).gte( 21 ).optional( ),
 } );
 ```
 
@@ -92,7 +94,7 @@ interface User {
 }
 ```
 
-Note the `?` for the optional properties, i.e. those that aren't followed by `required()`.
+Note the `?` for the optional properties, i.e. those that are followed by `optional()`.
 
 There are three ways of compiling a validator function; choose the one that best fits your application and situation. Given:
 
@@ -283,9 +285,9 @@ const userSchema = suretype(
         ],
     },
     v.object( {
-        firstName: v.string( ).required( ),
-        lastName: v.string( ),
-        age: v.number( ).gte( 21 ),
+        firstName: v.string( ),
+        lastName: v.string( ).optional( ),
+        age: v.number( ).gte( 21 ).optional( ),
     } )
 );
 
@@ -295,8 +297,8 @@ const messageSchema = suretype(
         title: "A message from a certain user",
     },
     v.object( {
-        user: userSchema.required( ),
-        line: v.string( ).required( ),
+        user: userSchema,
+        line: v.string( ),
     } )
 );
 ```

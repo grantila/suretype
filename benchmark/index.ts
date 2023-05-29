@@ -71,15 +71,15 @@ const owSchema =
 
 const suretypeSchema =
 	v.object( {
-		id: v.number( ).required( ),
-		level: v.string( ).enum( "debug", "info", "notice" ).required( ),
-		bool: v.boolean( ),
-		nul: v.null( ),
-		arr: v.array( v.anyOf( [ v.string( ), v.number( ) ] ) ),
+		id: v.number( ),
+		level: v.string( ).enum( "debug", "info", "notice" ),
+		bool: v.boolean( ).optional( ),
+		nul: v.null( ).optional( ),
+		arr: v.array( v.anyOf( [ v.string( ), v.number( ) ] ) ).optional( ),
 		sub: v.object( {
-			x: v.any( ),
-			tup: v.array( [ v.boolean( ), v.number( ) ] ).required( ),
-		} ),
+			x: v.any( ).optional( ),
+			tup: v.array( [ v.boolean( ), v.number( ) ] ),
+		} ).optional( ),
 	} )
 	.additional( true );
 

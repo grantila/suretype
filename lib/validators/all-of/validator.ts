@@ -1,7 +1,7 @@
 import { AnyType } from "../types.js"
 import { CoreValidator, TreeTraverser } from "../core/validator.js"
 import { BaseValidator } from "../base/validator.js"
-import { RequiredValidator } from "../required/validator.js"
+import { OptionalValidator } from "../optional/validator.js"
 
 
 export class AllOfValidator< T > extends BaseValidator< T, AllOfValidator< T > >
@@ -18,9 +18,9 @@ export class AllOfValidator< T > extends BaseValidator< T, AllOfValidator< T > >
 			);
 	}
 
-	public required( ): RequiredValidator< T, this >
+	public optional( ): OptionalValidator< T, this >
 	{
-		return new RequiredValidator( this );
+		return new OptionalValidator( this );
 	}
 
 	protected toSchema( traverser: TreeTraverser )

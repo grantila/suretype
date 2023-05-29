@@ -2,7 +2,7 @@ import { Type } from "../types.js"
 import { CoreValidator, TreeTraverser } from "../core/validator.js"
 import { validatorType } from "../../validation.js"
 import { ValueValidator } from "../value/validator.js"
-import { isRequired } from "../required/validator.js"
+import { isOptional } from "../optional/validator.js"
 import { AdditionalProperties, TypeOf } from "../functional.js"
 import { AnyValidator } from "../any/validator.js"
 
@@ -76,7 +76,7 @@ export class ObjectValidator< T extends { } >
 		keys.forEach( key =>
 		{
 			properties[ key ] = traverser.visit( this._properties[ key ] );
-			if ( isRequired( this._properties[ key ] ) )
+			if ( !isOptional( this._properties[ key ] ) )
 				required.push( key );
 		} );
 

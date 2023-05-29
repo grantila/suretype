@@ -1,33 +1,33 @@
-import { RequiredValidator } from "./validator.js"
+import { OptionalValidator } from "./validator.js"
 import { validatorType } from "../../validation.js"
 import { validateJsonSchema, validate } from "../../json-schema.js"
 import { NumberValidator } from "../number/validator.js"
 import { extractSingleJsonSchema } from "../../extract-json-schema.js"
 
 
-describe( "RequiredValidator", ( ) =>
+describe( "OptionalValidator", ( ) =>
 {
 	it( "Correct type", ( ) =>
 	{
-		const validator = new RequiredValidator( new NumberValidator( ) );
+		const validator = new OptionalValidator( new NumberValidator( ) );
 		expect( validatorType( validator ) ).toEqual( "number" );
 	} );
 
 	it( "Correct type on type change", ( ) =>
 	{
 		const numberValidator = new NumberValidator( );
-		const validator = new RequiredValidator( numberValidator );
+		const validator = new OptionalValidator( numberValidator );
 		expect( validatorType( validator ) ).toEqual( "number" );
 		const integerValidator =
-			new RequiredValidator( numberValidator.integer( ) );
+			new OptionalValidator( numberValidator.integer( ) );
 		expect( validatorType( validator ) ).toEqual( "number" );
 		expect( validatorType( integerValidator ) ).toEqual( "integer" );
 	} );
 
 	it( "Valid basic schema", ( ) =>
 	{
-		const validator = new RequiredValidator(
-			new NumberValidator( ).enum( 2, 3 )
+		const validator = new OptionalValidator(
+			new NumberValidator( ).enum( 2, 3 ).optional( )
 		);
 		const { schema } = extractSingleJsonSchema( validator );
 

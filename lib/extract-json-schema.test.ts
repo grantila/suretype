@@ -11,8 +11,8 @@ describe( "extract-json-schema", ( ) =>
 	it( "suretype() should keep validator schema", ( ) =>
 	{
 		const schema = v.object( {
-			foo: v.string( ).const( "bar" ),
-			bar: v.number( ).gt( 17 ).required( ),
+			foo: v.string( ).const( "bar" ).optional( ),
+			bar: v.number( ).gt( 17 ),
 		} );
 		const schema2 = suretype( { name: "Foo" }, schema );
 
@@ -27,8 +27,8 @@ describe( "extract-json-schema", ( ) =>
 	it( "suretype() of an array should produce valid JSON schema", ( ) =>
 	{
 		const inner = v.object( {
-			foo: v.string( ).const( "bar" ),
-			bar: v.number( ).gt( 17 ).required( ),
+			foo: v.string( ).const( "bar" ).optional( ),
+			bar: v.number( ).gt( 17 ),
 		} );
 		const schema = suretype(
 			{
@@ -57,8 +57,12 @@ describe( "extract-json-schema", ( ) =>
 
 	it( "should produce valid JSON schema for a 2+sized array", ( ) =>
 	{
-		const inner1 = v.object( { foo: v.string( ).const( "bar" ) } );
-		const inner2 = v.object( { bar: v.number( ).gt( 17 ).required( ) } );
+		const inner1 = v.object( {
+			foo: v.string( ).const( "bar" ).optional( ),
+		} );
+		const inner2 = v.object( {
+			bar: v.number( ).gt( 17 ),
+		} );
 		const schema1 = suretype(
 			{
 				name: "Foo",
@@ -188,7 +192,7 @@ describe( "extract-json-schema", ( ) =>
 				title: "Title",
 				examples: [ "Example" ],
 			},
-			v.object( { foo: v.string( ).const( "bar" ) } )
+			v.object( { foo: v.string( ).const( "bar" ).optional( ) } )
 		);
 		const schema2 = suretype(
 			{
@@ -198,8 +202,8 @@ describe( "extract-json-schema", ( ) =>
 				examples: [ "Ex" ],
 			},
 			v.object( {
-				bar: v.number( ).gt( 17 ).required( ),
-				foo: schema1,
+				bar: v.number( ).gt( 17 ),
+				foo: schema1.optional( ),
 			} )
 		);
 
@@ -232,7 +236,7 @@ describe( "extract-json-schema", ( ) =>
 					title: "Title",
 					examples: [ "Example" ],
 				},
-				v.object( { foo: v.string( ).const( "bar" ) } )
+				v.object( { foo: v.string( ).const( "bar" ).optional( ) } )
 			);
 			const schema2 = suretype(
 				{
@@ -242,10 +246,10 @@ describe( "extract-json-schema", ( ) =>
 					examples: [ "Ex" ],
 				},
 				v.object( {
-					bar: v.number( ).gt( 17 ).required( ),
-					foo: schema1,
-					baz: inlined,
-					bak: inlined,
+					bar: v.number( ).gt( 17 ),
+					foo: schema1.optional( ),
+					baz: inlined.optional( ),
+					bak: inlined.optional( ),
 				} )
 			);
 

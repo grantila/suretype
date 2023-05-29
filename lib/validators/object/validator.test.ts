@@ -113,6 +113,7 @@ describe( "ObjectValidator", ( ) =>
 				foo: { type: "string", enum: [ "bar", "baz" ] },
 				num: { type: "number", enum: [ 17, 42 ] },
 			},
+			required: [ "foo", "num" ],
 			additionalProperties: false,
 		} );
 
@@ -143,8 +144,8 @@ describe( "ObjectValidator", ( ) =>
 	{
 		const validator =
 			v.object( {
-				foo: new StringValidator( ).enum( "bar", "baz" ).required( ),
-				num: new NumberValidator( ).enum( 17, 42 ),
+				foo: new StringValidator( ).enum( "bar", "baz" ),
+				num: new NumberValidator( ).enum( 17, 42 ).optional( ),
 			} )
 			.additional( true );
 		type T = TypeOf< typeof validator >;
@@ -191,9 +192,11 @@ describe( "ObjectValidator", ( ) =>
 	{
 		const validator =
 			v.object( {
-				foo: new StringValidator( ).enum( "bar", "baz" ).required( ),
-				num: new NumberValidator( ).enum( 17, 42 ),
-				obj: v.object( { p: new StringValidator( ) } ),
+				foo: new StringValidator( ).enum( "bar", "baz" ),
+				num: new NumberValidator( ).enum( 17, 42 ).optional( ),
+				obj: v.object( {
+					p: new StringValidator( ).optional( )
+				} ).optional( ),
 			} )
 			.additional( new BooleanValidator( ) );
 		type T = TypeOf< typeof validator >;
@@ -255,9 +258,11 @@ describe( "ObjectValidator", ( ) =>
 			v.object( {
 				foo: new RawValidator( {
 					type: "string", enum: [ "bar", "baz" ]
-				} ).required( ),
-				num: new NumberValidator( ).enum( 17, 42 ),
-				obj: v.object( { p: new RawValidator( { type: "string" } ) } ),
+				} ),
+				num: new NumberValidator( ).enum( 17, 42 ).optional( ),
+				obj: v.object( {
+					p: new RawValidator( { type: "string" } ).optional( )
+				} ).optional( ),
 			} )
 			.additional( new RawValidator( { type: "boolean" } ) );
 		const { schema } = extractSingleJsonSchema( validator );
@@ -312,8 +317,8 @@ describe( "ObjectValidator", ( ) =>
 	{
 		const validator =
 			new ObjectValidator( {
-				foo: new StringValidator( ).enum( "bar", "baz" ).required( ),
-				num: new NumberValidator( ).enum( 17, 42 ),
+				foo: new StringValidator( ).enum( "bar", "baz" ),
+				num: new NumberValidator( ).enum( 17, 42 ).optional( ),
 			} )
 			.additional( false )
 			.enum( { foo: "bar", num: 42 }, { foo: "baz", num: 17 } );
@@ -371,8 +376,8 @@ describe( "ObjectValidator", ( ) =>
 	{
 		const validator =
 			new ObjectValidator( {
-				foo: new StringValidator( ).enum( "bar", "baz" ),
-				num: new NumberValidator( ).enum( 17, 42 ),
+				foo: new StringValidator( ).enum( "bar", "baz" ).optional( ),
+				num: new NumberValidator( ).enum( 17, 42 ).optional( ),
 			} )
 			.additional( true );
 		const { schema } = extractSingleJsonSchema( validator );
@@ -412,8 +417,8 @@ describe( "ObjectValidator", ( ) =>
 	{
 		const validator =
 			new ObjectValidator( {
-				foo: new StringValidator( ).enum( "bar", "baz" ),
-				num: new NumberValidator( ).enum( 17, 42 ),
+				foo: new StringValidator( ).enum( "bar", "baz" ).optional( ),
+				num: new NumberValidator( ).enum( 17, 42 ).optional( ),
 			} )
 			.additional( new NumberValidator( ).enum( 1, 2 ) );
 		const { schema } = extractSingleJsonSchema( validator );
@@ -468,8 +473,8 @@ describe( "ObjectValidator", ( ) =>
 	{
 		const validator =
 			new ObjectValidator( {
-				foo: new StringValidator( ).enum( "bar", "baz" ).required( ),
-				num: new NumberValidator( ).enum( 17, 42 ),
+				foo: new StringValidator( ).enum( "bar", "baz" ),
+				num: new NumberValidator( ).enum( 17, 42 ).optional( ),
 			} )
 			.additional( false );
 		const { schema } = extractSingleJsonSchema( validator );
@@ -513,23 +518,23 @@ describe( "ObjectValidator", ( ) =>
 	{
 		const validator =
 			new ObjectValidator( {
-				foo: new StringValidator( ),
-				num: new NumberValidator( ),
+				foo: new StringValidator( ).optional( ),
+				num: new NumberValidator( ).optional( ),
 			} )
 			.allOf( o => [
 				new IfValidator(
 					new ObjectValidator( {
-						foo: new StringValidator( ).enum( "bar" ),
+						foo: new StringValidator( ).enum( "bar" ).optional( ),
 					} )
 				).then( new ObjectValidator( {
-					num: new NumberValidator( ).enum( 17 ),
+					num: new NumberValidator( ).enum( 17 ).optional( ),
 				} ) ),
 				new IfValidator(
 					new ObjectValidator( {
-						foo: new StringValidator( ).enum( "baz" ),
+						foo: new StringValidator( ).enum( "baz" ).optional( ),
 					} )
 				).then( new ObjectValidator( {
-					num: new NumberValidator( ).enum( 42 ),
+					num: new NumberValidator( ).enum( 42 ).optional( ),
 				} ) ),
 			] );
 		const { schema } = extractSingleJsonSchema( validator );
@@ -606,7 +611,7 @@ describe( "ObjectValidator", ( ) =>
 	{
 		const userSchema = v
 			.object( {
-				firstName: v.string( ).required( ),
+				firstName: v.string( ),
 			})
 			.additional( v.number( ) );
 

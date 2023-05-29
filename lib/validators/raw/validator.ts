@@ -1,8 +1,8 @@
 import { CoreValidator } from "../core/validator.js"
 import {
-	extractRequiredValidator,
-	RequiredValidator,
-} from "../required/validator.js"
+	extractOptionalValidator,
+	OptionalValidator,
+} from "../optional/validator.js"
 import { AnyType } from "../types.js"
 
 
@@ -23,9 +23,9 @@ export class RawValidator extends CoreValidator< unknown >
 		return this.jsonSchema;
 	}
 
-	public required( ): RequiredValidator< unknown, this >
+	public optional( ): OptionalValidator< unknown, this >
 	{
-		return new RequiredValidator( this );
+		return new OptionalValidator( this );
 	}
 
 	protected clone( _clean: boolean = false ): this
@@ -44,6 +44,6 @@ export function isRaw( validator: CoreValidator< unknown > ): boolean
 export function getRaw( validator: CoreValidator< unknown > )
 : RawValidator | undefined
 {
-	validator = extractRequiredValidator( validator );
+	validator = extractOptionalValidator( validator );
 	return isRaw( validator ) ? validator as RawValidator : undefined;
 }

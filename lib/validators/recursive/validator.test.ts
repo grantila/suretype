@@ -36,8 +36,8 @@ describe( "RecursiveValidator", ( ) =>
 		const schema = suretype(
 			{ name: 'Foo' },
 			v.object( {
-				foo: v.number( ),
-				bar: v.recursive( ),
+				foo: v.number( ).optional( ),
+				bar: v.recursive( ).optional( ),
 			} )
 		);
 		expect( extractSingleJsonSchema( schema ).schema ).toStrictEqual( {
@@ -54,15 +54,15 @@ describe( "RecursiveValidator", ( ) =>
 		const schema1 = suretype(
 			{ name: 'Foo' },
 			v.object( {
-				foo: v.number( ),
-				bar: v.recursive( ),
+				foo: v.number( ).optional( ),
+				bar: v.recursive( ).optional( ),
 			} )
 		);
 		const schema2 = suretype(
 			{ name: 'Bar' },
 			v.object( {
-				foo2: schema1,
-				bar2: v.recursive( ),
+				foo2: schema1.optional( ),
+				bar2: v.recursive( ).optional( ),
 			} )
 		);
 		const { schema } = extractJsonSchema( [ schema1, schema2 ] );

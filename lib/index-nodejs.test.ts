@@ -38,8 +38,8 @@ describe( "nodejs", ( ) =>
 describe( "short-hands", ( ) =>
 {
 	const schema = v.object( {
-		firstName: v.string( ).required( ),
-		lastName: v.string( ).required( ),
+		firstName: v.string( ),
+		lastName: v.string( ),
 	} );
 
 	const valueValid = { firstName: 'Foo', lastName: 'Bar' } as unknown;

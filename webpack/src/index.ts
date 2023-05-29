@@ -14,8 +14,8 @@ document.documentElement.appendChild( div3 );
 
 
 const schemaThing = v.object( {
-	title: v.string( ).required( ),
-	type: v.string( ).enum( 'big', 'small' ).required( ),
+	title: v.string( ),
+	type: v.string( ).enum( 'big', 'small' ),
 } );
 
 const styling = { colors: true, location: true } as const;

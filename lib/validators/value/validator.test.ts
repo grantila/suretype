@@ -2,7 +2,7 @@ import { Type } from "../types.js"
 import { ValueValidator } from "./validator.js"
 import { TreeTraverser } from "../core/validator.js"
 import { validatorType } from "../../validation.js"
-import { RequiredValidator, isRequired } from "../required/validator.js"
+import { OptionalValidator, isOptional } from "../optional/validator.js"
 import { DuplicateConstraintError } from "../../errors.js"
 import { StringValidator } from "../string/validator.js"
 import { extractSingleJsonSchema } from "../../extract-json-schema.js"
@@ -88,38 +88,38 @@ describe( "ValueValidator", ( ) =>
 			.toThrow( DuplicateConstraintError );
 	} );
 
-	it( "required() not called", ( ) =>
+	it( "optional() not called", ( ) =>
 	{
 		const x = new X( );
-		expect( isRequired( x ) ).toEqual( false );
+		expect( isOptional( x ) ).toEqual( false );
 	} );
 
-	it( "required() called", ( ) =>
+	it( "optional() called", ( ) =>
 	{
 		const x = new X( );
-		const y = x.required( );
-		expect( isRequired( x ) ).toEqual( false );
-		expect( isRequired( y ) ).toEqual( true );
+		const y = x.optional( );
+		expect( isOptional( x ) ).toEqual( false );
+		expect( isOptional( y ) ).toEqual( true );
 	} );
 
-	it( "required() returns RequiredValidator<>", ( ) =>
+	it( "optional() returns OptionalValidator<>", ( ) =>
 	{
 		const x = new X( );
-		const r = x.required( );
-		expect( isRequired( x ) ).toEqual( false );
-		expect( isRequired( r ) ).toEqual( true );
-		expect( r ).toBeInstanceOf( RequiredValidator );
+		const r = x.optional( );
+		expect( isOptional( x ) ).toEqual( false );
+		expect( isOptional( r ) ).toEqual( true );
+		expect( r ).toBeInstanceOf( OptionalValidator );
 	} );
 
-	it( "required() returns RequiredValidator with correct type", ( ) =>
+	it( "optional() returns OptionalValidator with correct type", ( ) =>
 	{
-		const r = new X( ).required( );
+		const r = new X( ).optional( );
 		expect( validatorType( r ) ).toEqual( "string" );
 	} );
 
-	it( "required() returns RequiredValidator with correct JSON schema", ( ) =>
+	it( "optional() returns OptionalValidator with correct JSON schema", ( ) =>
 	{
-		const r = new X( ).required( );
+		const r = new X( ).optional( );
 		expect( extractSingleJsonSchema( r ).schema ).toEqual(
 			{ type: "string" }
 		);

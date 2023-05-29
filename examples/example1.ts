@@ -6,10 +6,10 @@ const userSchema = suretype(
 		description: 'A user representation',
 	},
 	v.object( {
-		firstName: v.string( ).minLength( 1 ).required( ),
-		lastName: v.string( ).minLength( 1 ).required( ),
-		id: v.string( ).required( ),
-		email: v.string( ).format( 'email' ),
+		firstName: v.string( ).minLength( 1 ),
+		lastName: v.string( ).minLength( 1 ),
+		id: v.string( ),
+		email: v.string( ).format( 'email' ).optional( ),
 	} )
 );
 
@@ -19,10 +19,10 @@ const messageSchema = suretype(
 		description: 'A message from a user, to a user',
 	},
 	v.object( {
-		body: v.string( ).required( ),
-		from: userSchema,
-		to: userSchema,
-		sentAt: v.string( ).format( 'date-time' ),
+		body: v.string( ),
+		from: userSchema.optional( ),
+		to: userSchema.optional( ),
+		sentAt: v.string( ).format( 'date-time' ).optional( ),
 	} )
 );
 

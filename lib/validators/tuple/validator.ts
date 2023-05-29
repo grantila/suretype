@@ -2,7 +2,7 @@ import type { If, Is, And, Extends, GreaterThan, LengthOf } from "meta-types"
 
 import { Type } from "../types.js"
 import { ValueValidator } from "../value/validator.js"
-import { isRequired } from "../required/validator.js"
+import { isOptional } from "../optional/validator.js"
 import { CoreValidator, TreeTraverser } from "../core/validator.js"
 import { AnyValidator } from "../any/validator.js"
 import { DuplicateConstraintError } from "../../errors.js"
@@ -52,7 +52,7 @@ export class TupleValidator<
 	{
 		for ( let i = validators.length - 1; i >= 0; --i )
 		{
-			if ( isRequired( validators[ i ] ) )
+			if ( !isOptional( validators[ i ] ) )
 				return i + 1;
 		}
 		return 0;

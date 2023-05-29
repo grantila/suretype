@@ -1,7 +1,7 @@
 import { AnyType } from "../types.js"
 import { TreeTraverser } from "../core/validator.js"
 import { BaseValidator } from "../base/validator.js"
-import { RequiredValidator } from "../required/validator.js"
+import { OptionalValidator } from "../optional/validator.js"
 
 
 export class RecursiveValidator
@@ -9,9 +9,9 @@ export class RecursiveValidator
 {
 	protected type: AnyType = 'recursive';
 
-	public required( ): RequiredValidator< RecursiveValidator, this >
+	public optional( ): OptionalValidator< RecursiveValidator, this >
 	{
-		return new RequiredValidator( this );
+		return new OptionalValidator( this );
 	}
 
 	protected toSchema( traverser: TreeTraverser )

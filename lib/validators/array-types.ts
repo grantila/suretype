@@ -10,7 +10,7 @@ import type {
 import { BaseValidator } from "./base/validator.js"
 import { ArrayValidator } from "./array/validator.js"
 import { TupleValidator } from "./tuple/validator.js"
-import type { TypeOf, IsRequired } from "./functional.js"
+import type { TypeOf, IsOptional } from "./functional.js"
 
 
 export type FirstOptionalIndex
@@ -20,7 +20,7 @@ export type FirstOptionalIndex
 	> =
 		T extends [ ]
 		? 0
-		: IsRequired< Last< T > > extends true
+		: IsOptional< Last< T > > extends false
 		? N
 		: FirstOptionalIndex< ReverseRest< T > >;
 

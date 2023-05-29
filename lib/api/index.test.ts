@@ -8,8 +8,8 @@ describe( "suretype", ( ) =>
 	it( "should validate a suretype()-decorated schema", ( ) =>
 	{
 		const inner = v.object( {
-			foo: v.string( ).const( "bar" ),
-			bar: v.number( ).gt( 17 ).required( ),
+			foo: v.string( ).const( "bar" ).optional( ),
+			bar: v.number( ).gt( 17 ),
 		} );
 		const schema = suretype(
 			{
@@ -39,8 +39,8 @@ describe( "annotate", ( ) =>
 	it( "should validate a annotate()'d schema", ( ) =>
 	{
 		const inner = v.object( {
-			foo: v.string( ).const( "bar" ),
-			bar: v.number( ).gt( 17 ).required( ),
+			foo: v.string( ).const( "bar" ).optional( ),
+			bar: v.number( ).gt( 17 ),
 		} );
 		const schema = annotate(
 			{
@@ -69,8 +69,8 @@ describe( "retype", ( ) =>
 	it( "should retype", ( ) =>
 	{
 		const validator = v.object( {
-			foo: v.string( ).const( "bar" ),
-			obj: v.object( { prop: v.string( ) } ).required( ),
+			foo: v.string( ).const( "bar" ).optional( ),
+			obj: v.object( { prop: v.string( ) } ),
 		} );
 
 		interface NiceType
@@ -93,7 +93,7 @@ describe( "v", ( ) =>
 {
 	it( "should compile and validate a validator schema", ( ) =>
 	{
-		const schema = v.object( { foo: v.string( ) } );
+		const schema = v.object( { foo: v.string( ).optional( ) } );
 
 		const validator = compile( schema );
 
@@ -108,7 +108,7 @@ describe( "ensureNamed", ( ) =>
 	{
 		const schema = suretype(
 			{ name: 'Goodname' },
-			v.object( { foo: v.string( ) } )
+			v.object( { foo: v.string( ).optional( ) } )
 		);
 		const validator = ensureNamed( 'Badname', schema );
 		expect( getName( validator ) ).toBe( 'Goodname' );
@@ -116,7 +116,7 @@ describe( "ensureNamed", ( ) =>
 
 	it( "should change name of non-annotated validator", ( ) =>
 	{
-		const schema = v.object( { foo: v.string( ) } );
+		const schema = v.object( { foo: v.string( ).optional( ) } );
 		const validator = ensureNamed( 'Goodname', schema );
 		expect( getName( validator ) ).toBe( 'Goodname' );
 	} );

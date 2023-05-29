@@ -75,8 +75,8 @@ describe( "ArrayValidator", ( ) =>
 		const validator =
 			new ArrayValidator(
 				new AnyOfValidator( [
-					new StringValidator( ).required( ),
-					new BooleanValidator( )
+					new StringValidator( ),
+					new BooleanValidator( ).optional( )
 				] )
 			)
 			.minItems( 3 );
@@ -203,8 +203,8 @@ describe( "ArrayValidator", ( ) =>
 		const validator =
 			new ArrayValidator(
 				new AnyOfValidator( [
-					new StringValidator( ).required( ),
-					new RawValidator( { type: "boolean" } )
+					new StringValidator( ),
+					new RawValidator( { type: "boolean" } ).optional( )
 				] )
 			)
 			.minItems( 3 );

@@ -2,7 +2,7 @@ import { Type } from "../types.js"
 import { TreeTraverser } from "../core/validator.js"
 import { BaseValidator } from "../base/validator.js"
 import { DuplicateConstraintError, DuplicateError } from "../../errors.js"
-import { RequiredValidator } from "../required/validator.js"
+import { OptionalValidator } from "../optional/validator.js"
 
 
 export abstract class ValueValidator< T, U extends ValueValidator< T, U > >
@@ -64,9 +64,9 @@ export abstract class ValueValidator< T, U extends ValueValidator< T, U > >
 		return clone;
 	}
 
-	public required( ): RequiredValidator< T, this >
+	public optional( ): OptionalValidator< T, this >
 	{
-		return new RequiredValidator( this );
+		return new OptionalValidator( this );
 	}
 
 	protected getConst( ): T | undefined

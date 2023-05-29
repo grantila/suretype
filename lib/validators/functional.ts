@@ -12,17 +12,17 @@ import { TupleValidator } from "./tuple/validator.js"
 import { AnyOfValidator } from "./or/validator.js"
 import { AllOfValidator } from "./all-of/validator.js"
 import { IfValidator, ThenValidator, ElseValidator } from "./if/validator.js"
-import { RequiredValidator } from "./required/validator.js"
+import { OptionalValidator } from "./optional/validator.js"
 import { RawValidator } from "./raw/validator.js"
 import { RecursiveValidator } from "./recursive/validator.js"
 import { RecursiveValue } from "./types.js"
 
 
-export type IsRequired< T > =
-	T extends RequiredValidator< infer U, infer _ > ? true : false;
+export type IsOptional< T > =
+	T extends OptionalValidator< infer U, infer _ > ? true : false;
 
-export type ExtractRequired< T > =
-	T extends RequiredValidator< infer U, infer _ > ? U : never;
+export type ExtractOptional< T > =
+	T extends OptionalValidator< infer U, infer _ > ? U : never;
 
 export type ValuesOf< T extends { } > = T[ keyof T ] & unknown;
 
@@ -31,7 +31,7 @@ export type FlattenObject< T > = { [ K in keyof T ]: T[ K ] & unknown; };
 export type AdditionalProperties< T extends { }, U > =
 	FlattenObject< T & Record< string, U | ValuesOf< T > > >;
 
-export type TypeOf< T, InclRequired = false > =
+export type TypeOf< T, InclOptional = false > =
 	T extends ObjectValidator< infer U >
 	? FlattenObject< U >
 	: T extends TupleValidator< infer U, infer V, infer N, infer A >
@@ -64,9 +64,9 @@ export type TypeOf< T, InclRequired = false > =
 	? U
 	: T extends ValueValidator< infer U, infer V >
 	? U
-	: T extends RequiredValidator< infer U, infer _ >
+	: T extends OptionalValidator< infer U, infer _ >
 	?
-		InclRequired extends true
+		InclOptional extends true
 		? U
 		: never
 	: T extends BaseValidator< infer U >

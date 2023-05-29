@@ -4,8 +4,8 @@ import { BaseValidator } from "../base/validator.js"
 import { validatorType, cloneValidator } from "../../validation.js"
 
 
-export class RequiredValidator< T, U extends CoreValidator< T > >
-	extends BaseValidator< T, RequiredValidator< T, U > >
+export class OptionalValidator< T, U extends CoreValidator< T > >
+	extends BaseValidator< T, OptionalValidator< T, U > >
 {
 	constructor( protected validator: U )
 	{
@@ -28,25 +28,25 @@ export class RequiredValidator< T, U extends CoreValidator< T > >
 	protected clone( clean: boolean = false )
 	{
 		const clonedInner = cloneValidator( this.validator, clean );
-		return new RequiredValidator< T, U >( clonedInner ) as this;
+		return new OptionalValidator< T, U >( clonedInner ) as this;
 	}
 }
 
-export abstract class InternalRequiredValidator
-	extends RequiredValidator< unknown, CoreValidator< unknown > >
+export abstract class InternalOptionalValidator
+	extends OptionalValidator< unknown, CoreValidator< unknown > >
 {
 	public abstract validator: CoreValidator< unknown >;
 }
 
-export function isRequired( validator: CoreValidator< unknown > )
+export function isOptional( validator: CoreValidator< unknown > )
 {
-	return validator instanceof RequiredValidator;
+	return validator instanceof OptionalValidator;
 }
 
-export function extractRequiredValidator( validator: CoreValidator< unknown > )
+export function extractOptionalValidator( validator: CoreValidator< unknown > )
 : CoreValidator< unknown >
 {
-	return validator instanceof RequiredValidator
-		? ( validator as InternalRequiredValidator ).validator
+	return validator instanceof OptionalValidator
+		? ( validator as InternalOptionalValidator ).validator
 		: validator;
 }
